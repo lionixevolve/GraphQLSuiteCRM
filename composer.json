@@ -1,0 +1,22 @@
+{
+    "name": "lionix/graphqlSuiteCRM",
+    "description": "GraphQL for SuiteCRM + Rest API enhancements and simplifications",
+    "license": "LGPL",
+    "authors": [
+        {
+            "name": "Matías Barletta",
+            "email": "mrb@lionix.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+	"slim/slim": "~2.0",
+        "webonyx/graphql-php": "^0.6.2",
+        "youshido/graphql": "^1.0",
+        "doctrine/orm": "^2.5",
+        "symfony/yaml": "^3.0",
+        "codeguy/upload": "dev-master"
+    
+}
+}
+
