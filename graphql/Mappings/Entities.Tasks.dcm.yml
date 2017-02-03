@@ -1,0 +1,134 @@
+Entities\Tasks:
+    type: entity
+    table: tasks
+    indexes:
+        idx_tsk_name:
+            columns:
+                - name
+        idx_task_con_del:
+            columns:
+                - contact_id
+                - deleted
+        idx_task_par_del:
+            columns:
+                - parent_id
+                - parent_type
+                - deleted
+        idx_task_assigned:
+            columns:
+                - assigned_user_id
+        idx_task_status:
+            columns:
+                - status
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+                default: 'Not Started'
+        dateDueFlag:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: date_due_flag
+        dateDue:
+            type: datetime
+            nullable: true
+            column: date_due
+        dateStartFlag:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: date_start_flag
+        dateStart:
+            type: datetime
+            nullable: true
+            column: date_start
+        parentType:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: parent_type
+        parentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: parent_id
+        contactId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: contact_id
+        priority:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }

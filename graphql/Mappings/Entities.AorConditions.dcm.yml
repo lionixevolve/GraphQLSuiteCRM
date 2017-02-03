@@ -1,0 +1,119 @@
+Entities\AorConditions:
+    type: entity
+    table: aor_conditions
+    indexes:
+        aor_conditions_index_report_id:
+            columns:
+                - aor_report_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        aorReportId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: aor_report_id
+        conditionOrder:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: condition_order
+        logicOp:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: logic_op
+        parenthesis:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        modulePath:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: module_path
+        field:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        operator:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        valueType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: value_type
+        value:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        parameter:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }

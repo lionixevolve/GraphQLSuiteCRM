@@ -1,0 +1,43 @@
+Entities\AosQuotesAosInvoicesC:
+    type: entity
+    table: aos_quotes_aos_invoices_c
+    indexes:
+        aos_quotes_aos_invoices_alt:
+            columns:
+                - aos_quotes77d9_quotes_ida
+                - aos_quotes6b83nvoices_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        aosQuotes77d9QuotesIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: aos_quotes77d9_quotes_ida
+        aosQuotes6b83nvoicesIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: aos_quotes6b83nvoices_idb
+    lifecycleCallbacks: {  }

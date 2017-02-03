@@ -1,0 +1,39 @@
+Entities\CronRemoveDocuments:
+    type: entity
+    table: cron_remove_documents
+    indexes:
+        idx_cron_remove_document_bean_id:
+            columns:
+                - bean_id
+        idx_cron_remove_document_stamp:
+            columns:
+                - date_modified
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        beanId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: bean_id
+        module:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+    lifecycleCallbacks: {  }

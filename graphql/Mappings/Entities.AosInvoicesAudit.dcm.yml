@@ -1,0 +1,89 @@
+Entities\AosInvoicesAudit:
+    type: entity
+    table: aos_invoices_audit
+    indexes:
+        idx_aos_invoices_parent_id:
+            columns:
+                - parent_id
+    uniqueConstraints:
+        lxcode_c:
+            columns:
+                - lxcode_c
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        parentId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: parent_id
+        dateCreated:
+            type: datetime
+            nullable: true
+            column: date_created
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: created_by
+        fieldName:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: field_name
+        dataType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: data_type
+        beforeValueString:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: before_value_string
+        afterValueString:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: after_value_string
+        beforeValueText:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: before_value_text
+        afterValueText:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: after_value_text
+        lxcodeC:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: lxcode_c
+    lifecycleCallbacks: {  }

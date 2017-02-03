@@ -1,0 +1,43 @@
+Entities\OpportunitiesAosInvoices1C:
+    type: entity
+    table: opportunities_aos_invoices_1_c
+    indexes:
+        opportunities_aos_invoices_1_alt:
+            columns:
+                - opportunities_aos_invoices_1opportunities_ida
+                - opportunities_aos_invoices_1aos_invoices_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        opportunitiesAosInvoices1opportunitiesIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: opportunities_aos_invoices_1opportunities_ida
+        opportunitiesAosInvoices1aosInvoicesIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: opportunities_aos_invoices_1aos_invoices_idb
+    lifecycleCallbacks: {  }

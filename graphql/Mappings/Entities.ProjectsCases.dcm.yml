@@ -1,0 +1,49 @@
+Entities\ProjectsCases:
+    type: entity
+    table: projects_cases
+    indexes:
+        idx_proj_case_proj:
+            columns:
+                - project_id
+        idx_proj_case_case:
+            columns:
+                - case_id
+        projects_cases_alt:
+            columns:
+                - project_id
+                - case_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        caseId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: case_id
+        projectId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: project_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

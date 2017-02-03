@@ -1,0 +1,31 @@
+Entities\OauthNonce:
+    type: entity
+    table: oauth_nonce
+    indexes:
+        oauth_nonce_keyts:
+            columns:
+                - conskey
+                - nonce_ts
+    id:
+        conskey:
+            type: string
+            nullable: false
+            length: 32
+            options:
+                fixed: false
+            id: true
+        nonce:
+            type: string
+            nullable: false
+            length: 32
+            options:
+                fixed: false
+            id: true
+    fields:
+        nonceTs:
+            type: bigint
+            nullable: true
+            options:
+                unsigned: false
+            column: nonce_ts
+    lifecycleCallbacks: {  }

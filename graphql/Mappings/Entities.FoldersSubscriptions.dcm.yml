@@ -1,0 +1,34 @@
+Entities\FoldersSubscriptions:
+    type: entity
+    table: folders_subscriptions
+    indexes:
+        idx_folder_id_assigned_user_id:
+            columns:
+                - folder_id
+                - assigned_user_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        folderId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: folder_id
+        assignedUserId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,250 @@
+Entities\Meetings:
+    type: entity
+    table: meetings
+    indexes:
+        idx_mtg_name:
+            columns:
+                - name
+        idx_meet_par_del:
+            columns:
+                - parent_id
+                - parent_type
+                - deleted
+        idx_meet_stat_del:
+            columns:
+                - assigned_user_id
+                - status
+                - deleted
+        idx_meet_date_start:
+            columns:
+                - date_start
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        location:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        password:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        joinUrl:
+            type: string
+            nullable: true
+            length: 200
+            options:
+                fixed: false
+            column: join_url
+        hostUrl:
+            type: string
+            nullable: true
+            length: 400
+            options:
+                fixed: false
+            column: host_url
+        displayedUrl:
+            type: string
+            nullable: true
+            length: 400
+            options:
+                fixed: false
+            column: displayed_url
+        creator:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        externalId:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: external_id
+        durationHours:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: duration_hours
+        durationMinutes:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: duration_minutes
+        dateStart:
+            type: datetime
+            nullable: true
+            column: date_start
+        dateEnd:
+            type: datetime
+            nullable: true
+            column: date_end
+        parentType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: parent_type
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+                default: Planned
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+                default: Sugar
+        parentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: parent_id
+        reminderTime:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '-1'
+            column: reminder_time
+        emailReminderTime:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '-1'
+            column: email_reminder_time
+        emailReminderSent:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: email_reminder_sent
+        outlookId:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: outlook_id
+        sequence:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        repeatType:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: repeat_type
+        repeatInterval:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '1'
+            column: repeat_interval
+        repeatDow:
+            type: string
+            nullable: true
+            length: 7
+            options:
+                fixed: false
+            column: repeat_dow
+        repeatUntil:
+            type: date
+            nullable: true
+            column: repeat_until
+        repeatCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: repeat_count
+        repeatParentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: repeat_parent_id
+        recurringSource:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: recurring_source
+    lifecycleCallbacks: {  }

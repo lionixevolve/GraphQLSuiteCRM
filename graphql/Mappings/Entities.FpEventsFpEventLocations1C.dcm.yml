@@ -1,0 +1,43 @@
+Entities\FpEventsFpEventLocations1C:
+    type: entity
+    table: fp_events_fp_event_locations_1_c
+    indexes:
+        fp_events_fp_event_locations_1_alt:
+            columns:
+                - fp_events_fp_event_locations_1fp_events_ida
+                - fp_events_fp_event_locations_1fp_event_locations_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        fpEventsFpEventLocations1fpEventsIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: fp_events_fp_event_locations_1fp_events_ida
+        fpEventsFpEventLocations1fpEventLocationsIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: fp_events_fp_event_locations_1fp_event_locations_idb
+    lifecycleCallbacks: {  }

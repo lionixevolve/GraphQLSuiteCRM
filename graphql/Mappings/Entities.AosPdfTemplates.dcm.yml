@@ -1,0 +1,126 @@
+Entities\AosPdfTemplates:
+    type: entity
+    table: aos_pdf_templates
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        active:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+        type:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        pdfheader:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        pdffooter:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        marginLeft:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '15'
+            column: margin_left
+        marginRight:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '15'
+            column: margin_right
+        marginTop:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '16'
+            column: margin_top
+        marginBottom:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '16'
+            column: margin_bottom
+        marginHeader:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '9'
+            column: margin_header
+        marginFooter:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '9'
+            column: margin_footer
+    lifecycleCallbacks: {  }

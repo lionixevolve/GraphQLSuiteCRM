@@ -1,0 +1,10 @@
+Hacer un backup de netcommutual y pasarlo a netcommutual2 (hay que borrar tablas)
+
+Borrar las tablas de netcommutual2 que no tienen índices para que funcione el generador
+
+mysql -uroot -p0610988 -e "drop table netcommutual2.users_feeds" && mysql -uroot -pshto33 -e "drop table netcommutual2.email_cache" &&  mysql -uroot -pshto33 -e "drop table netcommutual2.custom_fields" &&  mysql -uroot -pshto33 -e "drop table netcommutual2.config"
+
+
+sudo php vendor/bin/doctrine orm:convert:mapping --from-database yml Mappings  --namespace 'Entities\' --force
+sudo php vendor/bin/doctrine orm:generate-entities  --regenerate-entities --no-backup ./
+

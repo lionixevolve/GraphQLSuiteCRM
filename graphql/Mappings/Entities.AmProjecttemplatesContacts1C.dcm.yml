@@ -1,0 +1,43 @@
+Entities\AmProjecttemplatesContacts1C:
+    type: entity
+    table: am_projecttemplates_contacts_1_c
+    indexes:
+        am_projecttemplates_contacts_1_alt:
+            columns:
+                - am_projecttemplates_ida
+                - contacts_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        amProjecttemplatesIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: am_projecttemplates_ida
+        contactsIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: contacts_idb
+    lifecycleCallbacks: {  }

@@ -1,0 +1,131 @@
+Entities\JobQueue:
+    type: entity
+    table: job_queue
+    indexes:
+        idx_status_scheduler:
+            columns:
+                - status
+                - scheduler_id
+        idx_status_time:
+            columns:
+                - status
+                - execute_time
+                - date_entered
+        idx_status_entered:
+            columns:
+                - status
+                - date_entered
+        idx_status_modified:
+            columns:
+                - status
+                - date_modified
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        schedulerId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: scheduler_id
+        executeTime:
+            type: datetime
+            nullable: true
+            column: execute_time
+        status:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+        resolution:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+        message:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        target:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        data:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        requeue:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        retryCount:
+            type: boolean
+            nullable: true
+            column: retry_count
+        failureCount:
+            type: boolean
+            nullable: true
+            column: failure_count
+        jobDelay:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: job_delay
+        client:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        percentComplete:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: percent_complete
+    lifecycleCallbacks: {  }

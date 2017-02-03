@@ -1,0 +1,96 @@
+Entities\Tracker:
+    type: entity
+    table: tracker
+    indexes:
+        idx_tracker_iid:
+            columns:
+                - item_id
+        idx_tracker_userid_vis_id:
+            columns:
+                - user_id
+                - visible
+                - id
+        idx_tracker_userid_itemid_vis:
+            columns:
+                - user_id
+                - item_id
+                - visible
+        idx_tracker_monitor_id:
+            columns:
+                - monitor_id
+        idx_tracker_date_modified:
+            columns:
+                - date_modified
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        monitorId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: monitor_id
+        userId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: user_id
+        moduleName:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: module_name
+        itemId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: item_id
+        itemSummary:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: item_summary
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        action:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        sessionId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: session_id
+        visible:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

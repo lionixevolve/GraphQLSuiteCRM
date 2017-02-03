@@ -1,0 +1,56 @@
+Entities\UsersSignatures:
+    type: entity
+    table: users_signatures
+    indexes:
+        idx_usersig_uid:
+            columns:
+                - user_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+        userId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: user_id
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        signature:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        signatureHtml:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: signature_html
+    lifecycleCallbacks: {  }

@@ -1,0 +1,47 @@
+Entities\DocumentsContacts:
+    type: entity
+    table: documents_contacts
+    indexes:
+        documents_contacts_contact_id:
+            columns:
+                - contact_id
+                - document_id
+        documents_contacts_document_id:
+            columns:
+                - document_id
+                - contact_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        documentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: document_id
+        contactId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: contact_id
+    lifecycleCallbacks: {  }

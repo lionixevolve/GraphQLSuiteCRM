@@ -1,0 +1,100 @@
+Entities\DocumentRevisions:
+    type: entity
+    table: document_revisions
+    indexes:
+        documentrevision_mimetype:
+            columns:
+                - file_mime_type
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        changeLog:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: change_log
+        documentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: document_id
+        docId:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: doc_id
+        docType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: doc_type
+        docUrl:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: doc_url
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        filename:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        fileExt:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: file_ext
+        fileMimeType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: file_mime_type
+        revision:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+    lifecycleCallbacks: {  }

@@ -1,0 +1,192 @@
+Entities\ProjectTask:
+    type: entity
+    table: project_task
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        projectId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: project_id
+        projectTaskId:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: project_task_id
+        name:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        status:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        relationshipType:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: relationship_type
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        predecessors:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        dateStart:
+            type: date
+            nullable: true
+            column: date_start
+        timeStart:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: time_start
+        timeFinish:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: time_finish
+        dateFinish:
+            type: date
+            nullable: true
+            column: date_finish
+        duration:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        durationUnit:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: duration_unit
+        actualDuration:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: actual_duration
+        percentComplete:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: percent_complete
+        dateDue:
+            type: date
+            nullable: true
+            column: date_due
+        timeDue:
+            type: time
+            nullable: true
+            column: time_due
+        parentTaskId:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: parent_task_id
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        priority:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        milestoneFlag:
+            type: boolean
+            nullable: true
+            column: milestone_flag
+        orderNumber:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '1'
+            column: order_number
+        taskNumber:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: task_number
+        estimatedEffort:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: estimated_effort
+        actualEffort:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: actual_effort
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        utilization:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '100'
+    lifecycleCallbacks: {  }

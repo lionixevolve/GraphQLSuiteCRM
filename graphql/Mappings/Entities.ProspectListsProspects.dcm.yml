@@ -1,0 +1,54 @@
+Entities\ProspectListsProspects:
+    type: entity
+    table: prospect_lists_prospects
+    indexes:
+        idx_plp_pro_id:
+            columns:
+                - prospect_list_id
+        idx_plp_rel_id:
+            columns:
+                - related_id
+                - related_type
+                - prospect_list_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        prospectListId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: prospect_list_id
+        relatedId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: related_id
+        relatedType:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+            column: related_type
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

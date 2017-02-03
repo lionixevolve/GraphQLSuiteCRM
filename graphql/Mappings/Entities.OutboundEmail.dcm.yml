@@ -1,0 +1,127 @@
+Entities\OutboundEmail:
+    type: entity
+    table: outbound_email
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        type:
+            type: string
+            nullable: true
+            length: 15
+            options:
+                fixed: false
+                default: user
+        userId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: user_id
+        mailSendtype:
+            type: string
+            nullable: true
+            length: 8
+            options:
+                fixed: false
+                default: smtp
+            column: mail_sendtype
+        mailSmtptype:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+                default: other
+            column: mail_smtptype
+        mailSmtpserver:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: mail_smtpserver
+        mailSmtpport:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: mail_smtpport
+        mailSmtpuser:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: mail_smtpuser
+        mailSmtppass:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: mail_smtppass
+        mailSmtpauthReq:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: mail_smtpauth_req
+        mailSmtpssl:
+            type: string
+            nullable: true
+            length: 1
+            options:
+                fixed: false
+                default: '0'
+            column: mail_smtpssl
+    lifecycleCallbacks: {  }

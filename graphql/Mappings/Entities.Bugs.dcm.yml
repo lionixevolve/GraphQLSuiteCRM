@@ -1,0 +1,139 @@
+Entities\Bugs:
+    type: entity
+    table: bugs
+    indexes:
+        bug_number:
+            columns:
+                - bug_number
+        idx_bug_name:
+            columns:
+                - name
+        idx_bugs_assigned_user:
+            columns:
+                - assigned_user_id
+    uniqueConstraints:
+        bugsnumk:
+            columns:
+                - bug_number
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        bugNumber:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: bug_number
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        priority:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        resolution:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        workLog:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: work_log
+        foundInRelease:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: found_in_release
+        fixedInRelease:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: fixed_in_release
+        source:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        productCategory:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: product_category
+    lifecycleCallbacks: {  }

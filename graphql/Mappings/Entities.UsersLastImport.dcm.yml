@@ -1,0 +1,50 @@
+Entities\UsersLastImport:
+    type: entity
+    table: users_last_import
+    indexes:
+        idx_user_id:
+            columns:
+                - assigned_user_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        importModule:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: import_module
+        beanType:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: bean_type
+        beanId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: bean_id
+        deleted:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }

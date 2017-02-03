@@ -1,0 +1,83 @@
+Entities\UpgradeHistory:
+    type: entity
+    table: upgrade_history
+    uniqueConstraints:
+        upgrade_history_md5_uk:
+            columns:
+                - md5sum
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        filename:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        md5sum:
+            type: string
+            nullable: true
+            length: 32
+            options:
+                fixed: false
+        type:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+        status:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        version:
+            type: string
+            nullable: true
+            length: 64
+            options:
+                fixed: false
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        idName:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: id_name
+        manifest:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        enabled:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+    lifecycleCallbacks: {  }

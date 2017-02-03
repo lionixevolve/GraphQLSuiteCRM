@@ -1,0 +1,293 @@
+Entities\AosInvoices:
+    type: entity
+    table: aos_invoices
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        billingAccountId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: billing_account_id
+        billingContactId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: billing_contact_id
+        billingAddressStreet:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: billing_address_street
+        billingAddressCity:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: billing_address_city
+        billingAddressState:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: billing_address_state
+        billingAddressPostalcode:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+            column: billing_address_postalcode
+        billingAddressCountry:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: billing_address_country
+        shippingAddressStreet:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: shipping_address_street
+        shippingAddressCity:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: shipping_address_city
+        shippingAddressState:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: shipping_address_state
+        shippingAddressPostalcode:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+            column: shipping_address_postalcode
+        shippingAddressCountry:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: shipping_address_country
+        number:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        totalAmt:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: total_amt
+        totalAmtUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: total_amt_usdollar
+        subtotalAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: subtotal_amount
+        subtotalAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: subtotal_amount_usdollar
+        discountAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: discount_amount
+        discountAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: discount_amount_usdollar
+        taxAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: tax_amount
+        taxAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: tax_amount_usdollar
+        shippingAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: shipping_amount
+        shippingAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: shipping_amount_usdollar
+        shippingTax:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: shipping_tax
+        shippingTaxAmt:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: shipping_tax_amt
+        shippingTaxAmtUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: shipping_tax_amt_usdollar
+        totalAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: total_amount
+        totalAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: total_amount_usdollar
+        currencyId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: currency_id
+        quoteNumber:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: quote_number
+        quoteDate:
+            type: date
+            nullable: true
+            column: quote_date
+        invoiceDate:
+            type: date
+            nullable: true
+            column: invoice_date
+        dueDate:
+            type: date
+            nullable: true
+            column: due_date
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        templateDdownC:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: template_ddown_c
+        subtotalTaxAmount:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: subtotal_tax_amount
+        subtotalTaxAmountUsdollar:
+            type: decimal
+            nullable: true
+            precision: 26
+            scale: 6
+            column: subtotal_tax_amount_usdollar
+    lifecycleCallbacks: {  }

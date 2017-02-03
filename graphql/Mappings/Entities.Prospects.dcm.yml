@@ -1,0 +1,267 @@
+Entities\Prospects:
+    type: entity
+    table: prospects
+    indexes:
+        prospect_auto_tracker_key:
+            columns:
+                - tracker_key
+        idx_prospects_last_first:
+            columns:
+                - last_name
+                - first_name
+                - deleted
+        idx_prospecs_del_last:
+            columns:
+                - last_name
+                - deleted
+        idx_prospects_id_del:
+            columns:
+                - id
+                - deleted
+        idx_prospects_assigned:
+            columns:
+                - assigned_user_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        salutation:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        firstName:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: first_name
+        lastName:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: last_name
+        title:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        photo:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        department:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        doNotCall:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: do_not_call
+        phoneHome:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: phone_home
+        phoneMobile:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: phone_mobile
+        phoneWork:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: phone_work
+        phoneOther:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: phone_other
+        phoneFax:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: phone_fax
+        primaryAddressStreet:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: primary_address_street
+        primaryAddressCity:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: primary_address_city
+        primaryAddressState:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: primary_address_state
+        primaryAddressPostalcode:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+            column: primary_address_postalcode
+        primaryAddressCountry:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: primary_address_country
+        altAddressStreet:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: alt_address_street
+        altAddressCity:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: alt_address_city
+        altAddressState:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: alt_address_state
+        altAddressPostalcode:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+            column: alt_address_postalcode
+        altAddressCountry:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: alt_address_country
+        assistant:
+            type: string
+            nullable: true
+            length: 75
+            options:
+                fixed: false
+        assistantPhone:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: assistant_phone
+        trackerKey:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: tracker_key
+        birthdate:
+            type: date
+            nullable: true
+        leadId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: lead_id
+        accountName:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: account_name
+        campaignId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: campaign_id
+    lifecycleCallbacks: {  }
