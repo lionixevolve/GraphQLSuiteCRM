@@ -1,0 +1,49 @@
+Entities\ProjectsOpportunities:
+    type: entity
+    table: projects_opportunities
+    indexes:
+        idx_proj_opp_proj:
+            columns:
+                - project_id
+        idx_proj_opp_opp:
+            columns:
+                - opportunity_id
+        projects_opportunities_alt:
+            columns:
+                - project_id
+                - opportunity_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        opportunityId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: opportunity_id
+        projectId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: project_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

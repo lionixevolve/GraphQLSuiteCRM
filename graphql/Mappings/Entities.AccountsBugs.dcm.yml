@@ -1,0 +1,49 @@
+Entities\AccountsBugs:
+    type: entity
+    table: accounts_bugs
+    indexes:
+        idx_acc_bug_acc:
+            columns:
+                - account_id
+        idx_acc_bug_bug:
+            columns:
+                - bug_id
+        idx_account_bug:
+            columns:
+                - account_id
+                - bug_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        accountId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: account_id
+        bugId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: bug_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

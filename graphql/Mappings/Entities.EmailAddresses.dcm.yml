@@ -1,0 +1,65 @@
+Entities\EmailAddresses:
+    type: entity
+    table: email_addresses
+    indexes:
+        idx_ea_caps_opt_out_invalid:
+            columns:
+                - email_address_caps
+                - opt_out
+                - invalid_email
+        idx_ea_opt_out_invalid:
+            columns:
+                - email_address
+                - opt_out
+                - invalid_email
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        emailAddress:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: email_address
+        emailAddressCaps:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: email_address_caps
+        invalidEmail:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: invalid_email
+        optOut:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: opt_out
+        dateCreated:
+            type: datetime
+            nullable: true
+            column: date_created
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

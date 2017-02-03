@@ -1,0 +1,46 @@
+Entities\InboundEmailAutoreply:
+    type: entity
+    table: inbound_email_autoreply
+    indexes:
+        idx_ie_autoreplied_to:
+            columns:
+                - autoreplied_to
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        autorepliedTo:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: autoreplied_to
+        ieId:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            column: ie_id
+    lifecycleCallbacks: {  }

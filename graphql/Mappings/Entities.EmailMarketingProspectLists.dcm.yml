@@ -1,0 +1,43 @@
+Entities\EmailMarketingProspectLists:
+    type: entity
+    table: email_marketing_prospect_lists
+    indexes:
+        email_mp_prospects:
+            columns:
+                - email_marketing_id
+                - prospect_list_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        prospectListId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: prospect_list_id
+        emailMarketingId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: email_marketing_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

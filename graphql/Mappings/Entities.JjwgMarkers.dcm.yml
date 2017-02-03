@@ -1,0 +1,103 @@
+Entities\JjwgMarkers:
+    type: entity
+    table: jjwg_markers
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+        city:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        state:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        country:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        jjwgMapsLat:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lat
+        jjwgMapsLng:
+            type: float
+            nullable: true
+            precision: 11
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lng
+        markerImage:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+                default: company
+            column: marker_image
+    lifecycleCallbacks: {  }

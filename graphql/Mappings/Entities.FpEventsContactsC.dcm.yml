@@ -1,0 +1,66 @@
+Entities\FpEventsContactsC:
+    type: entity
+    table: fp_events_contacts_c
+    indexes:
+        fp_events_contacts_alt:
+            columns:
+                - fp_events_contactsfp_events_ida
+                - fp_events_contactscontacts_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        fpEventsContactsfpEventsIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: fp_events_contactsfp_events_ida
+        fpEventsContactscontactsIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: fp_events_contactscontacts_idb
+        inviteStatus:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+                default: 'Not Invited'
+            column: invite_status
+        acceptStatus:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+                default: 'No Response'
+            column: accept_status
+        emailResponded:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: email_responded
+    lifecycleCallbacks: {  }

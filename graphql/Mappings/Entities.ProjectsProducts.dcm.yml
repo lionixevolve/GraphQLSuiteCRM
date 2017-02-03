@@ -1,0 +1,49 @@
+Entities\ProjectsProducts:
+    type: entity
+    table: projects_products
+    indexes:
+        idx_proj_prod_project:
+            columns:
+                - project_id
+        idx_proj_prod_product:
+            columns:
+                - product_id
+        projects_products_alt:
+            columns:
+                - project_id
+                - product_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        productId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: product_id
+        projectId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: project_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

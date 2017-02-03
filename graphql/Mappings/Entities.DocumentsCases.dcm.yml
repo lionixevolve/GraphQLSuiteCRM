@@ -1,0 +1,47 @@
+Entities\DocumentsCases:
+    type: entity
+    table: documents_cases
+    indexes:
+        documents_cases_case_id:
+            columns:
+                - case_id
+                - document_id
+        documents_cases_document_id:
+            columns:
+                - document_id
+                - case_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        documentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: document_id
+        caseId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: case_id
+    lifecycleCallbacks: {  }

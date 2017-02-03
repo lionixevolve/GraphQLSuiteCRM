@@ -1,0 +1,70 @@
+Entities\CasesCstm:
+    type: entity
+    table: cases_cstm
+    uniqueConstraints:
+        lxcode_c:
+            columns:
+                - lxcode_c
+    id:
+        idC:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            column: id_c
+            generator:
+                strategy: IDENTITY
+    fields:
+        jjwgMapsLngC:
+            type: float
+            nullable: true
+            precision: 11
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lng_c
+        jjwgMapsLatC:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lat_c
+        jjwgMapsGeocodeStatusC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: jjwg_maps_geocode_status_c
+        jjwgMapsAddressC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: jjwg_maps_address_c
+        elapsedtimeinminsC:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: elapsedtimeinmins_c
+        lxcodeC:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: lxcode_c
+        areaC:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: area_c
+    lifecycleCallbacks: {  }

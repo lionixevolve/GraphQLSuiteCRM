@@ -1,0 +1,98 @@
+Entities\Schedulers:
+    type: entity
+    table: schedulers
+    indexes:
+        idx_schedule:
+            columns:
+                - date_time_start
+                - deleted
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        job:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateTimeStart:
+            type: datetime
+            nullable: true
+            column: date_time_start
+        dateTimeEnd:
+            type: datetime
+            nullable: true
+            column: date_time_end
+        jobInterval:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: job_interval
+        timeFrom:
+            type: time
+            nullable: true
+            column: time_from
+        timeTo:
+            type: time
+            nullable: true
+            column: time_to
+        lastRun:
+            type: datetime
+            nullable: true
+            column: last_run
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        catchUp:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+            column: catch_up
+    lifecycleCallbacks: {  }

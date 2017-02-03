@@ -1,0 +1,124 @@
+Entities\CampaignLog:
+    type: entity
+    table: campaign_log
+    indexes:
+        idx_camp_tracker:
+            columns:
+                - target_tracker_key
+        idx_camp_campaign_id:
+            columns:
+                - campaign_id
+        idx_camp_more_info:
+            columns:
+                - more_information
+        idx_target_id:
+            columns:
+                - target_id
+        idx_target_id_deleted:
+            columns:
+                - target_id
+                - deleted
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        campaignId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: campaign_id
+        targetTrackerKey:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: target_tracker_key
+        targetId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: target_id
+        targetType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: target_type
+        activityType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: activity_type
+        activityDate:
+            type: datetime
+            nullable: true
+            column: activity_date
+        relatedId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: related_id
+        relatedType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: related_type
+        archived:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        hits:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+        listId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: list_id
+        deleted:
+            type: boolean
+            nullable: true
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        moreInformation:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: more_information
+        marketingId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: marketing_id
+    lifecycleCallbacks: {  }

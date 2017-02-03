@@ -1,0 +1,71 @@
+Entities\OauthTokens:
+    type: entity
+    table: oauth_tokens
+    indexes:
+        oauth_state_ts:
+            columns:
+                - tstate
+                - token_ts
+        constoken_key:
+            columns:
+                - consumer
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+        deleted:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+            id: true
+    fields:
+        secret:
+            type: string
+            nullable: true
+            length: 32
+            options:
+                fixed: false
+        tstate:
+            type: string
+            nullable: true
+            length: 1
+            options:
+                fixed: false
+        consumer:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+        tokenTs:
+            type: bigint
+            nullable: true
+            options:
+                unsigned: false
+            column: token_ts
+        verify:
+            type: string
+            nullable: true
+            length: 32
+            options:
+                fixed: false
+        callbackUrl:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: callback_url
+        assignedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: assigned_user_id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,64 @@
+Entities\MeetingsLeads:
+    type: entity
+    table: meetings_leads
+    indexes:
+        idx_lead_meeting_meeting:
+            columns:
+                - meeting_id
+        idx_lead_meeting_lead:
+            columns:
+                - lead_id
+        idx_meeting_lead:
+            columns:
+                - meeting_id
+                - lead_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        meetingId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: meeting_id
+        leadId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: lead_id
+        required:
+            type: string
+            nullable: true
+            length: 1
+            options:
+                fixed: false
+                default: '1'
+        acceptStatus:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+                default: none
+            column: accept_status
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

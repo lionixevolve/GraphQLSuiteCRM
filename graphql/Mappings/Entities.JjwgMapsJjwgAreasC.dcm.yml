@@ -1,0 +1,43 @@
+Entities\JjwgMapsJjwgAreasC:
+    type: entity
+    table: jjwg_maps_jjwg_areas_c
+    indexes:
+        jjwg_maps_jjwg_areas_alt:
+            columns:
+                - jjwg_maps_5304wg_maps_ida
+                - jjwg_maps_41f2g_areas_idb
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        jjwgMaps5304wgMapsIda:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: jjwg_maps_5304wg_maps_ida
+        jjwgMaps41f2gAreasIdb:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: jjwg_maps_41f2g_areas_idb
+    lifecycleCallbacks: {  }

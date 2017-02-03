@@ -1,0 +1,47 @@
+Entities\DocumentsBugs:
+    type: entity
+    table: documents_bugs
+    indexes:
+        documents_bugs_bug_id:
+            columns:
+                - bug_id
+                - document_id
+        documents_bugs_document_id:
+            columns:
+                - document_id
+                - bug_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        documentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: document_id
+        bugId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: bug_id
+    lifecycleCallbacks: {  }

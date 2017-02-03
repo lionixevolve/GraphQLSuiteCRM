@@ -1,0 +1,139 @@
+Entities\FieldsMetaData:
+    type: entity
+    table: fields_meta_data
+    indexes:
+        idx_meta_id_del:
+            columns:
+                - id
+                - deleted
+        idx_meta_cm_del:
+            columns:
+                - custom_module
+                - deleted
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        vname:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        comments:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        help:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        customModule:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: custom_module
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        len:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        required:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        defaultValue:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: default_value
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        audited:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        massupdate:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        duplicateMerge:
+            type: smallint
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: duplicate_merge
+        reportable:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+        importable:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        ext1:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        ext2:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        ext3:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        ext4:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }

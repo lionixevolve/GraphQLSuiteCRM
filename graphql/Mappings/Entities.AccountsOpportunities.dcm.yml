@@ -1,0 +1,48 @@
+Entities\AccountsOpportunities:
+    type: entity
+    table: accounts_opportunities
+    indexes:
+        idx_account_opportunity:
+            columns:
+                - account_id
+                - opportunity_id
+        idx_oppid_del_accid:
+            columns:
+                - opportunity_id
+                - deleted
+                - account_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        opportunityId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: opportunity_id
+        accountId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: account_id
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

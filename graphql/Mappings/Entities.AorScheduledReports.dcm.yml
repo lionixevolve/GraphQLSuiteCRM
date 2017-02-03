@@ -1,0 +1,84 @@
+Entities\AorScheduledReports:
+    type: entity
+    table: aor_scheduled_reports
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        schedule:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        lastRun:
+            type: datetime
+            nullable: true
+            column: last_run
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        emailRecipients:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: email_recipients
+        aorReportId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: aor_report_id
+    lifecycleCallbacks: {  }

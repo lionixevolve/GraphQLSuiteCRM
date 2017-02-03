@@ -1,0 +1,64 @@
+Entities\MeetingsContacts:
+    type: entity
+    table: meetings_contacts
+    indexes:
+        idx_con_mtg_mtg:
+            columns:
+                - meeting_id
+        idx_con_mtg_con:
+            columns:
+                - contact_id
+        idx_meeting_contact:
+            columns:
+                - meeting_id
+                - contact_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        meetingId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: meeting_id
+        contactId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: contact_id
+        required:
+            type: string
+            nullable: true
+            length: 1
+            options:
+                fixed: false
+                default: '1'
+        acceptStatus:
+            type: string
+            nullable: true
+            length: 25
+            options:
+                fixed: false
+                default: none
+            column: accept_status
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

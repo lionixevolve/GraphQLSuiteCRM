@@ -1,0 +1,260 @@
+Entities\Users:
+    type: entity
+    table: users
+    indexes:
+        idx_user_name:
+            columns:
+                - user_name
+                - is_group
+                - status
+                - last_name
+                - first_name
+                - id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userName:
+            type: string
+            nullable: true
+            length: 60
+            options:
+                fixed: false
+            column: user_name
+        userHash:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: user_hash
+        systemGeneratedPassword:
+            type: boolean
+            nullable: true
+            column: system_generated_password
+        pwdLastChanged:
+            type: datetime
+            nullable: true
+            column: pwd_last_changed
+        authenticateId:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: authenticate_id
+        sugarLogin:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+            column: sugar_login
+        firstName:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+            column: first_name
+        lastName:
+            type: string
+            nullable: true
+            length: 30
+            options:
+                fixed: false
+            column: last_name
+        isAdmin:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: is_admin
+        externalAuthOnly:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: external_auth_only
+        receiveNotifications:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+            column: receive_notifications
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        dateEntered:
+            type: datetime
+            nullable: true
+            column: date_entered
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        modifiedUserId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: modified_user_id
+        createdBy:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: created_by
+        title:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        photo:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        department:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        phoneHome:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: phone_home
+        phoneMobile:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: phone_mobile
+        phoneWork:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: phone_work
+        phoneOther:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: phone_other
+        phoneFax:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+            column: phone_fax
+        status:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+        addressStreet:
+            type: string
+            nullable: true
+            length: 150
+            options:
+                fixed: false
+            column: address_street
+        addressCity:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: address_city
+        addressState:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: address_state
+        addressCountry:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: address_country
+        addressPostalcode:
+            type: string
+            nullable: true
+            length: 20
+            options:
+                fixed: false
+            column: address_postalcode
+        deleted:
+            type: boolean
+            nullable: true
+        portalOnly:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: portal_only
+        showOnEmployees:
+            type: boolean
+            nullable: true
+            options:
+                default: '1'
+            column: show_on_employees
+        employeeStatus:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: employee_status
+        messengerId:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: messenger_id
+        messengerType:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: messenger_type
+        reportsToId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: true
+            column: reports_to_id
+        isGroup:
+            type: boolean
+            nullable: true
+            column: is_group
+    lifecycleCallbacks: {  }

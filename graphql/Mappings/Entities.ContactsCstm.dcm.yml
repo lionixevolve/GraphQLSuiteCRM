@@ -1,0 +1,211 @@
+Entities\ContactsCstm:
+    type: entity
+    table: contacts_cstm
+    uniqueConstraints:
+        lxcode_c:
+            columns:
+                - lxcode_c
+    id:
+        idC:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: true
+            id: true
+            column: id_c
+            generator:
+                strategy: IDENTITY
+    fields:
+        jjwgMapsLngC:
+            type: float
+            nullable: true
+            precision: 11
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lng_c
+        jjwgMapsLatC:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 8
+            options:
+                default: '0.00000000'
+            column: jjwg_maps_lat_c
+        jjwgMapsGeocodeStatusC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: jjwg_maps_geocode_status_c
+        jjwgMapsAddressC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: jjwg_maps_address_c
+        soundexC:
+            type: string
+            nullable: true
+            length: 3
+            options:
+                fixed: false
+            column: soundex_c
+        cedulaC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: cedula_c
+        lxcodeC:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: lxcode_c
+        migratedfromC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: migratedfrom_c
+        fechaingresoC:
+            type: date
+            nullable: true
+            column: fechaingreso_c
+        puestoC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: puesto_c
+        paisC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: pais_c
+        estadocivilC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: estadocivil_c
+        dependientesC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: dependientes_c
+        horarioC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: horario_c
+        numerodeempleadoC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: numerodeempleado_c
+        grupoC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: grupo_c
+        whatsappC:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: whatsapp_c
+        estadoC:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: estado_c
+        sexoC:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: sexo_c
+        lxoldphonesC:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+            column: lxoldphones_c
+        lastname2C:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: lastname2_c
+        tecnicoindependienteC:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: tecnicoindependiente_c
+        tecnicoenempresaC:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: tecnicoenempresa_c
+        areainfluenciaprovinciaC:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: areainfluenciaprovincia_c
+        areainfluenciacantonC:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: areainfluenciacanton_c
+        areainfluenciadistritoC:
+            type: string
+            nullable: true
+            length: 100
+            options:
+                fixed: false
+            column: areainfluenciadistrito_c
+        zonaservicioC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: zonaservicio_c
+        fullnameC:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: fullname_c
+    lifecycleCallbacks: {  }

@@ -1,0 +1,47 @@
+Entities\DocumentsOpportunities:
+    type: entity
+    table: documents_opportunities
+    indexes:
+        idx_docu_opps_oppo_id:
+            columns:
+                - opportunity_id
+                - document_id
+        idx_docu_oppo_docu_id:
+            columns:
+                - document_id
+                - opportunity_id
+    id:
+        id:
+            type: string
+            nullable: false
+            length: 36
+            options:
+                fixed: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateModified:
+            type: datetime
+            nullable: true
+            column: date_modified
+        deleted:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+        documentId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: document_id
+        opportunityId:
+            type: string
+            nullable: true
+            length: 36
+            options:
+                fixed: false
+            column: opportunity_id
+    lifecycleCallbacks: {  }
