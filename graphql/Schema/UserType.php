@@ -13,6 +13,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
         foreach (argsHelper::entityArgsHelper('Users') as $field => $type) {
             $config->addField($field, $type);
         }
+        $config->addField('session_id', new StringType());
         $config->addField('email1', new StringType());
         $config->addField('roles', new StringType());
         $config->addField('related_roles', [
@@ -99,8 +100,15 @@ class UserType extends AbstractObjectType   // extending abstract Object type
     {
         if(!empty($args['whoami'])){
             global $current_user;
-            // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($current_user,1), FILE_APPEND);
-            return self::retrieveUser($current_user->id, $info);
+            if($current_user->id){
+                // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($current_user,1), FILE_APPEND);
+                $user=self::retrieveUser($current_user->id, $info);
+                $user['session_id']=session_id();
+                return $user;
+
+            }else{
+                return null;
+            }
         }
         if (isset($args['id']) && is_array($args['id'])) {
             foreach ($args as $key => $userId) {
