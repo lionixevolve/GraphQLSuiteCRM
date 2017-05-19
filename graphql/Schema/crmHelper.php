@@ -1,6 +1,6 @@
 <?php
 class crmHelper{
-/* This saveBean is an adapted copy of the set_entry sugar rest/soap service
+    /* This saveBean is an adapted copy of the set_entry sugar rest/soap service
 */
 public function saveBean($module_name, $class_name, $name_value_list){
 
@@ -28,15 +28,14 @@ public function saveBean($module_name, $class_name, $name_value_list){
             continue;
         }
         if($name=="related_bean"){
-            $related_bean=strtolower($value);
+            $seed->new_rel_relname=$value;
         }
         if($name=="related_beans"){
             $related_beans=$value;
         }
         if($name=="related_id"){
-            $related_id=$value;
+            $seed->new_rel_id=$value;
         }
-
         if (!is_array($value)) {
             $seed->$name = $value;
         } elseif ($name!="related_beans") {
@@ -47,6 +46,7 @@ public function saveBean($module_name, $class_name, $name_value_list){
 
 
     if ($seed->ACLAccess('Save')) {
+        $seed->not_use_rel_in_req=true;
         $seed->save();
         if ($seed->deleted == 1) {
             $seed->mark_deleted($seed->id);
