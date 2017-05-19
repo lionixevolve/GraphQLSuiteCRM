@@ -78,7 +78,7 @@ class NotesListType extends AbstractListType
         $moduleFields['ids']="enabled";
         foreach ($moduleFields as $key => $params) {
             if (in_array($key, $arrayKeys)) {
-                if (substr_count($args[$key], ",")>0) {
+                if (is_array($args[$key]) || substr_count($args[$key], ",")>0 ) {
                     $guessOperator="in";
                     if(is_array($args[$key])){
                         $findValues=$args[$key];
