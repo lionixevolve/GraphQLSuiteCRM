@@ -258,6 +258,14 @@ class SuiteCRMSchema extends AbstractSchema
                         return TaskType::resolve($value, ['id'=>$result['id']], $type);
                  },
              ],
+             'createNote' => [
+                 'type' => new NoteInputType(),
+                 'args'    => argsHelper::entityArgsHelper('Notes'),
+                 'resolve' => function ($value, $args, $type) {
+                     $result=NoteInputType::resolve($value, $args, $type);
+                        return NoteType::resolve($value, ['id'=>$result['id']], $type);
+                 },
+             ],
         ]);
     }
 }
