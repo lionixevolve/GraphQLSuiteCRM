@@ -56,6 +56,18 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                     }
                 },
         ]);
+        $config->addField('notes', [
+                'type' => new NotesListType(),
+                'args' => argsHelper::entityArgsHelper('Notes'),
+                'resolve' => function ($value, array $args, ResolveInfo $info) {
+                    if (!empty($value['notes'])) {
+                        $args['ids']=$value['notes'];
+                        return NotesListType::resolve($value, $args, $info);
+                    } else {
+                        return null;
+                    }
+                 },
+         ]);
         $config->addField('account_details', [
                 'type'=> new AccountType(),
                 'args' => argsHelper::entityArgsHelper('Accounts'),
@@ -178,9 +190,14 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                         $module_arr['contacts'][] = $contact->id;
                     }
                 }
+                if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                    foreach ($opportunity->get_linked_beans('notes') as $note) {
+                        $module_arr['notes'][] = $note->id;
+                    }
+                }
                 if(isset($queryFields) && array_key_exists('account_id',$queryFields)){
                     $opportunity->load_relationship('accounts');
-                    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($opportunity,1), FILE_APPEND);
+                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($opportunity,1), FILE_APPEND);
                     foreach ($opportunity->accounts->getBeans() as $account) {
                         $module_arr['account_id'] = $account->id;
                     }
