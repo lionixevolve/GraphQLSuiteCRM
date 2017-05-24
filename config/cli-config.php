@@ -23,8 +23,7 @@ $config->setMetadataDriverImpl($driver);
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
-$config->setFilterSchemaAssetsExpression("~^(?!(config|address_book|custom_fields|email_cache|users_feeds))~");
-
+$config->setFilterSchemaAssetsExpression("~^(?!(config|address_book|custom_fields|email_cache|users_feeds|.*_audit$))~");
 // $entityManager->getConnection()->getConfiguration()->setFilterSchemaAssetsExpression("~^(?!Table1)~");
 
 $entityManager = \Doctrine\ORM\EntityManager::create($connectionParams, $config);
