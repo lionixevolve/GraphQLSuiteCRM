@@ -19,6 +19,7 @@ require_once __DIR__ . '/Schema/MeetingType.php';
 require_once __DIR__ . '/Schema/MeetingInputType.php';
 require_once __DIR__ . '/Schema/MeetingsListType.php';
 require_once __DIR__ . '/Schema/NoteType.php';
+require_once __DIR__ . '/Schema/NoteInputType.php';
 require_once __DIR__ . '/Schema/NotesListType.php';
 require_once __DIR__ . '/Schema/OpportunityType.php';
 require_once __DIR__ . '/Schema/OpportunityInputType.php';
