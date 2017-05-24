@@ -1,17 +1,18 @@
 <?php
 require_once 'bootstrap.php';
+require_once 'config.php';
+$sugar_config['lx_dbcrmserver'] = 'localhost';
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 // replace with file to your own project bootstrap
-
 // replace with mechanism to retrieve EntityManager in your app
 $connectionParams = array(
     'driver' => 'pdo_mysql',
-    'host' => 'localhost',
+    'host' => $sugar_config['dbconfig']['db_host_name'] ,
     'port' => '3306',
-    'user' => 'root',
-    'password' => '',
-    'dbname' => '',
+    'user' => $sugar_config['dbconfig']['db_user_name'] ,
+    'password' => $sugar_config['dbconfig']['db_password'] ,
+    'dbname' => $sugar_config['dbconfig']['db_name'] ,
     'charset' => 'utf8',
 );
 $config = new \Doctrine\ORM\Configuration();
