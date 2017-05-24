@@ -5,6 +5,6 @@
         "symfony/yaml": "^3.0",
         "codeguy/upload": "dev-master",
         "palanik/corsslim": "*",
-        "youshido/graphql": "v1.4.2.7"
+        "youshido/graphql": "v1.4.3"
     }
 }
