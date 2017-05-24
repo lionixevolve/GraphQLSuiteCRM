@@ -1,7 +1,8 @@
 <?php
-require_once 'bootstrap.php';
 require_once 'config.php';
 $sugar_config['lx_dbcrmserver'] = 'localhost';
+require_once '../vendor/autoload.php';
+
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 // replace with file to your own project bootstrap
