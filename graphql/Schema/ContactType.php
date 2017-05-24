@@ -21,6 +21,15 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                          return CallsListType::resolve($value, $args, $info);
                      },
                  ]);
+        $config->addField('cases',[
+                    'type' => new ListType(new CaseType()),
+                    'args' => argsHelper::entityArgsHelper('Calls'),
+                    'resolve' => function ($value, array $args, ResolveInfo $info) {
+                        //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ".  print_r($info, 1), FILE_APPEND);
+                        $args['id']=$value['calls'];
+                         return CasesListType::resolve($value, $args, $info);
+                     },
+                 ]);
          $config->addField('created_user_details', [
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
@@ -129,6 +138,11 @@ class ContactType extends AbstractObjectType // extending abstract Object type
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
                 foreach ($contact->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('cases',$queryFields)){
+                foreach ($contact->get_linked_beans('cases') as $case) {
+                    $module_arr['cases'][] = $case->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('tasks',$queryFields)){
