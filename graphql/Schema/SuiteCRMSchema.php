@@ -204,7 +204,7 @@ class SuiteCRMSchema extends AbstractSchema
         $config->getMutation()->addFields([
             'createAccount' => [
                 'type' => new AccountInputType(),
-                'args'    => argsHelper::entityArgsHelper('Accounts'),
+                'args'    => array_merge(argsHelper::entityArgsHelper('Accounts'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                 'resolve' => function ($value, $args, $type) {
                     $result=AccountInputType::resolve($value, $args, $type);
                     return AccountType::resolve($value, ['id'=>$result['id']], $type);
@@ -212,7 +212,7 @@ class SuiteCRMSchema extends AbstractSchema
             ],
              'createCall' => [
                  'type' => new CallInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Calls'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Calls'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                     $result=CallInputType::resolve($value, $args, $type);
                     return CallType::resolve($value, ['id'=>$result['id']], $type);
@@ -220,7 +220,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createCase' => [
                  'type' => new CaseInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Cases'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Cases'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                     $result=CaseInputType::resolve($value, $args, $type);
                     return CaseType::resolve($value, ['id'=>$result['id']], $type);
@@ -228,7 +228,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createCaseupdate' => [
                  'type' => new CaseupdatesInputType(),
-                 'args'    => argsHelper::entityArgsHelper('AopCaseUpdates'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('AopCaseUpdates'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                     $result=CaseupdatesInputType::resolve($value, $args, $type);
                     return CaseupdatesType::resolve($value, ['id'=>$result['id']], $type);
@@ -236,7 +236,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createContact' => [
                  'type' => new ContactInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Contacts'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Contacts'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=ContactInputType::resolve($value, $args, $type);
                         return ContactType::resolve($value, ['id'=>$result['id']], $type);
@@ -244,7 +244,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createMeeting' => [
                  'type' => new MeetingInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Meetings'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Meetings'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=MeetingInputType::resolve($value, $args, $type);
                      return MeetingType::resolve($value, ['id'=>$result['id']], $type);
@@ -252,7 +252,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createOpportunity' => [
                  'type' => new OpportunityInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Opportunities'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Opportunities'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=OpportunityInputType::resolve($value, $args, $type);
                         return OpportunityType::resolve($value, ['id'=>$result['id']], $type);
@@ -260,7 +260,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createTask' => [
                  'type' => new TaskInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Tasks'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Tasks'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=TaskInputType::resolve($value, $args, $type);
                         return TaskType::resolve($value, ['id'=>$result['id']], $type);
@@ -268,7 +268,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createNote' => [
                  'type' => new NoteInputType(),
-                 'args'    => argsHelper::entityArgsHelper('Notes'),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Notes'),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=NoteInputType::resolve($value, $args, $type);
                         return NoteType::resolve($value, ['id'=>$result['id']], $type);
