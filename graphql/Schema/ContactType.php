@@ -17,17 +17,25 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                     'args' => argsHelper::entityArgsHelper('Calls'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                         //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ".  print_r($info, 1), FILE_APPEND);
-                        $args['id']=$value['calls'];
-                         return CallsListType::resolve($value, $args, $info);
+                         if (!empty($value['calls'])) {
+                             $args['id']=$value['calls'];
+                             return CallsListType::resolve($value, $args, $info);
+                         } else {
+                             return null;
+                         }
                      },
                  ]);
         $config->addField('cases',[
                     'type' => new ListType(new CaseType()),
-                    'args' => argsHelper::entityArgsHelper('Calls'),
+                    'args' => argsHelper::entityArgsHelper('Cases'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                         //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ".  print_r($info, 1), FILE_APPEND);
-                        $args['id']=$value['calls'];
-                         return CasesListType::resolve($value, $args, $info);
+                        if (!empty($value['cases'])) {
+                            $args['id']=$value['cases'];
+                            return CasesListType::resolve($value, $args, $info);
+                        } else {
+                            return null;
+                        }
                      },
                  ]);
          $config->addField('created_user_details', [
