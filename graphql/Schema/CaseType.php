@@ -19,7 +19,12 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
         $config->addField('notes', [
                 'type' => new ListType(new NoteType()),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    return NoteType::resolve($value, ['id' => $value['notes']], $info);
+                    if (!empty($value['notes'])) {
+                        $args['id']=$value['notes'];
+                        return NotesListType::resolve($value, $args, $info);
+                    } else {
+                        return null;
+                    }
                  },
          ]);
          $config->addField('created_user_details', [
