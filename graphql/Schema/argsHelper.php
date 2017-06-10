@@ -118,7 +118,6 @@ class argsHelper
         if ($entity == 'Calls' || $entity == 'Cases' || $entity == 'Notes' || $entity == 'Accounts' || $entity == 'Contacts' || $entity == 'Leads' || $entity == 'Opportunities' || $entity == 'Meetings' || $entity == 'Tasks') {
             $argsArray = array_merge($argsArray, [
                 'related_bean' => new StringType(TypeMap::TYPE_STRING),
-                'related_beans' => new ListType(new RelatedBeanInputType()),
                 'related_id' => new StringType(TypeMap::TYPE_STRING),
             ]);
         }
