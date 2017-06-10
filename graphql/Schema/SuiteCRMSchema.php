@@ -226,6 +226,14 @@ class SuiteCRMSchema extends AbstractSchema
                     return CaseType::resolve($value, ['id'=>$result['id']], $type);
                  },
              ],
+             'createCaseupdate' => [
+                 'type' => new CaseupdatesInputType(),
+                 'args'    => argsHelper::entityArgsHelper('AopCaseUpdates'),
+                 'resolve' => function ($value, $args, $type) {
+                    $result=CaseupdatesInputType::resolve($value, $args, $type);
+                    return CaseupdatesType::resolve($value, ['id'=>$result['id']], $type);
+                 },
+             ],
              'createContact' => [
                  'type' => new ContactInputType(),
                  'args'    => argsHelper::entityArgsHelper('Contacts'),
