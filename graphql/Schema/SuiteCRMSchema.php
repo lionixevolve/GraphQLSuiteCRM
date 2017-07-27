@@ -165,7 +165,7 @@ class SuiteCRMSchema extends AbstractSchema
                 }
             ],
             'roles'         => [
-                'type' => new AclRoleType(),
+                'type' => new AclRolesListType(),
                 'args' => argsHelper::entityArgsHelper('AclRoles'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
