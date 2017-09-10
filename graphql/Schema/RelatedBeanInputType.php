@@ -21,4 +21,8 @@ class RelatedBeanInputType extends AbstractInputObjectType   // extending abstra
     {
         return 'RelatedBeanInputType';  // important to use the real name here, it will be used later in the Schema
     }
+    // public function getOutputType()
+    // {
+    //     return new StringType();  // important to use the real name here, it will be used later in the Schema
+    // }
 }

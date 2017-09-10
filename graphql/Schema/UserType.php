@@ -60,7 +60,6 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                 }
             }
 
-
             $sql = "
             SELECT r.id
             FROM users u
@@ -72,8 +71,11 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                 AND u.id = '{$id}';
             ";
             $result=$db->query($sql);
-            while (($row = $db->fetchByAssoc($result)) != null) {
-                $module_arr['related_roles'][] = $row['id'];
+            if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                $module_arr['related_roles'] =  array();
+                while (($row = $db->fetchByAssoc($result)) != null) {
+                    $module_arr['related_roles'][] = $row['id'];
+                }
             }
             // foreach ($user->ACLRoles->getBeans() as $role) {
             //     $module_arr['related_roles'][] = $role->id;
@@ -90,9 +92,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
             // lxlog(getRelationshipByModules($m1, $m2));
             return $module_arr;
         } else {
-            error_log('error resolving UserType');
-
-            return;
+            return null;
         }
     }
 
@@ -100,9 +100,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
     {
         if(!empty($args['whoami'])){
             global $current_user;
-            file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($current_user, 1).PHP_EOL, FILE_APPEND);
             if($_SESSION['authenticated_user_id']){
-                // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($current_user,1), FILE_APPEND);
                 $user=self::retrieveUser($_SESSION['authenticated_user_id'], $info);
                 $user['session_id']=session_id();
                 return $user;

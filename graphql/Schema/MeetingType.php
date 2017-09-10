@@ -10,7 +10,6 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r(argsHelper::entityArgsHelper('Calls'),1), FILE_APPEND);
         foreach (argsHelper::entityArgsHelper('Meeting') as $field => $type) {
                 $config->addField($field, $type);
         }
@@ -142,25 +141,26 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
 
                 }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                $module_arr['contacts'] =  array();
                 foreach ($meeting->get_linked_beans('contacts', 'Contact') as $contact) {
-                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($contact->id,1), FILE_APPEND);
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                $module_arr['accounts'] =  array();
                 foreach ($meeting->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
+                $module_arr['opportunities'] = array();
                 foreach ($meeting->get_linked_beans('opportunities', 'Opportunity') as $account) {
                     $module_arr['opportunities'][] = $account->id;
                 }
             }
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CallType');
-            return;
+            return null;
         }
     }
 

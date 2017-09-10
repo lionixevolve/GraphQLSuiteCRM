@@ -117,7 +117,6 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
          $config->addField('assigned_user_details',[
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                      if (!empty($value['assigned_user_details'])) {
                          $args['id']=$value['assigned_user_details'];
                          return UserType::resolve($value, $args, $info);
@@ -185,29 +184,32 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
             }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 $opportunity->load_relationship('contacts');
+                $module_arr['contacts'] =  array();
                 foreach ($opportunity->contacts->getBeans() as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                $module_arr['notes'] =  array();
                 foreach ($opportunity->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('account_id',$queryFields)){
                 $opportunity->load_relationship('accounts');
-                // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($opportunity,1), FILE_APPEND);
                 foreach ($opportunity->accounts->getBeans() as $account) {
                     $module_arr['account_id'] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('aos_quotes',$queryFields)){
                 $opportunity->load_relationship('aos_quotes');
+                $module_arr['aos_quotes'] =  array();
                 foreach ($opportunity->aos_quotes->getBeans() as $aos_quote) {
                     $module_arr['aos_quotes'][] = $aos_quote->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                $module_arr['calls'] =  array();
                 foreach ($opportunity->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }

@@ -16,7 +16,6 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                     'type' => new ListType(new CallType()),
                     'args' => argsHelper::entityArgsHelper('Call'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
-                        //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ".  print_r($info, 1), FILE_APPEND);
                         $args['id']=$value['calls'];
                          return CallsListType::resolve($value, $args, $info);
                      },
@@ -35,7 +34,6 @@ class ContactType extends AbstractObjectType // extending abstract Object type
          $config->addField('assigned_user_details',[
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                      if (!empty($value['assigned_user_details'])) {
                          $args['id']=$value['assigned_user_details'];
                          return UserType::resolve($value, $args, $info);
@@ -103,7 +101,6 @@ class ContactType extends AbstractObjectType // extending abstract Object type
             foreach ($getFieldASTList as $key => $value) {
                 $queryFields[$value->getName()]="";
             }
-            // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($queryFields,1), FILE_APPEND);
         }
         $module_arr = array();
         if ($contact->id && $contact->ACLAccess('view')) {
@@ -127,30 +124,33 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                 $module_arr['created_user_details']=$module_arr['created_by'];
             }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                $module_arr['calls'] =  array();
                 foreach ($contact->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('tasks',$queryFields)){
+                $module_arr['tasks'] =  array();
                 foreach ($contact->get_linked_beans('tasks') as $task) {
                     $module_arr['tasks'][] = $task->id;
                 }
             }
 
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                $module_arr['accounts'] =  array();
                 foreach ($contact->get_linked_beans('accounts') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('campaigns',$queryFields)){
+                $module_arr['campaigns'] =  array();
                 foreach ($contact->get_linked_beans('campaigns') as $campaign) {
                     $module_arr['campaigns'][] = $campaign->id;
                 }
             }
             return $module_arr;
         } else {
-            error_log(PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ".'error resolving ContactType');
-            return;
+            return null;
         }
     }
 

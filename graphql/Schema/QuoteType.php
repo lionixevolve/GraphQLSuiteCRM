@@ -89,7 +89,6 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
           $config->addField('assigned_user_details',[
                   'type' => new UserType(),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
-                      // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                       if (!empty($value['assigned_user_details'])) {
                           $args['id']=$value['assigned_user_details'];
                           return UserType::resolve($value, $args, $info);
@@ -178,12 +177,6 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
             if(isset($queryFields) && array_key_exists('opportunity_details',$queryFields)){
                 $module_arr['opportunity_details']=$module_arr['opportunity_id'];
             }
-            // file_put_contents($_SERVER['DOCUMENT_ROOT'].'lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($module_arr['total_amt'],1), FILE_APPEND);
-            // if(isset($queryFields) && array_key_exists('calls',$queryFields)){
-            //     foreach ($quote->get_linked_beans('calls') as $call) {
-            //         $module_arr['calls'][] = $call->id;
-            //     }
-            // }
 
             return $module_arr;
         } else {

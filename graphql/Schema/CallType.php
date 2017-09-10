@@ -28,7 +28,6 @@ class CallType extends AbstractObjectType   // extending abstract Object type
         $config->addField('assigned_user_details',[
                 'type' => new UserType(),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                     if (!empty($value['assigned_user_details'])) {
                         $args['id']=$value['assigned_user_details'];
                         return UserType::resolve($value, $args, $info);
@@ -52,7 +51,6 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                     'type'     => new ContactType(),
                     'args' => argsHelper::entityArgsHelper('Contact'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
-                        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($info->getFieldASTList(),1), FILE_APPEND);
                         if (!empty($value['parent_contact'])) {
                             $args['ids']=$value['parent_contact'];
                             return ContactType::resolve($value, $args, $info);
@@ -194,21 +192,25 @@ class CallType extends AbstractObjectType   // extending abstract Object type
 
                 }
                 if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                    $module_arr['contacts'] =  array();
                     foreach ($call->get_linked_beans('contacts', 'Contact') as $contact) {
                         $module_arr['contacts'][] = $contact->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                    $module_arr['accounts'] =  array();
                         foreach ($call->get_linked_beans('accounts', 'Account') as $account) {
                             $module_arr['accounts'][] = $account->id;
                         }
                 }
                 if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
+                    $module_arr['opportunities'] =  array();
                     foreach ($call->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                         $module_arr['opportunities'][] = $opportunity->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                    $module_arr['notes'] =  array();
                     foreach ($call->get_linked_beans('notes') as $note) {
                         $module_arr['notes'][] = $note->id;
                     }
@@ -217,8 +219,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
 
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CallType');
-            return;
+            return null;
         }
     }
 
