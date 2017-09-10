@@ -9,7 +9,7 @@ class MeetingInputType extends AbstractObjectType   // extending abstract Object
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Meetings') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Meetings', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('related_beans', new ListType(new RelatedBeanInputType()));

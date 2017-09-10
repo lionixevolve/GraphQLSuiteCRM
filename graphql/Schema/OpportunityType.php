@@ -38,15 +38,14 @@ require_once 'include/formbase.php';
 
 class OpportunityType extends AbstractObjectType   // extending abstract Object type
 {
-
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach ( argsHelper::entityArgsHelper('Opportunities') as $field => $type){
+        foreach ( argsHelper::entityArgsHelper('Opportunity') as $field => $type){
             $config->addField($field, $type);
         }
         $config->addField('contacts', [
                 'type'=> new ContactsListType(),
-                'args' => argsHelper::entityArgsHelper('Contacts'),
+                'args' => argsHelper::entityArgsHelper('Contact'),
                 'resolve' => function ($value, $args, ResolveInfo $info) {
                     if (!empty($value['contacts'])) {
                         $args['ids']=$value['contacts'];
@@ -58,7 +57,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
         ]);
         $config->addField('notes', [
                 'type' => new NotesListType(),
-                'args' => argsHelper::entityArgsHelper('Notes'),
+                'args' => argsHelper::entityArgsHelper('Note'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['notes'])) {
                         $args['ids']=$value['notes'];
@@ -70,7 +69,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
          ]);
         $config->addField('account_details', [
                 'type'=> new AccountType(),
-                'args' => argsHelper::entityArgsHelper('Accounts'),
+                'args' => argsHelper::entityArgsHelper('Account'),
                 'resolve' => function ($value, $args, ResolveInfo $info) {
                     if (!empty($value['account_id'])) {
                         $args['id']=$value['account_id'];
@@ -82,7 +81,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
         ]);
         $config->addField('calls', [
                 'type'=> new ListType(new CallType()),
-                'args' => argsHelper::entityArgsHelper('Calls'),
+                'args' => argsHelper::entityArgsHelper('Call'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['calls'])) {
                         $args['ids']=$value['calls'];
@@ -94,7 +93,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
         ]);
         $config->addField('aos_quotes', [
             'type'=> new ListType(new QuoteType()),
-            'args' => argsHelper::entityArgsHelper('AosQuotes'),
+            'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
             'resolve' => function ($value, $args, ResolveInfo $info) {
                 if (!empty($value['aos_quotes'])) {
                     $args['ids']=$value['aos_quotes'];
@@ -140,97 +139,97 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
           ]);
     }
 
-        public function resolve($value = null, $args = [], ResolveInfo $info = null){
-            if (isset($args['id']) && is_array($args['id'])) {
-                // We received a list of contacts to return
-                foreach ($args as $key => $opportunityId) {
-                    if (isset($opportunityId) && is_array($opportunityId)) {
-                        foreach ($opportunityId as $key => $opportunityIdItem) {
+    public function resolve($value = null, $args = [], ResolveInfo $info = null){
+        if (isset($args['id']) && is_array($args['id'])) {
+            // We received a list of contacts to return
+            foreach ($args as $key => $opportunityId) {
+                if (isset($opportunityId) && is_array($opportunityId)) {
+                    foreach ($opportunityId as $key => $opportunityIdItem) {
 
-                            $resultArray[] = self::retrieve($opportunityIdItem, $info);
-                        }
-                    } elseif (!empty($opportunityId)) {
-                        $resultArray[] = self::retrieve($opportunityId, $info);
+                        $resultArray[] = self::retrieve($opportunityIdItem, $info);
                     }
-                }
-                return $resultArray;
-            } else {
-                // We received a list of contacts to return
-                if (!empty($args['id'])) {
-                    return self::retrieve($args['id'], $info);
+                } elseif (!empty($opportunityId)) {
+                    $resultArray[] = self::retrieve($opportunityId, $info);
                 }
             }
-        }
-        public function retrieve($id, $info=null)  // implementing resolve function
-        {
-            global $sugar_config, $current_user;
-            $opportunityBean = BeanFactory::getBean('Opportunities');
-            $opportunity = $opportunityBean->retrieve($id);
-            $module_arr = array();
-            if ($opportunity->id && $opportunity->ACLAccess('view')) {
-                $all_fields = $opportunity->column_fields;
-                foreach ($all_fields as $field) {
-                    if (isset($opportunity->$field) && !is_object($opportunity->$field)) {
-                        $opportunity->$field = from_html($opportunity->$field);
-                        $opportunity->$field = preg_replace("/\r\n/", '<BR>', $opportunity->$field);
-                        $opportunity->$field = preg_replace("/\n/", '<BR>', $opportunity->$field);
-                        $module_arr[$field] = $opportunity->$field;
-                    }
-                }
-                if($info!=null){
-                    $getFieldASTList=$info->getFieldASTList();
-                    $queryFields=[];
-                    foreach ($getFieldASTList as $key => $value) {
-                        $queryFields[$value->getName()]="";
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
-                    $opportunity->load_relationship('contacts');
-                    foreach ($opportunity->contacts->getBeans() as $contact) {
-                        $module_arr['contacts'][] = $contact->id;
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('notes',$queryFields)){
-                    foreach ($opportunity->get_linked_beans('notes') as $note) {
-                        $module_arr['notes'][] = $note->id;
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('account_id',$queryFields)){
-                    $opportunity->load_relationship('accounts');
-                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($opportunity,1), FILE_APPEND);
-                    foreach ($opportunity->accounts->getBeans() as $account) {
-                        $module_arr['account_id'] = $account->id;
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('aos_quotes',$queryFields)){
-                    $opportunity->load_relationship('aos_quotes');
-                    foreach ($opportunity->aos_quotes->getBeans() as $aos_quote) {
-                        $module_arr['aos_quotes'][] = $aos_quote->id;
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('calls',$queryFields)){
-                    foreach ($opportunity->get_linked_beans('calls') as $call) {
-                        $module_arr['calls'][] = $call->id;
-                    }
-                }
-                if(isset($queryFields) && array_key_exists('modified_user_details',$queryFields)){
-                    $module_arr['modified_user_details']=$module_arr['modified_user_id'];
-                }
-                if(isset($queryFields) && array_key_exists('assigned_user_details',$queryFields)){
-                    $module_arr['assigned_user_details']=$module_arr['assigned_user_id'];
-                }
-                if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
-                    $module_arr['created_user_details']=$module_arr['created_by'];
-                }
-
-                return $module_arr;
-            } else {
-                // Error
-                error_log('Error resolving OpportunityType');
-
-                return;
+            return $resultArray;
+        } else {
+            // We received a list of contacts to return
+            if (!empty($args['id'])) {
+                return self::retrieve($args['id'], $info);
             }
         }
+    }
+    public function retrieve($id, $info=null)  // implementing resolve function
+    {
+        global $sugar_config, $current_user;
+        $opportunityBean = BeanFactory::getBean('Opportunities');
+        $opportunity = $opportunityBean->retrieve($id);
+        $module_arr = array();
+        if ($opportunity->id && $opportunity->ACLAccess('view')) {
+            $all_fields = $opportunity->column_fields;
+            foreach ($all_fields as $field) {
+                if (isset($opportunity->$field) && !is_object($opportunity->$field)) {
+                    $opportunity->$field = from_html($opportunity->$field);
+                    $opportunity->$field = preg_replace("/\r\n/", '<BR>', $opportunity->$field);
+                    $opportunity->$field = preg_replace("/\n/", '<BR>', $opportunity->$field);
+                    $module_arr[$field] = $opportunity->$field;
+                }
+            }
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
+                }
+            }
+            if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                $opportunity->load_relationship('contacts');
+                foreach ($opportunity->contacts->getBeans() as $contact) {
+                    $module_arr['contacts'][] = $contact->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                foreach ($opportunity->get_linked_beans('notes') as $note) {
+                    $module_arr['notes'][] = $note->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('account_id',$queryFields)){
+                $opportunity->load_relationship('accounts');
+                // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($opportunity,1), FILE_APPEND);
+                foreach ($opportunity->accounts->getBeans() as $account) {
+                    $module_arr['account_id'] = $account->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('aos_quotes',$queryFields)){
+                $opportunity->load_relationship('aos_quotes');
+                foreach ($opportunity->aos_quotes->getBeans() as $aos_quote) {
+                    $module_arr['aos_quotes'][] = $aos_quote->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                foreach ($opportunity->get_linked_beans('calls') as $call) {
+                    $module_arr['calls'][] = $call->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('modified_user_details',$queryFields)){
+                $module_arr['modified_user_details']=$module_arr['modified_user_id'];
+            }
+            if(isset($queryFields) && array_key_exists('assigned_user_details',$queryFields)){
+                $module_arr['assigned_user_details']=$module_arr['assigned_user_id'];
+            }
+            if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
+                $module_arr['created_user_details']=$module_arr['created_by'];
+            }
+
+            return $module_arr;
+        } else {
+            // Error
+            error_log('Error resolving OpportunityType');
+
+            return;
+        }
+    }
 
     public function getName()
     {
