@@ -20,12 +20,24 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
         foreach ( argsHelper::entityArgsHelper('ACLRole') as $field => $type){
             $config->addField($field, $type);
         }
+        $config->addField('users', [
+                    'type' => new UsersListType(),
+                    'resolve' => function ($value, array $args, ResolveInfo $info) {
+                         if (!empty($value['users'])) {
+                             $args['id']=$value['users'];
+                             return UsersListType::resolve($value, $args, $info);
+                         } else {
+                             return null;
+                         }
+                    },
+                ]);
         // $config->addField('email1', new StringType());
         // $config->addField('roles', new StringType());
     }
     private function retrieveAclRole($id, $info){
         global $sugar_config, $current_user, $beanList;
-        $roleBean = BeanFactory::getBean('ACLRoles');
+        $roleBean = BeanFactory::getBean('ACLRole');
+        $roleBean = new ACLRole();
         $role = $roleBean->retrieve($id);
         if($info!=null){
             $getFieldASTList=$info->getFieldASTList();
@@ -37,6 +49,11 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
         $module_arr = array();
         if ($role->id && $role->ACLAccess('view')) {
             $all_fields = $role->column_fields;
+            if(isset($queryFields) && array_key_exists('users',$queryFields)){
+                foreach ($role->get_linked_beans('users', 'User') as $user) {
+                    $module_arr['users'][] = $user->id;
+                }
+            }
             foreach ($all_fields as $field) {
                 if (isset($role->$field) && !is_object($role->$field)) {
                     $role->$field = from_html($role->$field);
@@ -70,7 +87,6 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
                 if (isset($roleId) && is_array($roleId)) {
                     foreach ($roleId as $key => $roleIdItem) {
                         $resultArray[] = self::retrieveAclRole($roleIdItem,$info);
-                        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($resultArray,1), FILE_APPEND);
                     }
                 } elseif (!empty($roleId)) {
                     $resultArray[] = self::retrieveAclRole($callId,$info);
