@@ -19,7 +19,12 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
         $config->addField('notes', [
                 'type' => new ListType(new NoteType()),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    return NoteType::resolve($value, ['id' => $value['notes']], $info);
+                    if (!empty($value['notes'])) {
+                        $args['id']=$value['notes'];
+                        return NotesListType::resolve($value, $args, $info);
+                    } else {
+                        return null;
+                    }
                  },
          ]);
          $config->addField('created_user_details', [
@@ -56,6 +61,30 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                      }
                   },
           ]);
+          $config->addField('case_updates',[
+                  'type' => new CaseupdatesListType(),
+                  'args' => argsHelper::entityArgsHelper('AopCaseUpdates'),
+                  'resolve' => function ($value, array $args, ResolveInfo $info) {
+                      if (!empty($value['case_updates'])) {
+                          $args['id']=$value['case_updates'];
+                          return CaseupdatesListType::resolve($value, $args, $info);
+                      } else {
+                          return null;
+                      }
+                   },
+               ]);
+          $config->addField('calls',[
+                  'type' => new ListType(new CallType()),
+                  'args' => argsHelper::entityArgsHelper('Calls'),
+                  'resolve' => function ($value, array $args, ResolveInfo $info) {
+                      if (!empty($value['calls'])) {
+                          $args['id']=$value['calls'];
+                          return CallsListType::resolve($value, $args, $info);
+                      } else {
+                          return null;
+                      }
+                   },
+               ]);
         $config->addField('contacts',[
                     'type' => new ContactsListType(),
                     'args' => argsHelper::entityArgsHelper('Contact'),
@@ -151,6 +180,11 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                     break;
 
                 }
+            if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                foreach ($case->get_linked_beans('calls') as $call) {
+                    $module_arr['calls'][] = $call->id;
+                }
+            }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 foreach ($case->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
@@ -159,6 +193,11 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
                 foreach ($case->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('case_updates',$queryFields)){
+                foreach ($case->get_linked_beans('aop_case_updates', 'AOP_Case_Updates') as $updates) {
+                    $module_arr['case_updates'][] = $updates->id;
                 }
             }
 
