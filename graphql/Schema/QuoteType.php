@@ -38,7 +38,7 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach ( argsHelper::entityArgsHelper('AosQuotes') as $field => $type){
+        foreach ( argsHelper::entityArgsHelper('AOS_Quotes') as $field => $type){
             $config->addField($field, $type);
         }
 
@@ -48,6 +48,17 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
                      if (!empty($value['billing_account_details'])) {
                          $args['id']=$value['billing_account_details'];
                          return AccountType::resolve($value, $args,$info);
+                     } else {
+                         return null;
+                     }
+                 },
+         ]);
+        $config->addField('billing_contact_details', [
+                'type'=> new ContactType(),
+                'resolve' => function ($value, array $args, ResolveInfo $info) {
+                     if (!empty($value['billing_contact_details'])) {
+                         $args['id']=$value['billing_contact_details'];
+                         return ContactType::resolve($value, $args,$info);
                      } else {
                          return null;
                      }
@@ -160,6 +171,9 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
             }
             if(isset($queryFields) && array_key_exists('billing_account_details',$queryFields)){
                 $module_arr['billing_account_details']=$module_arr['billing_account_id'];
+            }
+            if(isset($queryFields) && array_key_exists('billing_contact_details',$queryFields)){
+                $module_arr['billing_contact_details']=$module_arr['billing_contact_id'];
             }
             if(isset($queryFields) && array_key_exists('opportunity_details',$queryFields)){
                 $module_arr['opportunity_details']=$module_arr['opportunity_id'];

@@ -12,7 +12,7 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
     {
         // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r(argsHelper::entityArgsHelper('field'),1), FILE_APPEND);
         // error_log(__LINE__.print_r(argsHelper::entityArgsHelper('Calls'),1));
-        foreach (argsHelper::entityArgsHelper('Tasks') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Task') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('created_user_details', [

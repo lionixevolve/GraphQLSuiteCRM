@@ -17,7 +17,7 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
     public function build($config)  // implementing an abstract function where you build your type
     {
         //  error_log(__METHOD__.__LINE__.print_r($config,1));
-        foreach ( argsHelper::entityArgsHelper('AclRoles') as $field => $type){
+        foreach ( argsHelper::entityArgsHelper('ACLRole') as $field => $type){
             $config->addField($field, $type);
         }
         // $config->addField('email1', new StringType());

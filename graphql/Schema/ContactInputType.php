@@ -9,7 +9,7 @@ class ContactInputType extends AbstractObjectType   // extending abstract Object
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Contacts') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Contact', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('created_user_details', new UserType(), [

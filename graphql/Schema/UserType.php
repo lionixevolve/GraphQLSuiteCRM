@@ -10,7 +10,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Users') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('User',true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('session_id', new StringType());
@@ -100,9 +100,10 @@ class UserType extends AbstractObjectType   // extending abstract Object type
     {
         if(!empty($args['whoami'])){
             global $current_user;
-            if($current_user->id){
+            file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($current_user, 1).PHP_EOL, FILE_APPEND);
+            if($_SESSION['authenticated_user_id']){
                 // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($current_user,1), FILE_APPEND);
-                $user=self::retrieveUser($current_user->id, $info);
+                $user=self::retrieveUser($_SESSION['authenticated_user_id'], $info);
                 $user['session_id']=session_id();
                 return $user;
 
@@ -128,6 +129,10 @@ class UserType extends AbstractObjectType   // extending abstract Object type
     }
 
     public function getName()
+    {
+        return 'User';  // important to use the real name here, it will be used later in the Schema
+    }
+    public function getOutputType()
     {
         return 'User';  // important to use the real name here, it will be used later in the Schema
     }

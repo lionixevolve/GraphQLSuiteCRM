@@ -1,7 +1,5 @@
 <?php
-
 require_once __DIR__ .'/../../vendor/autoload.php';
-
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\StringType;
@@ -9,7 +7,6 @@ use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\TypeMap;
 use Doctrine\DBAL\Types\Type as DoctrineType;
 
-//
 class argsHelper
 {
     public function doctrineToGraphqlTypeMapper($type)
@@ -45,63 +42,142 @@ class argsHelper
                 return new StringType();
         }
     }
-    public function entityArgsHelper($entity)
+    public function suitecrmToGraphqlTypeMapper($type)
     {
-        $entityNamespaced = 'Entities\\'.$entity;
-        $entityNamespacedCstm = 'Entities\\'.$entity.'Cstm';
-        $cstmExists = file_exists('./graphql/Entities/'.$entity.'Cstm.php');
-        $paths = array(
-            './graphql/Mappings/',
-        );
-        $config = \Doctrine\ORM\Tools\Setup::createYAMLMetadataConfiguration($paths, true);
-        $dbParams = array(
-            'driver' => 'pdo_mysql',
-            'user' => $GLOBALS['sugar_config']['dbconfig']['db_user_name'],
-            'password' => $GLOBALS['sugar_config']['dbconfig'][ 'db_password'],
-            'dbname' => $GLOBALS['sugar_config']['dbconfig'][ 'db_name'],
-        );
-
-        $em = \Doctrine\ORM\EntityManager::create($dbParams, $config);
-        require_once './graphql/Entities/'.$entity.'.php';
-        if ($cstmExists) {
-            require_once './graphql/Entities/'.$entity.'Cstm.php';
+        switch ($type) {
+            case 'datetime':
+            case 'date':
+            case 'char':
+            case 'varchar':
+            case 'tinyint':
+            case 'bool':
+            case 'double':
+            case 'text':
+            case 'int':
+            case 'enum':
+            case 'multienum':
+            case 'relate':
+            case 'currency':
+                return new StringType();
+            default:
+                return new StringType();
         }
-
-        $em->getRepository($entityNamespaced);
-
-        $entityFields = $em->getClassMetadata($entityNamespaced)->getColumnNames();
-        if ($cstmExists) {
-            $entityFieldsCstm = $em->getClassMetadata($entityNamespacedCstm)->getColumnNames();
-        }
+    }
+    public function entityArgsHelper($entity, $mutation=false)
+    {
+        global $db, $dictionary, $beanList, $language;
         $argsArray = [];
-        $fieldType = '';
-        foreach ($entityFields as $key => $fieldName) {
-            $fieldType = $em->getClassMetadata($entityNamespaced)->getTypeOfColumn($fieldName);
-            $argsArray = array_merge($argsArray, [$fieldName => self::doctrineToGraphqlTypeMapper($fieldType)]);
-            if($fieldType==DoctrineType::DATE || $fieldType==DoctrineType::DATETIME){
-                //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
-                $fieldNameStartRange="start_range_".$fieldName;
-                $fieldNameEndRange="end_range_".$fieldName;
-                $argsArray = array_merge($argsArray, [$fieldNameStartRange =>self::doctrineToGraphqlTypeMapper($fieldType)]);
-                $argsArray = array_merge($argsArray, [$fieldNameEndRange =>self::doctrineToGraphqlTypeMapper($fieldType)]);
-            }
+        $default_language = $sugar_config['default_language'];
+        if (empty($language)) {
+            $language = $default_language;
         }
-        if ($cstmExists) {
-            foreach ($entityFieldsCstm as $key => $fieldName) {
-                $fieldType = $em->getClassMetadata($entityNamespacedCstm)->getTypeOfColumn($fieldName);
-                $argsArray = array_merge($argsArray, [$fieldName => self::doctrineToGraphqlTypeMapper($fieldType)]);
-                if($fieldType==DoctrineType::DATE || $fieldType==DoctrineType::DATETIME){
-                    //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
-                    $fieldNameStartRange="start_range_".$fieldName;
-                    $fieldNameEndRange="end_range_".$fieldName;
-                    $argsArray = array_merge($argsArray, [$fieldNameStartRange =>self::doctrineToGraphqlTypeMapper($fieldType)]);
-                    $argsArray = array_merge($argsArray, [$fieldNameEndRange =>self::doctrineToGraphqlTypeMapper($fieldType)]);
+        if (!file_exists(sugar_cached('modules/').$entity.'/language/'.$language.'.lang.php')
+                && !empty($GLOBALS['beanList'][$entity])) {
+            $object = BeanFactory::getObjectName($entity);
+            VardefManager::refreshVardefs($entity, $object);
+        }
+        if (!empty($beanList[$entity])) {
+            $entity=$beanList[$entity];
+        }
+        $moduleFields=$dictionary[$entity]['fields'];
+        // file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r(array_keys($dictionary), 1).PHP_EOL, FILE_APPEND);
+        if (is_array($moduleFields)) {
+            foreach ($moduleFields as $key => $value) {
+                if ($moduleFields[$key]['type']!='link') {
+                    $fieldType=$moduleFields[$key]['type'];
+                    $argsArray = array_merge($argsArray, [$key => self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                    if ($mutation==false) {
+                        //Mutation doesn't allow this types as they are cannot be used to insert new data
+                        if ($fieldType=='date' || $fieldType=='datetime') {
+                            //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
+                            $fieldNameStartRange="start_range_".$key;
+                            $fieldNameEndRange="end_range_".$key;
+                            $argsArray = array_merge($argsArray, [$fieldNameStartRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                            $argsArray = array_merge($argsArray, [$fieldNameEndRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                        }
+                         elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Users') {
+                            //Fields of type Related will be added a new _details FIELD to the graphql query
+                            // Which will allow to reference the related Module allowing queries like
+                            // For example, a related field named related_user_field_c, will have a
+                            // related_user_field_c_details which in turn will be linked to the User modules
+                            // So it will be possible to query related_user_field_c_details{ user_name}
+                            $fieldNamePlusDetails=$key."_details";
+                            $relatedFieldName=$moduleFields[$key]['id_name'];
+                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                            [
+                                'type' => new UserType(),
+                                'args' => argsHelper::entityArgsHelper('Users', true),
+                                'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                    if (!empty($relatedFieldName)) {
+                                        $args['id']=$value[$relatedFieldName];
+                                        return UserType::resolve($value, $args, $info);
+                                    } else {
+                                        return null;
+                                    }
+                                },
+                            ]
+                        ]);
+                        }
+                    elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Contacts') {
+                        $fieldNamePlusDetails=$key."_details";
+                        $relatedFieldName=$moduleFields[$key]['id_name'];
+                        $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                        [
+                            'type' => new ContactType(),
+                            'args' => argsHelper::entityArgsHelper('Contacts', true),
+                            'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                if (!empty($relatedFieldName)) {
+                                    $args['id']=$value[$relatedFieldName];
+                                    return ContactType::resolve($value, $args, $info);
+                                } else {
+                                    return null;
+                                }
+                            },
+                        ]
+                    ]);
+                }elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Accounts') {
+                    $fieldNamePlusDetails=$key."_details";
+                    $relatedFieldName=$moduleFields[$key]['id_name'];
+                    $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                    [
+                        'type' => new AccountType(),
+                        'args' => argsHelper::entityArgsHelper('Accounts', true),
+                        'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                            if (!empty($relatedFieldName)) {
+                                $args['id']=$value[$relatedFieldName];
+                                return AccountType::resolve($value, $args, $info);
+                            } else {
+                                return null;
+                            }
+                        },
+                        ]
+                        ]);
+                    }elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Opportunities') {
+                        $fieldNamePlusDetails=$key."_details";
+                        $relatedFieldName=$moduleFields[$key]['id_name'];
+                        $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                        [
+                        'type' => new OpportunityType(),
+                        'args' => argsHelper::entityArgsHelper('Opportunities', true),
+                        'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                            if (!empty($relatedFieldName)) {
+                                $args['id']=$value[$relatedFieldName];
+                                return OpportunityType::resolve($value, $args, $info);
+                            } else {
+                                return null;
+                            }
+                        },
+                        ]
+                        ]);
+                    }
+                    }
                 }
             }
         }
         $argsArray = array_merge($argsArray, [
                 'offset' => new StringType(TypeMap::TYPE_INT),
                 'limit' => new StringType(TypeMap::TYPE_INT),
+                'order' => new StringType(TypeMap::TYPE_STRING),
             ]);
             //Some modules have more fields due to relations or special fields
         if ($entity == 'Contacts' || $entity == 'Accounts' || $entity == 'Prospects' || $entity == 'Leads') {
@@ -110,7 +186,7 @@ class argsHelper
                 'ids' => new ListType(new StringType(TypeMap::TYPE_STRING)),
             ]);
         }
-        if ($entity == 'Opportunities' ) {
+        if ($entity == 'Opportunities') {
             $argsArray = array_merge($argsArray, [
                 'account_id' => new StringType(TypeMap::TYPE_STRING),
             ]);
@@ -118,7 +194,6 @@ class argsHelper
         if ($entity == 'Calls' || $entity == 'Cases' || $entity == 'Notes' || $entity == 'Accounts' || $entity == 'Contacts' || $entity == 'Leads' || $entity == 'Opportunities' || $entity == 'Meetings' || $entity == 'Tasks') {
             $argsArray = array_merge($argsArray, [
                 'related_bean' => new StringType(TypeMap::TYPE_STRING),
-                'related_beans' => new ListType(new RelatedBeanInputType()),
                 'related_id' => new StringType(TypeMap::TYPE_STRING),
             ]);
         }
