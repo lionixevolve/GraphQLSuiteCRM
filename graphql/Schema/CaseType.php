@@ -11,13 +11,12 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r(argsHelper::entityArgsHelper('Calls'),1), FILE_APPEND);
-        // error_log(__LINE__.print_r(argsHelper::entityArgsHelper('Calls'),1));
         foreach (argsHelper::entityArgsHelper('Case') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('notes', [
                 'type' => new ListType(new NoteType()),
+                'args' => argsHelper::entityArgsHelper('Note'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['notes'])) {
                         $args['id']=$value['notes'];
@@ -41,7 +40,6 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
          $config->addField('assigned_user_details',[
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                      if (!empty($value['assigned_user_details'])) {
                          $args['id']=$value['assigned_user_details'];
                          return UserType::resolve($value, $args, $info);
@@ -63,7 +61,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
           ]);
           $config->addField('case_updates',[
                   'type' => new CaseupdatesListType(),
-                  'args' => argsHelper::entityArgsHelper('AopCaseUpdates'),
+                  'args' => argsHelper::entityArgsHelper('AOP_Case_Updates'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['case_updates'])) {
                           $args['id']=$value['case_updates'];
@@ -75,7 +73,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                ]);
           $config->addField('calls',[
                   'type' => new ListType(new CallType()),
-                  'args' => argsHelper::entityArgsHelper('Calls'),
+                  'args' => argsHelper::entityArgsHelper('Call'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['calls'])) {
                           $args['id']=$value['calls'];
@@ -112,7 +110,6 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                     'args' => argsHelper::entityArgsHelper('Account'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['account_details'])) {
-                            //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value['account_details'], 1), FILE_APPEND);
                              return AccountType::resolve($value, ['id' => $value['account_details']], $info);
                          } else {
                              return null;
@@ -181,27 +178,32 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
 
                 }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                $module_arr['calls'] =  array();
                 foreach ($case->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                $module_arr['contacts'] =  array();
                 foreach ($case->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                $module_arr['accounts'] =  array();
                 foreach ($case->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('case_updates',$queryFields)){
+                $module_arr['case_updates'] =   array();
                 foreach ($case->get_linked_beans('aop_case_updates', 'AOP_Case_Updates') as $updates) {
                     $module_arr['case_updates'][] = $updates->id;
                 }
             }
 
             if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                $module_arr['notes'] =  array();
                 foreach ($case->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
@@ -211,8 +213,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
             }
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CaseType');
-            return;
+            return null;
         }
     }
 

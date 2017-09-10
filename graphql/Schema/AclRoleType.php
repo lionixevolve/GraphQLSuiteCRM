@@ -16,7 +16,6 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
 
     public function build($config)  // implementing an abstract function where you build your type
     {
-        //  error_log(__METHOD__.__LINE__.print_r($config,1));
         foreach ( argsHelper::entityArgsHelper('ACLRole') as $field => $type){
             $config->addField($field, $type);
         }
@@ -31,13 +30,10 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
                          }
                     },
                 ]);
-        // $config->addField('email1', new StringType());
-        // $config->addField('roles', new StringType());
     }
     private function retrieveAclRole($id, $info){
         global $sugar_config, $current_user, $beanList;
-        $roleBean = BeanFactory::getBean('ACLRole');
-        $roleBean = new ACLRole();
+        $roleBean = BeanFactory::getBean('ACLRoles');
         $role = $roleBean->retrieve($id);
         if($info!=null){
             $getFieldASTList=$info->getFieldASTList();
@@ -50,6 +46,7 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
         if ($role->id && $role->ACLAccess('view')) {
             $all_fields = $role->column_fields;
             if(isset($queryFields) && array_key_exists('users',$queryFields)){
+                $module_arr['users'] = array();
                 foreach ($role->get_linked_beans('users', 'User') as $user) {
                     $module_arr['users'][] = $user->id;
                 }
@@ -75,7 +72,6 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
             return $module_arr;
 
         }else{
-            error_log("error resolving AclRoleType");
             return null;
         }
     }

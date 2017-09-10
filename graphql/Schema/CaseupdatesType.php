@@ -28,7 +28,6 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
          $config->addField('assigned_user_details',[
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                      if (!empty($value['assigned_user_details'])) {
                          $args['id']=$value['assigned_user_details'];
                          return UserType::resolve($value, $args, $info);
@@ -64,7 +63,6 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
                     'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['account_details'])) {
-                            //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value['account_details'], 1), FILE_APPEND);
                              return AccountType::resolve($value, ['id' => $value['account_details']], $info);
                          } else {
                              return null;
@@ -111,6 +109,7 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
 
 
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                $module_arr['contacts'] =  array();
                 foreach ($case->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
@@ -118,8 +117,7 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
 
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CaseupdatesType');
-            return;
+            return null;
         }
     }
 

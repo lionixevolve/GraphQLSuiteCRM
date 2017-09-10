@@ -235,48 +235,57 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
             }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 $account->load_relationship('contacts');
+                $module_arr['contacts'] =  array();
                 foreach ($account->contacts->getBeans() as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('aos_quotes',$queryFields)){
                 $account->load_relationship('aos_quotes');
+                $module_arr['aos_quotes'] =  array();
                 foreach ($account->aos_quotes->getBeans() as $aos_quote) {
                     $module_arr['aos_quotes'][] = $aos_quote->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
                 $account->load_relationship('opportunities');
+                $module_arr['opportunities'] =  array();
                 foreach ($account->opportunities->getBeans() as $opportunity) {
                     $module_arr['opportunities'][] = $opportunity->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+                $module_arr['calls'] =  array();
                 foreach ($account->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('cases',$queryFields)){
+                $module_arr['cases'] =  array();
                 foreach ($account->get_linked_beans('cases') as $case) {
                     $module_arr['cases'][] = $case->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+                $module_arr['notes'] =  array();
                 foreach ($account->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('meetings',$queryFields)){
+                $module_arr['meetings'] =  array();
                 foreach ($account->get_linked_beans('meetings') as $meeting) {
                     $module_arr['meetings'][] = $meeting->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('tasks',$queryFields)){
+                $module_arr['tasks'] =  array();
                 foreach ($account->get_linked_beans('tasks') as $task) {
                     $module_arr['tasks'][] = $task->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('campaigns',$queryFields)){
+                $module_arr['campaigns'] =  array();
                 foreach ($account->get_linked_beans('campaigns') as $campaign) {
                     $module_arr['campaigns'][] = $campaign->id;
                 }
@@ -294,8 +303,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
 
             return $module_arr;
         } else {
-            error_log('Error resolving AccountType');
-            return;
+            return null;
         }
     }
 

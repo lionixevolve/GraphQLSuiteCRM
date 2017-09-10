@@ -10,8 +10,6 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r(argsHelper::entityArgsHelper('field'),1), FILE_APPEND);
-        // error_log(__LINE__.print_r(argsHelper::entityArgsHelper('Calls'),1));
         foreach (argsHelper::entityArgsHelper('Task') as $field => $type) {
                 $config->addField($field, $type);
         }
@@ -29,7 +27,6 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
         $config->addField('assigned_user_details',[
                 'type' => new UserType(),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                     if (!empty($value['assigned_user_details'])) {
                         $args['id']=$value['assigned_user_details'];
                         return UserType::resolve($value, $args, $info);
@@ -148,26 +145,32 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
                     break;
 
                 }
-            foreach ($task->get_linked_beans('contacts', 'Contact') as $contact) {
-                $module_arr['related_contacts'][] = $contact->id;
+            if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                $module_arr['related_contacts'] =  array();
+                foreach ($task->get_linked_beans('contacts', 'Contact') as $contact) {
+                    $module_arr['related_contacts'][] = $contact->id;
+                }
             }
-            foreach ($task->get_linked_beans('accounts', 'Account') as $account) {
-                $module_arr['related_accounts'][] = $account->id;
+            if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                $module_arr['related_accounts'] =  array();
+                foreach ($task->get_linked_beans('accounts', 'Account') as $account) {
+                    $module_arr['related_accounts'][] = $account->id;
+                }
             }
-            foreach ($task->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
-                $module_arr['related_opportunities'][] = $opportunity->id;
+            if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
+                $module_arr['related_opportunities'] =  array();
+                foreach ($task->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
+                    $module_arr['related_opportunities'][] = $opportunity->id;
+                }
             }
-                // error_log(__METHOD__."----".__LINE__."----".print_r($module_arr['related_contacts'],1));
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CallType');
-            return;
+            return null;
         }
     }
 
     public function resolve($value = null, $args = [], $info = null )  // implementing resolve function
     {
-        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($args, 1), FILE_APPEND);
         if (isset($args['id']) && is_array($args['id'])) {
             foreach ($args as $key => $taskId) {
                 if (isset($taskId) && is_array($noteId)) {

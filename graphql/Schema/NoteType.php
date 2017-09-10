@@ -10,7 +10,6 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/mylog.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r(argsHelper::entityArgsHelper('Calls'),1), FILE_APPEND);
         foreach (argsHelper::entityArgsHelper('Notes') as $field => $type) {
                 $config->addField($field, $type);
         }
@@ -28,7 +27,6 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
         $config->addField('assigned_user_details',[
                 'type' => new UserType(),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    // file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value,1), FILE_APPEND);
                     if (!empty($value['assigned_user_details'])) {
                         $args['id']=$value['assigned_user_details'];
                         return UserType::resolve($value, $args, $info);
@@ -53,7 +51,6 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
                      if (!empty($value['contact_details'])) {
                          $args['id']=$value['contact_details'];
-                        //  file_put_contents($_SERVER['DOCUMENT_ROOT'].'/lx.log', PHP_EOL .PHP_EOL.__FILE__ .":". __LINE__." -- ". print_r($value['contact_details'],1), FILE_APPEND);
                          return ContactType::resolve($value, $args, $info);
                      } else {
                          return null;
@@ -205,27 +202,30 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
 
                 }
                 if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+                    $module_arr['contacts'] =  array();
                     foreach ($note->get_linked_beans('contacts', 'Contact') as $contact) {
                         $module_arr['contacts'][] = $contact->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
+                    $module_arr['accounts'] = array();
                     foreach ($note->get_linked_beans('accounts', 'Account') as $account) {
                         $module_arr['accounts'][] = $account->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
+                    $module_arr['opportunities'] =  array();
                     foreach ($note->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                         $module_arr['opportunities'][] = $opportunity->id;
                     }
                 }
+                $module_arr['contact_details'] =  array();
                 if(isset($queryFields) && array_key_exists('contact_details',$queryFields)){
                         $module_arr['contact_details'] = $note->contact_id;
                 }
             return $module_arr;
         } else {
-            error_log(__METHOD__.'----'.__LINE__.'----'.'error resolving CallType');
-            return;
+            return null;
         }
     }
 
