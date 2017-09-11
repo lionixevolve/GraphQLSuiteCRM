@@ -11,12 +11,12 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Case') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Cases') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('notes', [
                 'type' => new ListType(new NoteType()),
-                'args' => argsHelper::entityArgsHelper('Note'),
+                'args' => argsHelper::entityArgsHelper('Notes'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['notes'])) {
                         $args['id']=$value['notes'];
@@ -73,7 +73,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                ]);
           $config->addField('calls',[
                   'type' => new ListType(new CallType()),
-                  'args' => argsHelper::entityArgsHelper('Call'),
+                  'args' => argsHelper::entityArgsHelper('Calls'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['calls'])) {
                           $args['id']=$value['calls'];
@@ -85,7 +85,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                ]);
         $config->addField('contacts',[
                     'type' => new ContactsListType(),
-                    'args' => argsHelper::entityArgsHelper('Contact'),
+                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['contacts'])) {
                              return ContactsListType::resolve($value, ['id' => $value['contacts']], $info);
@@ -96,7 +96,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('accounts', [
                     'type' => new AccountsListType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['accounts'])) {
                              return AccountsListType::resolve($value, ['id' => $value['accounts']], $info);
@@ -107,7 +107,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('account_details', [
                     'type' => new AccountType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['account_details'])) {
                              return AccountType::resolve($value, ['id' => $value['account_details']], $info);

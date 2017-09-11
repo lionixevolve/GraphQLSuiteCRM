@@ -9,10 +9,9 @@ class CallInputType extends AbstractObjectType   // extending abstract Object ty
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Call', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Calls', true) as $field => $type) {
             $config->addField($field, $type);
         }
-        $config->addField('related_beans', new ListType(new RelatedBeanInputType()));
     }
 
     public function resolve($value = null, $args = [], $type = null)  // implementing resolve function

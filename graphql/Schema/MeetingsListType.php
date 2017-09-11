@@ -45,7 +45,7 @@ class MeetingsListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Meeting', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Meetings', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

@@ -9,7 +9,7 @@ class CaseInputType extends AbstractObjectType   // extending abstract Object ty
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Case', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Cases', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('related_beans', new ListType(new RelatedBeanInputType()));

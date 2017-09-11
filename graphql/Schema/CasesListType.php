@@ -44,7 +44,7 @@ class CasesListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Case', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Cases', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

@@ -11,7 +11,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Call') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Calls') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('created_user_details', [
@@ -49,7 +49,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
          ]);
         $config->addField('parent_contact', [
                     'type'     => new ContactType(),
-                    'args' => argsHelper::entityArgsHelper('Contact'),
+                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                         if (!empty($value['parent_contact'])) {
                             $args['ids']=$value['parent_contact'];
@@ -61,7 +61,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
            ]);
         $config->addField('parent_account', [
                     'type' => new AccountType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['parent_account'])) {
                              $args['ids']=$value['parent_account'];
@@ -73,7 +73,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
             ]);
         $config->addField('parent_opportunity', [
                     'type' => new OpportunityType(),
-                    'args' => argsHelper::entityArgsHelper('Opportunity'),
+                    'args' => argsHelper::entityArgsHelper('Opportunities'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['parent_opportunity'])) {
                              $args['ids']=$value['parent_opportunity'];
@@ -85,7 +85,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
             ]);
         $config->addField('contacts',[
                     'type' => new ContactsListType(),
-                    'args' => argsHelper::entityArgsHelper('Contact'),
+                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['contacts'])) {
                              $args['ids']=$value['contacts'];
@@ -97,7 +97,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('accounts', [
                     'type' => new AccountsListType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['accounts'])) {
                              $args['ids']=$value['accounts'];
@@ -109,7 +109,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('opportunities', [
                     'type' => new OpportunitiesListType(),
-                    'args' => argsHelper::entityArgsHelper('Opportunity'),
+                    'args' => argsHelper::entityArgsHelper('Opportunities'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['opportunities'])) {
                               $args['ids']=$value['opportunities'];
@@ -121,7 +121,7 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('notes', [
                 'type' => new ListType(new NoteType()),
-                'args' => argsHelper::entityArgsHelper('Note'),
+                'args' => argsHelper::entityArgsHelper('Notes'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['notes'])) {
                          $args['ids']=$value['notes'];

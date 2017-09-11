@@ -44,7 +44,7 @@ class OpportunitiesListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Opportunity', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Opportunities', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

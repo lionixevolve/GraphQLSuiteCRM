@@ -9,7 +9,7 @@ class OpportunityInputType extends AbstractObjectType   // extending abstract Ob
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Opportunity', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Opportunities', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('created_user_details', new UserType(), [

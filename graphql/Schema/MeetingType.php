@@ -10,7 +10,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Meeting') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Meetings') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('created_user_details', [
@@ -33,7 +33,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
          ]);
         $config->addField('parent_contact', [
                     'type'     => new ContactType(),
-                    'args' => argsHelper::entityArgsHelper('Contact'),
+                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                         if (!empty($value['parent_contact'])) {
                             return ContactType::resolve(null, ['id' => $value['parent_contact']], $info);
@@ -44,7 +44,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
            ]);
         $config->addField('parent_account', [
                     'type' => new AccountType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['parent_account'])) {
                              return AccountType::resolve(null, ['id' => $value['parent_account']], $info);
@@ -55,7 +55,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
             ]);
         $config->addField('parent_opportunity', [
                 'type'=> new ListType(new OpportunityType()),
-                'args' => argsHelper::entityArgsHelper('Opportunity'),
+                'args' => argsHelper::entityArgsHelper('Opportunities'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                      if (!empty($value['parent_opportunity'])) {
                          return OpportunityType::resolve($value, ['id' => $value['parent_opportunity']],$info);
@@ -67,7 +67,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
 
         $config->addField('accounts', [
                     'type' => new AccountsListType(),
-                    'args' => argsHelper::entityArgsHelper('Account'),
+                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['accounts'])) {
                              $args['ids']=$value['accounts'];
@@ -79,7 +79,7 @@ class MeetingType extends AbstractObjectType   // extending abstract Object type
                 ]);
         $config->addField('contacts',[
                     'type' => new ContactsListType(),
-                    'args' => argsHelper::entityArgsHelper('Contact'),
+                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['contacts'])) {
                              $args['ids']=$value['contacts'];

@@ -76,11 +76,15 @@ class argsHelper
             $object = BeanFactory::getObjectName($entity);
             VardefManager::refreshVardefs($entity, $object);
         }
-        if (!empty($beanList[$entity])) {
+        if($entity=="Cases"){
+        }
+        if (!empty($beanList[$entity]) && $entity!="Cases") {
             $entity=$beanList[$entity];
+        }elseif ($entity=="Cases") {
+            //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary 
+            $entity="Case";
         }
         $moduleFields=$dictionary[$entity]['fields'];
-        // file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r(array_keys($dictionary), 1).PHP_EOL, FILE_APPEND);
         if (is_array($moduleFields)) {
             foreach ($moduleFields as $key => $value) {
                 if ($moduleFields[$key]['type']!='link') {
@@ -180,23 +184,24 @@ class argsHelper
                 'order' => new StringType(TypeMap::TYPE_STRING),
             ]);
             //Some modules have more fields due to relations or special fields
-        if ($entity == 'Contacts' || $entity == 'Accounts' || $entity == 'Prospects' || $entity == 'Leads') {
+        if ($entity == 'Contact' || $entity == 'Account' || $entity == 'Prospect' || $entity == 'Lead') {
             $argsArray = array_merge($argsArray, [
                 'email1' => new StringType(TypeMap::TYPE_STRING),
                 'ids' => new ListType(new StringType(TypeMap::TYPE_STRING)),
             ]);
         }
-        if ($entity == 'Opportunities') {
+        if ($entity == 'Opportunity') {
             $argsArray = array_merge($argsArray, [
                 'account_id' => new StringType(TypeMap::TYPE_STRING),
             ]);
         }
-        if ($entity == 'Calls' || $entity == 'Cases' || $entity == 'Notes' || $entity == 'Accounts' || $entity == 'Contacts' || $entity == 'Leads' || $entity == 'Opportunities' || $entity == 'Meetings' || $entity == 'Tasks') {
+        if ($entity == 'Call' || $entity == 'Case' || $entity == 'Note' || $entity == 'Account' || $entity == 'Contact' || $entity == 'Lead' || $entity == 'Opportunitiy' || $entity == 'Meeting' || $entity == 'Task') {
             $argsArray = array_merge($argsArray, [
                 'related_bean' => new StringType(TypeMap::TYPE_STRING),
                 'related_id' => new StringType(TypeMap::TYPE_STRING),
             ]);
         }
+
         return $argsArray;
     }
 }

@@ -9,7 +9,7 @@ class CampaignInputType extends AbstractObjectType   // extending abstract Objec
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Campaign', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Campaigns', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('related_beans', new ListType(new RelatedBeanInputType()));

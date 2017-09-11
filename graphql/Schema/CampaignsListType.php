@@ -45,7 +45,7 @@ class CampaignsListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Campaign', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Campaigns', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }
