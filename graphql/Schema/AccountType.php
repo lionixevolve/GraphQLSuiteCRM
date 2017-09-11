@@ -40,7 +40,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach ( argsHelper::entityArgsHelper('Account') as $field => $type){
+        foreach ( argsHelper::entityArgsHelper('Accounts') as $field => $type){
             $config->addField($field, $type);
         }
         $config->addField('aos_quotes', [
@@ -57,7 +57,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
         ]);
         $config->addField('calls', [
                 'type'=> new ListType(new CallType()),
-                'args' => argsHelper::entityArgsHelper('Call'),
+                'args' => argsHelper::entityArgsHelper('Calls'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['calls'])) {
                         $args['ids']=$value['calls'];
@@ -69,7 +69,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
         ]);
         $config->addField('cases', [
                 'type'=> new ListType(new CaseType()),
-                'args' => argsHelper::entityArgsHelper('Case'),
+                'args' => argsHelper::entityArgsHelper('Cases'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['cases'])) {
                         $args['ids']=$value['cases'];
@@ -81,7 +81,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
         ]);
         $config->addField('contacts', [
                 'type'=> new ContactsListType(),
-                'args' => argsHelper::entityArgsHelper('Contact'),
+                'args' => argsHelper::entityArgsHelper('Contacts'),
                 'resolve' => function ($value, $args, ResolveInfo $info) {
                     if (!empty($value['contacts'])) {
                         $args['ids']=$value['contacts'];
@@ -93,7 +93,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
         ]);
         $config->addField('opportunities', [
                 'type'=> new ListType(new OpportunityType()),
-                'args' => argsHelper::entityArgsHelper('Opportunity'),
+                'args' => argsHelper::entityArgsHelper('Opportunities'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                      if (!empty($value['opportunities'])) {
                          $args['ids']=$value['opportunities'];
@@ -138,7 +138,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
           ]);
           $config->addField('notes', [
                   'type' => new NotesListType(),
-                  'args' => argsHelper::entityArgsHelper('Note'),
+                  'args' => argsHelper::entityArgsHelper('Notes'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['notes'])) {
                           $args['ids']=$value['notes'];
@@ -150,7 +150,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
            ]);
           $config->addField('meetings', [
                   'type' => new MeetingsListType(),
-                  'args' => argsHelper::entityArgsHelper('Meeting'),
+                  'args' => argsHelper::entityArgsHelper('Meetings'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['meetings'])) {
                           $args['ids']=$value['meetings'];
@@ -162,7 +162,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
            ]);
           $config->addField('tasks', [
                   'type' => new TasksListType(),
-                  'args' => argsHelper::entityArgsHelper('Task'),
+                  'args' => argsHelper::entityArgsHelper('Tasks'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['tasks'])) {
                           $args['ids']=$value['tasks'];
@@ -174,7 +174,7 @@ class AccountType extends AbstractObjectType   // extending abstract Object type
            ]);
           $config->addField('campaigns', [
                   'type' => new CampaignsListType(),
-                  'args' => argsHelper::entityArgsHelper('Campaign'),
+                  'args' => argsHelper::entityArgsHelper('Campaigns'),
                   'resolve' => function ($value, array $args, ResolveInfo $info) {
                       if (!empty($value['campaigns'][0])) {
                           $args['ids']=$value['campaigns'];

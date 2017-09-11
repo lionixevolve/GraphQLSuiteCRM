@@ -44,7 +44,7 @@ class ContactsListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Contact', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Contacts', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

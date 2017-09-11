@@ -41,13 +41,6 @@ class AclRolesListType extends AbstractListType
         return new AclRoleType();
     }
 
-    public function build($config)
-    {
-        // $config
-        // ->addArgument('limit', TypeMap::TYPE_INT)
-        // ->addArgument('offset', TypeMap::TYPE_INT);
-    }
-
     public function resolve($value = null, $args = [], $info = null)
     {
         global $sugar_config, $current_user;

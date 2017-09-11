@@ -10,7 +10,7 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Task') as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Tasks') as $field => $type) {
                 $config->addField($field, $type);
         }
         $config->addField('created_user_details', [
@@ -48,7 +48,6 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
          ]);
         $config->addField('parent_contact', [
                     'type'     => new ContactType(),
-                    'args' => argsHelper::entityArgsHelper('Contacts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                         if (!empty($value['parent_contact'])) {
                             $args['ids']=$value['parent_contact'];
@@ -60,7 +59,6 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
            ]);
         $config->addField('parent_account', [
                     'type' => new AccountType(),
-                    'args' => argsHelper::entityArgsHelper('Accounts'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
                          if (!empty($value['parent_account'])) {
                              $args['ids']=$value['parent_account'];

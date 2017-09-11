@@ -12,7 +12,6 @@ class MeetingInputType extends AbstractObjectType   // extending abstract Object
         foreach (argsHelper::entityArgsHelper('Meetings', true) as $field => $type) {
             $config->addField($field, $type);
         }
-        $config->addField('related_beans', new ListType(new RelatedBeanInputType()));
     }
 
     public function resolve($value = null, $args = [], $type = null)  // implementing resolve function

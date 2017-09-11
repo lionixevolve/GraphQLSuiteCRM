@@ -20,77 +20,77 @@ class SuiteCRMSchema extends AbstractSchema
         $config->getQuery()->addFields([
             'accounts'           => [
                 'type' => new AccountsListType(),
-                'args'    => argsHelper::entityArgsHelper('Accounts', true),
+                'args'    => argsHelper::entityArgsHelper('Accounts'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'account'           => [
                 'type' => new AccountType(),
-                'args'    => argsHelper::entityArgsHelper('Accounts', true),
+                'args'    => argsHelper::entityArgsHelper('Accounts'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'aos_quotes' => [
                 'type' => new QuotesListType(),
-                'args' => argsHelper::entityArgsHelper('AOS_Quotes', true),
+                'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 },
             ],
             'aos_quote' => [
                 'type' => new QuoteType(),
-                'args' => argsHelper::entityArgsHelper('AOS_Quotes', true),
+                'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 },
             ],
             'calls'           => [
                 'type' => new CallsListType(),
-                'args'    => argsHelper::entityArgsHelper('Calls', true),
+                'args'    => argsHelper::entityArgsHelper('Calls'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'call'           => [
                 'type' => new CallType(),
-                'args'    => argsHelper::entityArgsHelper('Calls', true),
+                'args'    => argsHelper::entityArgsHelper('Calls'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'campaigns'           => [
                 'type' => new CampaignsListType(),
-                'args'    => argsHelper::entityArgsHelper('Campaigns', true),
+                'args'    => argsHelper::entityArgsHelper('Campaigns'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'campaign'           => [
                 'type' => new CampaignType(),
-                'args'    => argsHelper::entityArgsHelper('Campaign', true),
+                'args'    => argsHelper::entityArgsHelper('Campaigns'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'cases'           => [
                 'type' => new CasesListType(),
-                'args'    => argsHelper::entityArgsHelper('Case', true),
+                'args'    => argsHelper::entityArgsHelper('Cases'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'case'           => [
                 'type' => new CaseType(),
-                'args'    => argsHelper::entityArgsHelper('Case', true),
+                'args'    => argsHelper::entityArgsHelper('Cases'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'contacts'           => [
                 'type' => new ContactsListType(),
-                'args'    => argsHelper::entityArgsHelper('Contact', true),
+                'args'    => argsHelper::entityArgsHelper('Contacts'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -98,7 +98,7 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'contact'           => [
                 'type' => new ContactType(),
-                'args'    => argsHelper::entityArgsHelper('Contact', true),
+                'args'    => argsHelper::entityArgsHelper('Contacts'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -106,7 +106,7 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'notes'           => [
                 'type' => new NotesListType(),
-                'args'    => argsHelper::entityArgsHelper('Note', true),
+                'args'    => argsHelper::entityArgsHelper('Notes'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -114,7 +114,7 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'note'           => [
                 'type' => new NoteType(),
-                'args'    => argsHelper::entityArgsHelper('Note', true),
+                'args'    => argsHelper::entityArgsHelper('Notes'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -122,14 +122,14 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'meetings'           => [
                 'type' => new MeetingsListType(),
-                'args'    => argsHelper::entityArgsHelper('Meeting', true),
+                'args'    => argsHelper::entityArgsHelper('Meetings'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'meeting'           => [
                 'type' => new MeetingType(),
-                'args'    => argsHelper::entityArgsHelper('Meeting', true),
+                'args'    => argsHelper::entityArgsHelper('Meetings'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -137,14 +137,14 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'opportunities'           => [
                 'type' => new OpportunitiesListType(),
-                'args'    => argsHelper::entityArgsHelper('Opportunity', true),
+                'args'    => argsHelper::entityArgsHelper('Opportunities'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'opportunity'           => [
                 'type' => new OpportunityType(),
-                'args'    => argsHelper::entityArgsHelper('Opportunity', true),
+                'args'    => argsHelper::entityArgsHelper('Opportunities'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
@@ -152,49 +152,49 @@ class SuiteCRMSchema extends AbstractSchema
             ],
             'tasks'           => [
                 'type' => new TasksListType(),
-                'args'    => argsHelper::entityArgsHelper('Task', true),
+                'args'    => argsHelper::entityArgsHelper('Tasks'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'task'           => [
                 'type' => new TaskType(),
-                'args'    => argsHelper::entityArgsHelper('Task', true),
+                'args'    => argsHelper::entityArgsHelper('Tasks'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'roles'         => [
                 'type' => new AclRoleType(),
-                'args' => argsHelper::entityArgsHelper('ACLRole', true),
+                'args' => argsHelper::entityArgsHelper('ACLRoles'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 },
             ],
             'role' => [
                 'type' => new AclRoleType(),
-                'args' => argsHelper::entityArgsHelper('ACLRole', true),
+                'args' => argsHelper::entityArgsHelper('ACLRoles'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 },
             ],
             'user'           => [
                 'type' => new UserType(),
-                'args'    => argsHelper::entityArgsHelper('User', true),
+                'args'    => argsHelper::entityArgsHelper('Users'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'users'           => [
                 'type' => new UsersListType(),
-                'args'    => argsHelper::entityArgsHelper('User', true),
+                'args'    => argsHelper::entityArgsHelper('Users'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 }
             ],
             'whoami'           => [
                 'type' => new UserType(),
-                'args'    => argsHelper::entityArgsHelper('User', true),
+                'args'    => argsHelper::entityArgsHelper('Users'),
                 'resolve'    => function ($value, array $args, ResolveInfo $info) {
                     $args['whoami']="1";
                     return $info->getReturnType()->resolve($value, $args, $info);
@@ -204,7 +204,7 @@ class SuiteCRMSchema extends AbstractSchema
         $config->getMutation()->addFields([
             'createAccount' => [
                 'type' => new AccountInputType(),
-                'args'    => array_merge(argsHelper::entityArgsHelper('Account', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                'args'    => array_merge(argsHelper::entityArgsHelper('Accounts', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                 'resolve' => function ($value, $args, $type) {
                     $result=AccountInputType::resolve($value, $args, $type);
                     return AccountType::resolve($value, ['id'=>$result['id']], $type);
@@ -212,7 +212,7 @@ class SuiteCRMSchema extends AbstractSchema
             ],
              'createCall' => [
                  'type' => new CallInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Call', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Calls', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                     $result=CallInputType::resolve($value, $args, $type);
                     return CallType::resolve($value, ['id'=>$result['id']], $type);
@@ -220,7 +220,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createCase' => [
                  'type' => new CaseInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Case', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Cases', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                     $result=CaseInputType::resolve($value, $args, $type);
                     return CaseType::resolve($value, ['id'=>$result['id']], $type);
@@ -238,13 +238,14 @@ class SuiteCRMSchema extends AbstractSchema
                  'type' => new ContactInputType(),
                  'args'    => array_merge(argsHelper::entityArgsHelper('Contact', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
+                     file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($args, 1).PHP_EOL, FILE_APPEND);
                      $result=ContactInputType::resolve($value, $args, $type);
                         return ContactType::resolve($value, ['id'=>$result['id']], $type);
                  },
              ],
              'createMeeting' => [
                  'type' => new MeetingInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Meeting', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Meetings', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=MeetingInputType::resolve($value, $args, $type);
                      return MeetingType::resolve($value, ['id'=>$result['id']], $type);
@@ -252,7 +253,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createOpportunity' => [
                  'type' => new OpportunityInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Opportunity', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Opportunities', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=OpportunityInputType::resolve($value, $args, $type);
                         return OpportunityType::resolve($value, ['id'=>$result['id']], $type);
@@ -260,7 +261,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createTask' => [
                  'type' => new TaskInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Task', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Tasks', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=TaskInputType::resolve($value, $args, $type);
                         return TaskType::resolve($value, ['id'=>$result['id']], $type);
@@ -268,7 +269,7 @@ class SuiteCRMSchema extends AbstractSchema
              ],
              'createNote' => [
                  'type' => new NoteInputType(),
-                 'args'    => array_merge(argsHelper::entityArgsHelper('Note', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
+                 'args'    => array_merge(argsHelper::entityArgsHelper('Notes', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
                      $result=NoteInputType::resolve($value, $args, $type);
                         return NoteType::resolve($value, ['id'=>$result['id']], $type);

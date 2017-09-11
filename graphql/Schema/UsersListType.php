@@ -43,7 +43,7 @@ class UsersListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('User', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Users', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

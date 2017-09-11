@@ -43,7 +43,7 @@ class AccountsListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Account', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Accounts', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

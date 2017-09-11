@@ -10,7 +10,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('User',true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Users',true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('session_id', new StringType());

@@ -45,7 +45,7 @@ class NotesListType extends AbstractListType
 
     public function build($config)
     {
-        foreach (argsHelper::entityArgsHelper('Note', true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Notes', true) as $field => $type) {
             $config->addField($field, $type);
         }
     }

@@ -45,7 +45,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
         }
         $config->addField('contacts', [
                 'type'=> new ContactsListType(),
-                'args' => argsHelper::entityArgsHelper('Contact'),
+                'args' => argsHelper::entityArgsHelper('Contacts'),
                 'resolve' => function ($value, $args, ResolveInfo $info) {
                     if (!empty($value['contacts'])) {
                         $args['ids']=$value['contacts'];
@@ -57,7 +57,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
         ]);
         $config->addField('notes', [
                 'type' => new NotesListType(),
-                'args' => argsHelper::entityArgsHelper('Note'),
+                'args' => argsHelper::entityArgsHelper('Notes'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['notes'])) {
                         $args['ids']=$value['notes'];
@@ -69,7 +69,6 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
          ]);
         $config->addField('account_details', [
                 'type'=> new AccountType(),
-                'args' => argsHelper::entityArgsHelper('Account'),
                 'resolve' => function ($value, $args, ResolveInfo $info) {
                     if (!empty($value['account_id'])) {
                         $args['id']=$value['account_id'];
@@ -80,8 +79,8 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                 },
         ]);
         $config->addField('calls', [
-                'type'=> new ListType(new CallType()),
-                'args' => argsHelper::entityArgsHelper('Call'),
+                'type'=> new CallsListType(),
+                'args' => argsHelper::entityArgsHelper('Calls'),
                 'resolve' => function ($value, array $args, ResolveInfo $info) {
                     if (!empty($value['calls'])) {
                         $args['ids']=$value['calls'];
@@ -92,7 +91,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                 },
         ]);
         $config->addField('aos_quotes', [
-            'type'=> new ListType(new QuoteType()),
+            'type'=> new QuotesListType(),
             'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
             'resolve' => function ($value, $args, ResolveInfo $info) {
                 if (!empty($value['aos_quotes'])) {

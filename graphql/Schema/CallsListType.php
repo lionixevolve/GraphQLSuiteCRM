@@ -41,13 +41,7 @@ class CallsListType extends AbstractListType
     {
         return new CallType();
     }
-    public function build($config)
-    {
-        foreach (argsHelper::entityArgsHelper('Call', true) as $field => $type) {
-            $config->addField($field, $type);
-        }
-    }
-
+    
     public function resolve($value = null, $args = [], $info = null)
     {
         require_once 'ListHelper.php';
