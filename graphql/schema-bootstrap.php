@@ -3,6 +3,7 @@ require_once __DIR__ . '/Schema/AccountType.php';
 require_once __DIR__ . '/Schema/AccountsListType.php';
 require_once __DIR__ . '/Schema/AccountInputType.php';
 require_once __DIR__ . '/Schema/AclRoleType.php';
+require_once __DIR__ . '/Schema/AclRolesListType.php';
 require_once __DIR__ . '/Schema/CallsListType.php';
 require_once __DIR__ . '/Schema/CallInputType.php';
 require_once __DIR__ . '/Schema/CallType.php';

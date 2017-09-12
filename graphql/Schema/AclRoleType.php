@@ -22,7 +22,7 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
         $config->addField('users', [
                     'type' => new UsersListType(),
                     'args'    => argsHelper::entityArgsHelper('Users', true),
-                    'resolve' => function ($value, array $args, ResolveInfo $info) {
+                    'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) {
                          if (!empty($value['users'])) {
                              $args['id']=$value['users'];
                              return UsersListType::resolve($value, $args, $info);
@@ -77,7 +77,7 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
         }
     }
 
-    public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
+    public function resolve($value = null, $args = [], Youshido\GraphQL\Execution\ResolveInfo $info = null)  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
             foreach ($args as $key => $roleId) {
