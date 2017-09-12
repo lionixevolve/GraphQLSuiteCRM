@@ -71,7 +71,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                 AND u.id = '{$id}';
             ";
             $result=$db->query($sql);
-            if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+            if(isset($queryFields) && array_key_exists('related_roles',$queryFields)){
                 $module_arr['related_roles'] =  array();
                 while (($row = $db->fetchByAssoc($result)) != null) {
                     $module_arr['related_roles'][] = $row['id'];
