@@ -58,6 +58,13 @@ $app->add(function($request, $response, $next) {
     if ($request->getAttribute('route')->getArgument('auth', true)) {
         session_start();
         if (isset($_SESSION['authenticated_user_id']) ){
+            //Somehow and sometimes current_user is not set, this breaks some functionality
+            //We copy this idea from
+            // https://github.com/salesagility/SuiteCRM/blob/932b87108edc154dd3c9c86b57ceaa24acd40835/modules/jjwg_Address_Cache/jjwg_Address_Cache.php
+            if (empty($GLOBALS['current_user']->id) && !empty($_SESSION['authenticated_user_id'])) {
+                $GLOBALS['current_user'] = new User();
+                $GLOBALS['current_user']->retrieve($_SESSION['authenticated_user_id']);
+            }
             return $next($request, $response);
         }else{
             return $response->withJson(['result'=>'error','message'=> 'not authenticated'], 403);
