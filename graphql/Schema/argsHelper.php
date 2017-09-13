@@ -65,7 +65,7 @@ class argsHelper
     }
     public function entityArgsHelper($entity, $mutation=false)
     {
-        global $db, $dictionary, $beanList, $language;
+        global $db, $dictionary, $beanList, $language,$sugar_config;
         $argsArray = [];
         $default_language = $sugar_config['default_language'];
         if (empty($language)) {
@@ -76,15 +76,18 @@ class argsHelper
             $object = BeanFactory::getObjectName($entity);
             VardefManager::refreshVardefs($entity, $object);
         }
-        if($entity=="Cases"){
-        }
+
         if (!empty($beanList[$entity]) && $entity!="Cases") {
             $entity=$beanList[$entity];
         }elseif ($entity=="Cases") {
-            //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary 
+            //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary
             $entity="Case";
         }
-        $moduleFields=$dictionary[$entity]['fields'];
+        if(isset($dictionary[$entity])){
+            $moduleFields=$dictionary[$entity]['fields'];
+        }else{
+            $moduleFields=null;
+        }
         if (is_array($moduleFields)) {
             foreach ($moduleFields as $key => $value) {
                 if ($moduleFields[$key]['type']!='link') {
@@ -99,7 +102,7 @@ class argsHelper
                             $argsArray = array_merge($argsArray, [$fieldNameStartRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
                             $argsArray = array_merge($argsArray, [$fieldNameEndRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
                         }
-                         elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Users') {
+                         elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Users') {
                             //Fields of type Related will be added a new _details FIELD to the graphql query
                             // Which will allow to reference the related Module allowing queries like
                             // For example, a related field named related_user_field_c, will have a
@@ -122,7 +125,7 @@ class argsHelper
                             ]
                         ]);
                         }
-                    elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Contacts') {
+                    elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Contacts') {
                         $fieldNamePlusDetails=$key."_details";
                         $relatedFieldName=$moduleFields[$key]['id_name'];
                         $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
@@ -139,7 +142,7 @@ class argsHelper
                             },
                         ]
                     ]);
-                }elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Accounts') {
+                }elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Accounts') {
                     $fieldNamePlusDetails=$key."_details";
                     $relatedFieldName=$moduleFields[$key]['id_name'];
                     $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
@@ -156,7 +159,7 @@ class argsHelper
                         },
                         ]
                         ]);
-                    }elseif ($fieldType=='relate' && $moduleFields[$key]['module']=='Opportunities') {
+                    }elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Opportunities') {
                         $fieldNamePlusDetails=$key."_details";
                         $relatedFieldName=$moduleFields[$key]['id_name'];
                         $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
