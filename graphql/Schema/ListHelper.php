@@ -6,8 +6,10 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
     if ($info!=null) {
         $getFieldASTList=$info->getFieldASTList();
         $queryFields=[];
+        $queryFieldsArray=[];
         foreach ($getFieldASTList as $key => $value) {
             $queryFields[$value->getName()]="";
+            $queryFieldsArray[]=$value->getName();
         }
     }
     $arrayKeys = array_keys($args);
@@ -75,7 +77,6 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
         $orderBy=$args['order'];
     }else{
         $orderBy="";
-
     }
     $query = $moduleBean->create_new_list_query($orderBy, implode(" AND ", $where), $queryFieldsArray, $params, $show_deleted = 0, '', false, null, $singleSelect = false);
     $resultArray = [];
@@ -88,8 +89,8 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
             unset($queryFieldsArray[$key]);
         }
         $query.=" GROUP BY ". implode(" , ", $queryFieldsArray);
-        if (!empty($args['orderby'])) {
-            $order_by = $moduleBean->process_order_by($args['orderby']);
+        if (!empty($args['order'])) {
+            $order_by = $moduleBean->process_order_by($args['order']);
             $query.=" ORDER BY " . $order_by;
         } else {
             $order_by = $moduleBean->process_order_by('name');
