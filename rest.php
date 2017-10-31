@@ -186,6 +186,93 @@ $app->post('/sendEmail', function (Request $request, Response $response)  {
     $reponseJson=$response->withJson(array("result" => "success" ));
     return $reponseJson;
 });
+$app->post('/webtocontactopportunity', function (Request $request, Response $response)  {
+    $parsedBody     = $request->getParsedBody();
+
+    $first_name        = $parsedBody['contact_first_name'];
+    $last_name        = $parsedBody[ 'contact_last_name'];
+    $phone_mobile        = $parsedBody['contact_phone_mobile'];
+    $email        = $parsedBody['contact_email1'];
+    $opportunity_name        = $parsedBody['opportunity_name'];
+    $campaign_id        = $parsedBody['campaign_id'];
+    $assigned_user_id        = $parsedBody['assigned_user_id'];
+
+    if ( empty($last_name) ) {
+        return $response->withJson(['result'=>'error','message'=> 'Last Name missing'], 400);
+    }elseif (empty($campaign_id)) {
+        return $response->withJson(['result'=>'error','message'=> 'Campaign Id missing'], 400);
+    }elseif (empty($email) && empty($phone_mobile)) {
+        return $response->withJson(['result'=>'error','message'=> 'Missing contact information - at least a phone (contact_phone_mobile) or an email (contact_email1) should be provided'], 400);
+    }
+
+    global $current_user, $db,$dictionary, $moduleList,$beanList,$beanFiles,$app_list_strings,$sugar_config;
+    $GLOBALS['app_list_strings'] = return_app_list_strings_language($GLOBALS['current_language']);
+    $default_language = $sugar_config['default_language'];
+
+    $current_user->id="bot";
+    $co = new Contact();
+    $op = new Opportunity();
+    if (empty($language)) {
+        $language = $default_language;
+    }
+    $entities=["Contacts", "Opportunities"];
+    $moduleFields=array();
+    foreach ($entities as $entity) {
+        $object = BeanFactory::getObjectName($entity);
+        VardefManager::refreshVardefs($entity, $object);
+        if (!empty($beanList[$entity]) && $entity!="Cases") {
+            $entity=$beanList[$entity];
+        }elseif ($entity=="Cases") {
+            //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary
+            $entity="Case";
+        }
+        if(isset($dictionary[$entity])){
+            $moduleFields[$entity]=$dictionary[$entity]['fields'];
+        }else{
+            $moduleFields=null;
+        }
+    }
+    foreach ($parsedBody as $parameter => $value) {
+        if(substr_count($parameter,'contact_')>0){
+            $tentativeVariableName=str_replace('contact_','',$parameter);
+            if(isset($moduleFields['Contact'][$tentativeVariableName])){
+                $co->{$tentativeVariableName}=$value;
+            }
+        }
+        if(substr_count($parameter,'opportunity_')>0){
+            $tentativeVariableName=str_replace('opportunity_','',$parameter);
+            if(isset($moduleFields['Opportunity'][$tentativeVariableName])){
+                $op->{$tentativeVariableName}=$value;
+            }
+        }
+    }
+    $co->last_name =  $last_name;
+    $co->email1 =  $email;
+    $op->name = $op->name? $op->name: "Oportunidad de Landing Page/FB";
+    $op->campaign_id = $campaign_id;
+    $co->campaign_id = $campaign_id;
+    $op->assigned_user_id =  $assigned_user_id? $assigned_user_id:"bot";
+    $co->assigned_user_id =  $assigned_user_id? $assigned_user_id:"bot";
+    $co->save();
+    foreach ($co->get_linked_beans('accounts') as $account) {
+        $account_id = $account->id;
+    }
+    if(!empty($account_id)){
+        $op->account_id = $account_id;
+    }
+    $op->contact_id = $co->id;
+    $op->sales_stage = "Prospecting";
+    $op->save();
+    $co->opportunity_id=$op->id;
+    $co->save();
+    if(isset($co->id) && isset($op->id)  ){
+        return $response->withJson(array("result" => "success" ), 200);
+    }else{
+        file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r("Opportunity or Contact could not be saved - Dumping request for analysis", 1).PHP_EOL, FILE_APPEND);
+        file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($parsedBody, 1).PHP_EOL, FILE_APPEND);
+        return $response->withJson(array("result" => "error", "message" => "Unknown error" ), 400);
+    }
+})->setArgument('auth', false);;
 
 $app->post('/upload/attachment', function (Request $request, Response $response)  {
     global $sugar_config, $current_user;
