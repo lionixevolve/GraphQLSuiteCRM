@@ -2,6 +2,12 @@
 if (!defined('sugarEntry')) {
     define('sugarEntry', true);
 }
+require_once 'graphql/Schema/searchHelper.php';
+require_once 'graphql/Schema/argsHelper.php';
+//SuiteCRM files require other files from their relative path so we need to make sure we move from here
+chdir('../../../');
+$dir = dirname(__FILE__);
+set_include_path($dir . '/' . PATH_SEPARATOR  . get_include_path());
 require_once('data/SugarBean.php');
 require_once('include/entryPoint.php');
 require_once('config.php');
