@@ -2,8 +2,6 @@
 
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
-require_once 'argsHelper.php';
-
 class AccountInputType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
