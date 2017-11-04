@@ -1,47 +1,12 @@
 <?php
-require_once __DIR__ .'/../../vendor/autoload.php';
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\TypeMap;
-use Doctrine\DBAL\Types\Type as DoctrineType;
 
 class argsHelper
 {
-    public function doctrineToGraphqlTypeMapper($type)
-    {
-        switch ($type) {
-            case DoctrineType::TARRAY:
-            case DoctrineType::JSON_ARRAY:
-                return new StringType();
-            case DoctrineType::BOOLEAN:
-                return new StringType();
-            case DoctrineType::DATETIME:
-            case DoctrineType::DATETIMETZ:
-            case 'vardatetime':
-            case DoctrineType::DATE:
-            case DoctrineType::TIME:
-                return new StringType();
-            case DoctrineType::DECIMAL:
-            case DoctrineType::FLOAT:
-                // return new IntType();
-                // TODO - Fix SuiteCRM Integers/Decimals returning as Strings from bean
-                return new StringType();
-            case DoctrineType::INTEGER:
-            case DoctrineType::BIGINT:
-            case DoctrineType::SMALLINT:
-                // return new IntType();
-                // TODO - Fix SuiteCRM Integers/Decimals returning as Strings from bean
-                return new StringType();
-            case DoctrineType::STRING:
-                return new StringType();
-            case DoctrineType::TEXT:
-                return new StringType();
-            default:
-                return new StringType();
-        }
-    }
     public function suitecrmToGraphqlTypeMapper($type)
     {
         switch ($type) {
