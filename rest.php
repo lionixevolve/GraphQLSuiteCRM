@@ -2,12 +2,14 @@
 if (!defined('sugarEntry')) {
     define('sugarEntry', true);
 }
+require '../../autoload.php';
 require_once 'graphql/Schema/searchHelper.php';
 require_once 'graphql/Schema/argsHelper.php';
 //SuiteCRM files require other files from their relative path so we need to make sure we move from here
 chdir('../../../');
-$dir = dirname(__FILE__);
-set_include_path($dir . '/' . PATH_SEPARATOR  . get_include_path());
+define("DIR",dirname(__FILE__));
+define("CRM_DIR",dirname(__FILE__)."/../../../");
+set_include_path(DIR . '/' . PATH_SEPARATOR  . get_include_path());
 require_once('data/SugarBean.php');
 require_once('include/entryPoint.php');
 require_once('config.php');
@@ -30,7 +32,7 @@ require_once('modules/Tasks/Task.php');
 require_once('modules/Documents/Document.php');
 require_once('modules/Notes/Note.php');
 require_once('include/formbase.php');
-require 'vendor/autoload.php';
+
 use Youshido\GraphQL\Execution\Processor;
 use Youshido\GraphQL\Schema;
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -80,9 +82,8 @@ $app->add(function($request, $response, $next) {
 });
 
 $app->post('/graphql', function (Request $request, Response $response) {
-    require_once __DIR__.'/vendor/autoload.php';
-    require_once __DIR__.'/graphql/Schema/SuiteCRMSchema.php';       // including PostType definition
-    require_once __DIR__.'/graphql/schema-bootstrap.php';
+    require_once DIR.'/graphql/Schema/SuiteCRMSchema.php';       // including PostType definition
+    require_once DIR.'/graphql/schema-bootstrap.php';
     $schema = new SuiteCRMSchema();
     $processor = new Processor($schema);
     $parsedBody = $request->getParsedBody();
@@ -361,7 +362,7 @@ $app->post('/upload/attachment', function (Request $request, Response $response)
         $parentId =$parsedBody['parent_id'];
         $parentType = $parsedBody['parent_type'];
     }
-    $storage = new \Upload\Storage\FileSystem(__DIR__."/".$sugar_config['upload_dir']);
+    $storage = new \Upload\Storage\FileSystem(CRM_DIR."/".$sugar_config['upload_dir']);
     $file = new \Upload\File('upload_files', $storage);
     if (count($file)>1) {
         //Multiple file upload
