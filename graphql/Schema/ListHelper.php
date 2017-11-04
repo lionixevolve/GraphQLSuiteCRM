@@ -16,6 +16,7 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
     $moduleFields=$moduleBean->field_name_map;
     //we hardcode the IDS field as available to this modules
     $moduleFields['ids']="enabled";
+    $searchFields=array();
     foreach ($moduleFields as $key => $params) {
         if (in_array($key, $arrayKeys)) {
             if (is_array($args[$key]) || substr_count($args[$key], ",")>0) {
@@ -100,6 +101,7 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
     if (!empty($args['limit'])) {
         $max=$args['limit'];
     } else {
+        $args['limit']="";
         $max=-1;
     }
     return $moduleBean->process_list_query($query, $offset, $args['limit'], $max, $where);
