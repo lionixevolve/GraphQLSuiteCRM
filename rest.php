@@ -252,7 +252,7 @@ $app->post('/webtocontactopportunity', function (Request $request, Response $res
     }
     $co->last_name =  $last_name;
     $co->email1 =  $email;
-    $op->name = $op->name? $op->name: "Oportunidad de Landing Page/FB";
+    $op->name = $op->name? $op->name: "Web Opportunity";
     $op->campaign_id = $campaign_id;
     $co->campaign_id = $campaign_id;
     $op->assigned_user_id =  $assigned_user_id? $assigned_user_id:"bot";
