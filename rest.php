@@ -264,6 +264,7 @@ $app->post('/webtocontactopportunity', function (Request $request, Response $res
     $op->contact_id = $co->id;
     $op->sales_stage = "Prospecting";
     $op->save();
+    $co=$co->retrieve($co->id);
     $co->opportunity_id=$op->id;
     $co->save();
     if(isset($co->id) && isset($op->id)  ){
