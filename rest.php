@@ -62,7 +62,10 @@ $container['logger'] = function ($c) {
 };
 
 $app->add(function($request, $response, $next) {
-
+    if (empty($route)) {
+        // return next Action when route not found
+        return $next($request, $response);
+     }
     if ($request->getAttribute('route')->getArgument('auth', true)) {
         session_start();
         if (isset($_SESSION['authenticated_user_id']) ){
