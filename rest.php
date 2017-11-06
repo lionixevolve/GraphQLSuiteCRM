@@ -265,6 +265,8 @@ $app->post('/webtocontactopportunity', function (Request $request, Response $res
         $op->account_id = $account_id;
     }
     $op->contact_id = $co->id;
+    //Only for LionixCRM - suitecrm/sugarcrm will not mind having this set unless is a new field on your installation 
+    $op->maincontact_c = $co->id;
     $op->sales_stage = "Prospecting";
     $op->save();
     $co=$co->retrieve($co->id);
