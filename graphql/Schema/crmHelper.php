@@ -20,6 +20,7 @@ public function saveBean($module_name, $class_name, $name_value_list){
             $seed->retrieve($value);
         }
     }
+    $seed->notifyonsave=false;
     foreach ($name_value_list as $name => $value) {
         if ($module_name == 'Users' && !empty($seed->id) && ($seed->id != $current_user->id) && $name == 'user_hash') {
             continue;
@@ -47,7 +48,7 @@ public function saveBean($module_name, $class_name, $name_value_list){
 
     if ($seed->ACLAccess('Save')) {
         $seed->not_use_rel_in_req=true;
-        $seed->save();
+        $seed->save($seed->notifyonsave);
         if ($seed->deleted == 1) {
             $seed->mark_deleted($seed->id);
         }
