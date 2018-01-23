@@ -147,6 +147,7 @@ class argsHelper
             }
         }
         $argsArray = array_merge($argsArray, [
+            //TODO: This variables should only be exposed on QUERY or MUTATION not always. 
                 'offset' => new StringType(TypeMap::TYPE_INT),
                 'limit' => new StringType(TypeMap::TYPE_INT),
                 'order' => new StringType(TypeMap::TYPE_STRING),
