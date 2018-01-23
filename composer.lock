@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3f057d842adfef0ca4a94ee3054fe06a",
-    "content-hash": "cdfacca470191e1d489f7ba512a78a30",
+    "content-hash": "d3748ff0f29956301d930823bfe7c0b8",
     "packages": [
         {
             "name": "codeguy/upload",
@@ -52,7 +51,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2016-03-03 15:58:57"
+            "time": "2016-03-03T15:58:57+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -83,7 +82,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "time": "2017-02-14 19:40:03"
+            "time": "2017-02-14T19:40:03+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -161,7 +160,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-06-19 01:22:40"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -204,7 +203,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2017-01-19 11:35:12"
+            "time": "2017-01-19T11:35:12+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -254,7 +253,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2018-01-21 10:38:34"
+            "time": "2018-01-21T10:38:34+00:00"
         },
         {
             "name": "psr/container",
@@ -303,7 +302,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-06-28 15:35:32"
+            "time": "2017-06-28T15:35:32+00:00"
         },
         {
             "name": "psr/http-message",
@@ -353,7 +352,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -400,7 +399,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "slim/slim",
@@ -471,7 +470,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2017-12-23 10:33:51"
+            "time": "2017-12-23T10:33:51+00:00"
         },
         {
             "name": "youshido/graphql",
@@ -514,7 +513,7 @@
                 }
             ],
             "description": "Pure PHP GraphQL",
-            "time": "2018-01-16 15:26:05"
+            "time": "2018-01-16T15:26:05+00:00"
         }
     ],
     "packages-dev": [],

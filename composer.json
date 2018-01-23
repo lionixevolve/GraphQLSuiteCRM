@@ -2,7 +2,7 @@
     "name": "lionixevolve/graphqlsuitecrm",
     "description": "GraphQL support for SuiteCRM / SugarCRM CE",
     "type": "library",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-or-later",
     "authors": [{
             "name": "Matías Barletta - Lionix Evolve",
             "email": "mrbarletta@lionix.com",
@@ -10,9 +10,7 @@
         }],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": {
-            "": "src"
-        }
+
     },
     "require": {
         "slim/slim": "~3.9",
