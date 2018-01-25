@@ -17,7 +17,7 @@ This GraphQL library uses SuiteCRM/SugarCRM beans for almost all the actions, so
 
 ## Set up
 
-`composer require lionixevolve/graphqlsuitecrm:v0.9.3`
+`composer require lionixevolve/graphqlsuitecrm`
 
 This will install the plugin in the vendor folder.
 
@@ -77,4 +77,5 @@ As you can see related modules are also retrieved using the plural word of the r
 You can use the included GraphiQL here:
 `vendor/lionixevolve/graphqlsuitecrm/graphql/GraphiQL/`
 
+### Known Issues
 there is currently an issue with the schema inspector Issue#2 
