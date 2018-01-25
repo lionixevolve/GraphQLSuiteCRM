@@ -151,6 +151,7 @@ class argsHelper
                 'offset' => new StringType(TypeMap::TYPE_INT),
                 'limit' => new StringType(TypeMap::TYPE_INT),
                 'order' => new StringType(TypeMap::TYPE_STRING),
+                'distinct' => new StringType(TypeMap::TYPE_STRING),
                 'notifyonsave' => new StringType(TypeMap::TYPE_BOOLEAN),
             ]);
             //Some modules have more fields due to relations or special fields
