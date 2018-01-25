@@ -93,7 +93,15 @@ $config->getQuery()->addFields([
 For the example you will also need the Type definition (in this case TopicType/TopicsListType) to resolve the data.
 
 Beware this is an include_once call so all the code here will be included when the RoothSchema (SuiteCRMSchema.php file) is executed
+#### Adding Rest endpoint
 
+* You can extend the rest (made with Slim) requests when the file `graphql/CustomRest.php` exists on your root suitecrm/lionixcrm folder
+
+```
+$app->post('/newPost', function (\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response){
+return $response->withJson(["result"=>"empty - not even tried"]);
+}
+```
 ### GraphiQL
 You can use the included GraphiQL here:
 `vendor/lionixevolve/graphqlsuitecrm/graphql/GraphiQL/`
