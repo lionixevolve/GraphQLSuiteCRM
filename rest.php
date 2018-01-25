@@ -554,5 +554,7 @@ function validateDate($date, $format = 'Y-m-d H:i:s')
     return $d && $d->format($format) == $date;
 }
 
-
+if(file_exists(__DIR__.'/../../../graphql/CustomRest.php')){
+    include_once(__DIR__.'/../../../graphql/CustomRest.php');
+}
 $app->run();
