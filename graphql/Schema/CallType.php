@@ -71,6 +71,19 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                          }
                     },
             ]);
+            $config->addField('parent_case', [
+                    'type'     => new CaseType(),
+                    'args' => argsHelper::entityArgsHelper('Cases'),
+                   'resolve' => function ($value, array $args, ResolveInfo $info) {
+                       file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($value, 1).PHP_EOL, FILE_APPEND);
+                       if (!empty($value['parent_case'])) {
+                           $args['id']=$value['parent_case'];
+                           return CaseType::resolve($value, $args, $info);
+                       } else {
+                          return null;
+                      }
+                     },
+              ]);
         $config->addField('parent_opportunity', [
                     'type' => new OpportunityType(),
                     'args' => argsHelper::entityArgsHelper('Opportunities'),
@@ -169,25 +182,35 @@ class CallType extends AbstractObjectType   // extending abstract Object type
             }
 
             switch ($module_arr['parent_type']) {
+                case 'Cases':
+                    $module_arr['parent_case'] = $module_arr['parent_id'];
+                    $module_arr['parent_contact'] = '';
+                    $module_arr['parent_account'] = '';
+                    $module_arr['parent_opportunity'] = '';
+                    break;
                 case 'Contacts':
                     $module_arr['parent_contact'] = $module_arr['parent_id'];
                     $module_arr['parent_account'] = '';
                     $module_arr['parent_opportunity'] = '';
+                    $module_arr['parent_case'] = '';
                     break;
                 case 'Accounts':
                     $module_arr['parent_account'] = $module_arr['parent_id'];
                     $module_arr['parent_contact'] = '';
                     $module_arr['parent_opportunity'] = '';
+                    $module_arr['parent_case'] = '';
                     break;
                 case 'Opportunities':
                     $module_arr['parent_opportunity'] = $module_arr['parent_id'];
                     $module_arr['parent_contact'] = '';
                     $module_arr['parent_account'] = '';
+                    $module_arr['parent_case'] = '';
                     break;
                 default:
                     $module_arr['parent_opportunity'] = '';
                     $module_arr['parent_contact'] = '';
                     $module_arr['parent_account'] = '';
+                    $module_arr['parent_case'] = '';
                     break;
 
                 }
