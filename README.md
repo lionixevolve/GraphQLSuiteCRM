@@ -72,6 +72,27 @@ Also you can see some schema changes for the assigned_user/created_by users fiel
 As you can see related modules are also retrieved using the plural word of the relation. Accounts/Opportunities, etc.
 
 
+### Extending/Customizing Suitecrm Graphql Schema  (Rudimentary/Hacky)
+If you need to extend the custom schema you can create a file `graphql/CustomSuiteCRMSchema.php` and it will be included_once when defining the Schema. This is an example taken from a real project
+
+```
+<?php
+require_once('Schema/TopicType.php');
+require_once('Schema/TopicsListType.php');
+
+$config->getQuery()->addFields([
+    'topics' => [
+                'type' => new TopicsListType(),
+                'args' => argsHelper::entityArgsHelper('lx_topics'),
+                'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo  $info) {
+                    return $info->getReturnType()->resolve($value, $args, $info);
+                },
+           ],
+]);
+```
+For the example you will also need the Type definition (in this case TopicType/TopicsListType) to resolve the data.
+
+Beware this is an include_once call so all the code here will be included when the RoothSchema (SuiteCRMSchema.php file) is executed
 
 ### GraphiQL
 You can use the included GraphiQL here:
