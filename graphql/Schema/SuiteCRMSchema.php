@@ -201,6 +201,9 @@ class SuiteCRMSchema extends AbstractSchema
                 }
             ],
         ]);
+        if(file_exists(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php')){
+            include_once(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php');
+        }
         $config->getMutation()->addFields([
             'createAccount' => [
                 'type' => new AccountInputType(),
