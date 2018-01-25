@@ -98,6 +98,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
 
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
+        session_start(); // We start the session to access logged in user details
         if(!empty($args['whoami'])){
             global $current_user;
             if($_SESSION['authenticated_user_id']){
