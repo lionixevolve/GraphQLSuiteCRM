@@ -80,15 +80,48 @@ If you need to extend the custom schema you can create a file `graphql/CustomSui
 require_once('Schema/TopicType.php');
 require_once('Schema/TopicsListType.php');
 
-$config->getQuery()->addFields([
-    'topics' => [
+
+class CustomSuiteCRMSchema
+{
+    public function buildSchema($config)
+    {
+        $config->getQuery()->addFields([
+            'topics' => [
                 'type' => new TopicsListType(),
                 'args' => argsHelper::entityArgsHelper('lx_topics'),
                 'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo  $info) {
                     return $info->getReturnType()->resolve($value, $args, $info);
                 },
-           ],
-]);
+            ],
+        ]);
+    }
+    public function buildUserResolve($user, $queryFields){
+        $module_arr=array();
+        if(isset($queryFields) && array_key_exists('topics',$queryFields)){
+                foreach ($user->get_linked_beans('lx_topics_users', 'lx_topics') as $topic) {
+                    $module_arr['topics'][] = $topic->id;
+                }
+        }
+        return $module_arr;
+    }
+    public function buildUserType($config)
+    {
+        $config->addField('topics', [
+            'type' => new TopicsListType(),
+            'args' => argsHelper::entityArgsHelper('lx_topics'),
+            'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) {
+                 if (!empty($value['topics'])) {
+                     $args['id']=$value['topics'];                     
+                     return TopicType::resolve($value, $args, $info);
+                 } else {
+                     return null;
+                 }
+            },
+        ]);
+    }
+
+}
+
 ```
 For the example you will also need the Type definition (in this case TopicType/TopicsListType) to resolve the data.
 
