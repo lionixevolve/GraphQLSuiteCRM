@@ -3,13 +3,13 @@ class crmHelper{
     /* This saveBean is an adapted copy of the set_entry sugar rest/soap service
 */
 public function saveBean($module_name, $class_name, $name_value_list){
-
-
+    session_start();
     global  $beanList, $beanFiles, $current_user;
-    // $module_name="Calls";
-    // $class_name = $beanList[$module_name];
-    // $class_name="Call";
-    // require_once $beanFiles[$class_name];
+    if(isset($_SESSION['user_id'])  && $_SESSION['user_id']!=$current_user->id){
+        $current_user=new User();
+        $current_user->retrieve($_SESSION['user_id']);
+
+    }
     $seed = new $class_name();
     // $name_value_list=$args;
     foreach ($name_value_list as $name => $value) {
