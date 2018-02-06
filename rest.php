@@ -85,7 +85,11 @@ $app->add(function($request, $response, $next) {
 });
 
 $app->post('/graphql', function (Request $request, Response $response) {
-    require_once DIR.'/graphql/Schema/SuiteCRMSchema.php';       // including PostType definition
+    session_start();
+    global $app_strings, $sugar_config, $app_list_strings,$sugar_config;
+    $default_language = $sugar_config['default_language'];
+	$app_list_strings = return_app_list_strings_language($default_language);
+    require_once DIR.'/graphql/Schema/SuiteCRMSchema.php';
     require_once DIR.'/graphql/schema-bootstrap.php';
     $schema = new SuiteCRMSchema();
     $processor = new Processor($schema);
