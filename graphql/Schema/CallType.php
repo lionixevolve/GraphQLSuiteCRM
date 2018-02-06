@@ -75,7 +75,6 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                     'type'     => new CaseType(),
                     'args' => argsHelper::entityArgsHelper('Cases'),
                    'resolve' => function ($value, array $args, ResolveInfo $info) {
-                       file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($value, 1).PHP_EOL, FILE_APPEND);
                        if (!empty($value['parent_case'])) {
                            $args['id']=$value['parent_case'];
                            return CaseType::resolve($value, $args, $info);
