@@ -151,30 +151,6 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
             if(isset($queryFields) && array_key_exists('modified_user_details',$queryFields)){
                 $module_arr['modified_user_details'] = $module_arr['modified_user_id'];
             }
-
-            switch ($module_arr['parent_type']) {
-                case 'Contacts':
-                    $module_arr['parent_contact'] = $module_arr['parent_id'];
-                    $module_arr['parent_account'] = '';
-                    $module_arr['parent_opportunity'] = '';
-                    break;
-                case 'Accounts':
-                    $module_arr['parent_account'] = $module_arr['parent_id'];
-                    $module_arr['parent_contact'] = '';
-                    $module_arr['parent_opportunity'] = '';
-                    break;
-                case 'Opportunities':
-                    $module_arr['parent_opportunity'] = $module_arr['parent_id'];
-                    $module_arr['parent_contact'] = '';
-                    $module_arr['parent_account'] = '';
-                    break;
-                default:
-                    $module_arr['parent_opportunity'] = '';
-                    $module_arr['parent_contact'] = '';
-                    $module_arr['parent_account'] = '';
-                    break;
-
-                }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
                 $module_arr['calls'] =  array();
                 foreach ($case->get_linked_beans('calls') as $call) {
