@@ -238,7 +238,6 @@ class SuiteCRMSchema extends AbstractSchema
                  'type' => new ContactInputType(),
                  'args'    => array_merge(argsHelper::entityArgsHelper('Contact', true),['related_beans' => new ListType(new RelatedBeanInputType())]),
                  'resolve' => function ($value, $args, $type) {
-                     file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($args, 1).PHP_EOL, FILE_APPEND);
                      $result=ContactInputType::resolve($value, $args, $type);
                         return ContactType::resolve($value, ['id'=>$result['id']], $type);
                  },
