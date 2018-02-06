@@ -36,11 +36,10 @@ class argsHelper
         if (empty($language)) {
             $language = $default_language;
         }
-        if (!file_exists('../../../cache/modules/'.$entity.'/language/'.$language.'.lang.php')
-                && !empty($GLOBALS['beanList'][$entity])) {
-            $object = BeanFactory::getObjectName($entity);
-            VardefManager::refreshVardefs($entity, $object);
-        }
+        //make sure dictionary has all the available
+        $object = BeanFactory::getObjectName($entity);
+        VardefManager::loadVardef($entity, $object);
+        // VardefManager::refreshVardefs($entity, $object);  //Commented as this clears the cache
 
         if (!empty($beanList[$entity]) && $entity!="Cases") {
             $entity=$beanList[$entity];
