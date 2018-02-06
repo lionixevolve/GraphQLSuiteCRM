@@ -29,7 +29,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                 ]);
         if(file_exists(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php')){
             require_once(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php');
-            if(method_exists(CustomSuiteCRMSchema,buildUserType)){
+            if(method_exists('CustomSuiteCRMSchema','buildUserType')){
                 CustomSuiteCRMSchema::buildUserType($config);
             }
         }
@@ -85,7 +85,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
             }
             if(file_exists(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php')){
                     require_once(__DIR__.'/../../../../../graphql/CustomSuiteCRMSchema.php');
-                    if(method_exists(CustomSuiteCRMSchema, buildUserResolve)){
+                    if(method_exists('CustomSuiteCRMSchema', 'buildUserResolve')){
                         $module_arr=array_merge($module_arr, CustomSuiteCRMSchema::buildUserResolve($user, $queryFields));
                     }
             }
