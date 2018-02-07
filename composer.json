@@ -14,6 +14,7 @@
     },
     "require": {
         "slim/slim": "~3.9",
+        "eko3alpha/slim-cors-middleware": "^1.1",
         "codeguy/upload": "dev-master",
         "youshido/graphql": "^v1.5",
         "monolog/monolog": "^1.23"
