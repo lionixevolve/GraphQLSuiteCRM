@@ -145,6 +145,8 @@ $app->add(new \Eko3alpha\Slim\Middleware\CorsMiddleware([
 ]));
 
 ```
+The CORS middleware will take care of allowing the specified hosts to access the API and return valid headers.
+
 ### GraphiQL
 You can use the included GraphiQL here:
 `vendor/lionixevolve/graphqlsuitecrm/graphql/GraphiQL/`
