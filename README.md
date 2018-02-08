@@ -34,7 +34,7 @@ Use the included GraphiQL to try this
 it will get you the accounts module with the name of each one. Limited to 2. You can also use the `offset:2` to paginate.
 
 
-An advance example - retrieving all the cases by status. 
+An advance example - retrieving all the cases by status.
 Also you can see some schema changes for the assigned_user/created_by users field that let you retrieve further information about the user.
 
 ```
@@ -126,7 +126,7 @@ class CustomSuiteCRMSchema
 For the example you will also need the Type definition (in this case TopicType/TopicsListType) to resolve the data.
 
 Beware this is an include_once call so all the code here will be included when the RoothSchema (SuiteCRMSchema.php file) is executed
-#### Adding Rest endpoint
+#### Customizing the Rest endpoint
 
 * You can extend the rest (made with Slim) requests when the file `graphql/CustomRest.php` exists on your root suitecrm/lionixcrm folder
 
@@ -135,9 +135,19 @@ $app->post('/newPost', function (\Psr\Http\Message\ServerRequestInterface $reque
 return $response->withJson(["result"=>"empty - not even tried"]);
 }
 ```
+#### CORS
+If you need support for CORS you may use the graphql/CustomRest.php and include the following snippet
+```
+
+$app->add(new \Eko3alpha\Slim\Middleware\CorsMiddleware([
+    'http://www.example.com' => ['GET', 'POST','PUT', 'DELETE','OPTIONS'],
+    'https://www.example2.com' => ['GET', 'POST'],
+]));
+
+```
 ### GraphiQL
 You can use the included GraphiQL here:
 `vendor/lionixevolve/graphqlsuitecrm/graphql/GraphiQL/`
 
 ### Known Issues
-there is currently an issue with the schema inspector Issue#2 
+there is currently an issue with the schema inspector Issue#2
