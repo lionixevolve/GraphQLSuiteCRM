@@ -24,6 +24,18 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                          }
                      },
                  ]);
+         $config->addField('cases', [
+                 'type'=> new ListType(new CaseType()),
+                 'args' => argsHelper::entityArgsHelper('Cases'),
+                 'resolve' => function ($value, array $args, ResolveInfo $info) {
+                     if (!empty($value['cases'])) {
+                         $args['ids']=$value['cases'];
+                         return CasesListType::resolve($value, $args,$info);
+                     } else {
+                         return null;
+                     }
+                 },
+         ]);
          $config->addField('created_user_details', [
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
@@ -131,6 +143,12 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                 $module_arr['calls'] =  array();
                 foreach ($contact->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('cases',$queryFields)){
+                $module_arr['cases'] =  array();
+                foreach ($contact->get_linked_beans('cases') as $case) {
+                    $module_arr['cases'][] = $case->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('tasks',$queryFields)){
