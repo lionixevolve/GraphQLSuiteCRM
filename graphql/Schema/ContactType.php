@@ -16,8 +16,12 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                     'type' => new ListType(new CallType()),
                     'args' => argsHelper::entityArgsHelper('Calls'),
                     'resolve' => function ($value, array $args, ResolveInfo $info) {
-                        $args['id']=$value['calls'];
-                         return CallsListType::resolve($value, $args, $info);
+                         if (!empty($value['calls'])) {
+                             $args['ids']=$value['calls'];
+                             return CallsListType::resolve($value, $args,$info);
+                         } else {
+                             return null;
+                         }
                      },
                  ]);
          $config->addField('created_user_details', [
