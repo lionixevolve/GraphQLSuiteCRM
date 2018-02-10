@@ -62,7 +62,7 @@ $container['logger'] = function ($c) {
 };
 
 $app->add(function($request, $response, $next) {
-    if (empty($route)) {
+    if (empty($request->getAttribute('route'))) {
         // return next Action when route not found
         return $next($request, $response);
      }
@@ -85,7 +85,6 @@ $app->add(function($request, $response, $next) {
 });
 
 $app->post('/graphql', function (Request $request, Response $response) {
-    session_start();
     global $app_strings, $sugar_config, $app_list_strings,$sugar_config;
     $default_language = $sugar_config['default_language'];
 	$app_list_strings = return_app_list_strings_language($default_language);
