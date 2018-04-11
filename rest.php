@@ -508,7 +508,6 @@ $app->post('/whoami', function (Request $request, Response $response){
     global $sugar_config, $current_user;
     //We retrieve the current user in order to get
     // all the fields we have to serialize
-    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/lx.log", PHP_EOL. date_format(date_create(),"Y-m-d H:i:s ")  .__FILE__ .":". __LINE__." -- ".print_r($current_user, 1).PHP_EOL, FILE_APPEND);
     $userBean = BeanFactory::getBean('Users');
     $user=$userBean->retrieve($current_user->id);
     $all_fields = $user->column_fields;
@@ -547,7 +546,7 @@ $app->post('/whoami', function (Request $request, Response $response){
     //Override User Hash - we don't need it
     $module_arr['user']['user_hash']='youShallNotPass';
     return $response->withJson($module_arr);
-})->setArgument('auth', false);
+})->setArgument('auth', true);
 
 
 
