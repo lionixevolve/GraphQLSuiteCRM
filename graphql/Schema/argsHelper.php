@@ -59,7 +59,7 @@ class argsHelper
                     $argsArray = array_merge($argsArray, [$key => self::suitecrmToGraphqlTypeMapper($fieldType)]);
                     if ($mutation==false) {
                         //Mutation doesn't allow this types as they are cannot be used to insert new data
-                        if ($fieldType=='date' || $fieldType=='datetime') {
+                        if ($fieldType=='date' || $fieldType=='datetime' || $fieldType=='datetimecombo') {
                             //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
                             $fieldNameStartRange="start_range_".$key;
                             $fieldNameEndRange="end_range_".$key;
