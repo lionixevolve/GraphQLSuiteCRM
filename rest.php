@@ -76,6 +76,10 @@ $app->add(function($request, $response, $next) {
                 $GLOBALS['current_user'] = new User();
                 $GLOBALS['current_user']->retrieve($_SESSION['authenticated_user_id']);
             }
+            if(empty($GLOBALS['current_language'])){
+                $GLOBALS['current_language'] = $sugar_config['default_language'];
+            }
+            $GLOBALS['app_list_strings'] = return_app_list_strings_language($GLOBALS['current_language']);
             return $next($request, $response);
         }else{
             return $response->withJson(['result'=>'error','message'=> 'not authenticated'], 403);
