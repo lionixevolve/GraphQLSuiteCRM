@@ -143,6 +143,13 @@ class CallType extends AbstractObjectType   // extending abstract Object type
                     }
                  },
          ]);
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customCallType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customCallType.php';
+            $customFields = customCallType::getFields();
+            foreach ($customFields as $field => $type) {
+                $config->addField($field, $type);
+            }
+        }
     }
     private function retrieveCall($id, $info)
     {
