@@ -19,9 +19,14 @@ This GraphQL library uses SuiteCRM/SugarCRM beans for almost all the actions, so
 
 `composer require lionixevolve/graphqlsuitecrm`
 
-This will install the plugin in the vendor folder.
+This will install the plugin in the vendor folder with all the requirements.
+
+PHP extension php-intl its a requirement, for ubuntu install as `sudo apt-get install php-intl`
 
 ## Testing and Usage
+
+GraphiQL is included in the package, to start using it open the web broser in 
+`http://localhost/vendor/lionixevolve/graphqlsuitecrm/graphql/GraphiQL/`  (adjust localhost to the suitecrm instance location)
 Use the included GraphiQL to try this
 ```
 {
