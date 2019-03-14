@@ -131,6 +131,7 @@ class CustomSuiteCRMSchema
     }
 
 }
+```
 
 ```
 <?php
