@@ -396,3 +396,7 @@ You can use the included GraphiQL here:
 ### Known Issues
 - there is currently an issue with the schema inspector Issue#2
 - Is currently  checking ACL edit when saving the bean,  
+
+### TODO
+- Add missing modules (Quotes/Invoices/ProspectLists/etc) 
+- Migrate to the more active webonyx graphqlphp 
