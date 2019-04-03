@@ -177,6 +177,12 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                     $module_arr['campaigns'][] = $campaign->id;
                 }
             }
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customContactType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customContactType.php';
+                if(method_exists(customContactType, processFields)){
+                    $module_arr = customContactType::processFields($contact, $queryFields,$module_arr);
+                }
+            }
             return $module_arr;
         } else {
             return null;
