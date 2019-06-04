@@ -1,3 +1,4 @@
+[![Latest Stable Version](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/v/stable)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm)  [![Total Downloads](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/downloads)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm) [![Latest Unstable Version](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/v/unstable)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm) [![License](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/license)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm)
 # GraphQLSuiteCRM
 
 Use GraphQL instead of REST API to access SuiteCRM data. Production ready. Supports custom modules and custom REST endpoints with or without authentication.
