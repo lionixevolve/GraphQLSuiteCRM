@@ -36,3 +36,4 @@ require_once __DIR__ . '/Schema/TaskInputType.php';
 require_once __DIR__ . '/Schema/UsersListType.php';
 require_once __DIR__ . '/Schema/UserType.php';
 require_once __DIR__ . '/Schema/RelatedBeanInputType.php';
+require_once __DIR__ . '/Schema/searchHelper.php';
