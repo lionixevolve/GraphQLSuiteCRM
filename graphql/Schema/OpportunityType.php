@@ -9,6 +9,7 @@ use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\DateTimeType;
 use Youshido\GraphQL\Type\Scalar\DateType;
 use Youshido\GraphQL\Execution\ResolveInfo;
+
 if (!defined('sugarEntry')) {
     define('sugarEntry', true);
 }
@@ -40,104 +41,114 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach ( argsHelper::entityArgsHelper('Opportunity') as $field => $type){
+        foreach (argsHelper::entityArgsHelper('Opportunity') as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('contacts', [
-                'type'=> new ContactsListType(),
-                'args' => argsHelper::entityArgsHelper('Contacts'),
-                'resolve' => function ($value, $args, ResolveInfo $info) {
-                    if (!empty($value['contacts'])) {
-                        $args['ids']=$value['contacts'];
-                        return ContactsListType::resolve($value, $args,$info);
-                    } else {
-                        return null;
-                    }
-                },
-        ]);
-        $config->addField('notes', [
-                'type' => new NotesListType(),
-                'args' => argsHelper::entityArgsHelper('Notes'),
-                'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    if (!empty($value['notes'])) {
-                        $args['ids']=$value['notes'];
-                        return NotesListType::resolve($value, $args, $info);
-                    } else {
-                        return null;
-                    }
-                 },
-         ]);
-        $config->addField('account_details', [
-                'type'=> new AccountType(),
-                'resolve' => function ($value, $args, ResolveInfo $info) {
-                    if (!empty($value['account_id'])) {
-                        $args['id']=$value['account_id'];
-                        return AccountType::resolve($value, $args,$info);
-                    } else {
-                        return null;
-                    }
-                },
-        ]);
-        $config->addField('calls', [
-                'type'=> new CallsListType(),
-                'args' => argsHelper::entityArgsHelper('Calls'),
-                'resolve' => function ($value, array $args, ResolveInfo $info) {
-                    if (!empty($value['calls'])) {
-                        $args['ids']=$value['calls'];
-                        return CallsListType::resolve($value, $args,$info);
-                    } else {
-                        return null;
-                    }
-                },
-        ]);
-        $config->addField('aos_quotes', [
-            'type'=> new QuotesListType(),
-            'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
+            'type' => new ContactsListType(),
+            'args' => argsHelper::entityArgsHelper('Contacts'),
             'resolve' => function ($value, $args, ResolveInfo $info) {
-                if (!empty($value['aos_quotes'])) {
-                    $args['ids']=$value['aos_quotes'];
-                    return QuotesListType::resolve($value, $args,$info);
+                if (!empty($value['contacts'])) {
+                    $args['ids'] = $value['contacts'];
+                    return ContactsListType::resolve($value, $args, $info);
                 } else {
                     return null;
                 }
             },
         ]);
-         $config->addField('created_user_details', [
-                 'type' => new UserType(),
-                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     if (!empty($value['created_user_details'])) {
-                         $args['id']=$value['created_user_details'];
-                         return UserType::resolve($value, $args, $info);
-                     } else {
-                         return null;
-                     }
-                  },
-          ]);
-         $config->addField('assigned_user_details',[
-                 'type' => new UserType(),
-                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     if (!empty($value['assigned_user_details'])) {
-                         $args['id']=$value['assigned_user_details'];
-                         return UserType::resolve($value, $args, $info);
-                     } else {
-                         return null;
-                     }
-                  },
-          ]);
-         $config->addField('modified_user_details', [
-                 'type' => new UserType(),
-                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     if (!empty($value['modified_user_details'])) {
-                         $args['id']=$value['modified_user_details'];
-                         return UserType::resolve($value, $args, $info);
-                     } else {
-                         return null;
-                     }
-                  },
-          ]);
+        $config->addField('notes', [
+            'type' => new NotesListType(),
+            'args' => argsHelper::entityArgsHelper('Notes'),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['notes'])) {
+                    $args['ids'] = $value['notes'];
+                    return NotesListType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('account_details', [
+            'type' => new AccountType(),
+            'resolve' => function ($value, $args, ResolveInfo $info) {
+                if (!empty($value['account_id'])) {
+                    $args['id'] = $value['account_id'];
+                    return AccountType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('calls', [
+            'type' => new CallsListType(),
+            'args' => argsHelper::entityArgsHelper('Calls'),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['calls'])) {
+                    $args['ids'] = $value['calls'];
+                    return CallsListType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('aos_quotes', [
+            'type' => new QuotesListType(),
+            'args' => argsHelper::entityArgsHelper('AOS_Quotes'),
+            'resolve' => function ($value, $args, ResolveInfo $info) {
+                if (!empty($value['aos_quotes'])) {
+                    $args['ids'] = $value['aos_quotes'];
+                    return QuotesListType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('created_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['created_user_details'])) {
+                    $args['id'] = $value['created_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('assigned_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['assigned_user_details'])) {
+                    $args['id'] = $value['assigned_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('modified_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['modified_user_details'])) {
+                    $args['id'] = $value['modified_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php';
+            if (method_exists(customAccountType, getFields)) {
+                $customFields = customOpportunityType::getFields();
+                foreach ($customFields as $field => $type) {
+                    $config->addField($field, $type);
+                }
+            }
+        }
     }
 
-    public function resolve($value = null, $args = [], ResolveInfo $info = null){
+    public function resolve($value = null, $args = [], ResolveInfo $info = null)
+    {
         if (isset($args['id']) && is_array($args['id'])) {
             // We received a list of contacts to return
             foreach ($args as $key => $opportunityId) {
@@ -158,7 +169,7 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
             }
         }
     }
-    public function retrieve($id, $info=null)  // implementing resolve function
+    public function retrieve($id, $info = null)  // implementing resolve function
     {
         global $sugar_config, $current_user;
         $opportunityBean = BeanFactory::getBean('Opportunities');
@@ -174,55 +185,60 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                     $module_arr[$field] = $opportunity->$field;
                 }
             }
-            if($info!=null){
-                $getFieldASTList=$info->getFieldASTList();
-                $queryFields=[];
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
                 foreach ($getFieldASTList as $key => $value) {
-                    $queryFields[$value->getName()]="";
+                    $queryFields[$value->getName()] = "";
                 }
             }
-            if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
+            if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
                 $opportunity->load_relationship('contacts');
                 $module_arr['contacts'] =  array();
                 foreach ($opportunity->contacts->getBeans() as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
-            if(isset($queryFields) && array_key_exists('notes',$queryFields)){
+            if (isset($queryFields) && array_key_exists('notes', $queryFields)) {
                 $module_arr['notes'] =  array();
                 foreach ($opportunity->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
-            if(isset($queryFields) && array_key_exists('account_id',$queryFields)){
+            if (isset($queryFields) && array_key_exists('account_id', $queryFields)) {
                 $opportunity->load_relationship('accounts');
                 foreach ($opportunity->accounts->getBeans() as $account) {
                     $module_arr['account_id'] = $account->id;
                 }
             }
-            if(isset($queryFields) && array_key_exists('aos_quotes',$queryFields)){
+            if (isset($queryFields) && array_key_exists('aos_quotes', $queryFields)) {
                 $opportunity->load_relationship('aos_quotes');
                 $module_arr['aos_quotes'] =  array();
                 foreach ($opportunity->aos_quotes->getBeans() as $aos_quote) {
                     $module_arr['aos_quotes'][] = $aos_quote->id;
                 }
             }
-            if(isset($queryFields) && array_key_exists('calls',$queryFields)){
+            if (isset($queryFields) && array_key_exists('calls', $queryFields)) {
                 $module_arr['calls'] =  array();
                 foreach ($opportunity->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
-            if(isset($queryFields) && array_key_exists('modified_user_details',$queryFields)){
-                $module_arr['modified_user_details']=$module_arr['modified_user_id'];
+            if (isset($queryFields) && array_key_exists('modified_user_details', $queryFields)) {
+                $module_arr['modified_user_details'] = $module_arr['modified_user_id'];
             }
-            if(isset($queryFields) && array_key_exists('assigned_user_details',$queryFields)){
-                $module_arr['assigned_user_details']=$module_arr['assigned_user_id'];
+            if (isset($queryFields) && array_key_exists('assigned_user_details', $queryFields)) {
+                $module_arr['assigned_user_details'] = $module_arr['assigned_user_id'];
             }
-            if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
-                $module_arr['created_user_details']=$module_arr['created_by'];
+            if (isset($queryFields) && array_key_exists('created_user_details', $queryFields)) {
+                $module_arr['created_user_details'] = $module_arr['created_by'];
             }
-
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php';
+                if (method_exists(customOpportunityType, processFields)) {
+                    $module_arr = customOpportunityType::processFields($contact, $queryFields, $module_arr);
+                }
+            }
             return $module_arr;
         } else {
             // Error
@@ -236,5 +252,4 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
     {
         return "Opportunity";  // important to use the real name here, it will be used later in the Schema
     }
-
 }

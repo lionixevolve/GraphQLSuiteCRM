@@ -1,8 +1,6 @@
 <?php
-use Youshido\GraphQL\Type\Scalar\BooleanType;
-use Youshido\GraphQL\Type\Scalar\IntType;
-use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\ListType\ListType;
+use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\TypeMap;
 
 class argsHelper
@@ -28,9 +26,9 @@ class argsHelper
                 return new StringType();
         }
     }
-    public function entityArgsHelper($entity, $mutation=false)
+    public function entityArgsHelper($entity, $mutation = false)
     {
-        global $db, $dictionary, $beanList, $language,$sugar_config;
+        global $db, $dictionary, $beanList, $language, $sugar_config;
         $argsArray = [];
         $default_language = $sugar_config['default_language'];
         if (empty($language)) {
@@ -41,119 +39,129 @@ class argsHelper
         VardefManager::loadVardef($entity, $object);
         // VardefManager::refreshVardefs($entity, $object);  //Commented as this clears the cache
 
-        if (!empty($beanList[$entity]) && $entity!="Cases") {
-            $entity=$beanList[$entity];
-        }elseif ($entity=="Cases") {
+        if (!empty($beanList[$entity]) && $entity != "Cases") {
+            $entity = $beanList[$entity];
+        } elseif ($entity == "Cases") {
             //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary
-            $entity="Case";
+            $entity = "Case";
         }
-        if(isset($dictionary[$entity])){
-            $moduleFields=$dictionary[$entity]['fields'];
-        }else{
-            $moduleFields=null;
+        $customOverrideFile='custom' .$entity.'Type.php';
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile)) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile;
+            if (method_exists($customOverrideFile, getFields)) {
+                $customFields = $customOverrideFile::getFields();
+                foreach ($customFields as $field => $type) {
+                    $argsArray = array_merge($argsArray, [
+                        $field => $type,
+                    ]);
+                }
+            }
+        }
+        if (isset($dictionary[$entity])) {
+            $moduleFields = $dictionary[$entity]['fields'];
+        } else {
+            $moduleFields = null;
         }
         if (is_array($moduleFields)) {
             foreach ($moduleFields as $key => $value) {
-                if ($moduleFields[$key]['type']!='link') {
-                    $fieldType=$moduleFields[$key]['type'];
+                if ($moduleFields[$key]['type'] != 'link') {
+                    $fieldType = $moduleFields[$key]['type'];
                     $argsArray = array_merge($argsArray, [$key => self::suitecrmToGraphqlTypeMapper($fieldType)]);
-                    if ($mutation==false) {
+                    if ($mutation == false) {
                         //Mutation doesn't allow this types as they are cannot be used to insert new data
-                        if ($fieldType=='date' || $fieldType=='datetime' || $fieldType=='datetimecombo') {
+                        if ($fieldType == 'date' || $fieldType == 'datetime' || $fieldType == 'datetimecombo') {
                             //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
-                            $fieldNameStartRange="start_range_".$key;
-                            $fieldNameEndRange="end_range_".$key;
-                            $argsArray = array_merge($argsArray, [$fieldNameStartRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
-                            $argsArray = array_merge($argsArray, [$fieldNameEndRange =>self::suitecrmToGraphqlTypeMapper($fieldType)]);
-                        }
-                         elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Users') {
+                            $fieldNameStartRange = "start_range_" . $key;
+                            $fieldNameEndRange = "end_range_" . $key;
+                            $argsArray = array_merge($argsArray, [$fieldNameStartRange => self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                            $argsArray = array_merge($argsArray, [$fieldNameEndRange => self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                        } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Users') {
                             //Fields of type Related will be added a new _details FIELD to the graphql query
                             // Which will allow to reference the related Module allowing queries like
                             // For example, a related field named related_user_field_c, will have a
                             // related_user_field_c_details which in turn will be linked to the User modules
                             // So it will be possible to query related_user_field_c_details{ user_name}
-                            $fieldNamePlusDetails=$key."_details";
-                            $relatedFieldName=$moduleFields[$key]['id_name'];
+                            $fieldNamePlusDetails = $key . "_details";
+                            $relatedFieldName = $moduleFields[$key]['id_name'];
                             $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
-                            [
-                                'type' => new UserType(),
-                                'args' => argsHelper::entityArgsHelper('Users', true),
-                                'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
-                                    if (!empty($relatedFieldName)) {
-                                        $args['id']=$value[$relatedFieldName];
-                                        return UserType::resolve($value, $args, $info);
-                                    } else {
-                                        return null;
-                                    }
-                                },
-                            ]
-                        ]);
+                                [
+                                    'type' => new UserType(),
+                                    'args' => argsHelper::entityArgsHelper('Users', true),
+                                    'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                        if (!empty($relatedFieldName)) {
+                                            $args['id'] = $value[$relatedFieldName];
+                                            return UserType::resolve($value, $args, $info);
+                                        } else {
+                                            return null;
+                                        }
+                                    },
+                                ],
+                            ]);
+                        } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Contacts') {
+                            $fieldNamePlusDetails = $key . "_details";
+                            $relatedFieldName = $moduleFields[$key]['id_name'];
+                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                                [
+                                    'type' => new ContactType(),
+                                    'args' => argsHelper::entityArgsHelper('Contacts', true),
+                                    'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                        if (!empty($relatedFieldName)) {
+                                            $args['id'] = $value[$relatedFieldName];
+                                            return ContactType::resolve($value, $args, $info);
+                                        } else {
+                                            return null;
+                                        }
+                                    },
+                                ],
+                            ]);
+                        } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Accounts') {
+                            $fieldNamePlusDetails = $key . "_details";
+                            $relatedFieldName = $moduleFields[$key]['id_name'];
+                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                                [
+                                    'type' => new AccountType(),
+                                    'args' => argsHelper::entityArgsHelper('Accounts', true),
+                                    'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                        if (!empty($relatedFieldName)) {
+                                            $args['id'] = $value[$relatedFieldName];
+                                            return AccountType::resolve($value, $args, $info);
+                                        } else {
+                                            return null;
+                                        }
+                                    },
+                                ],
+                            ]);
+                        } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Opportunities') {
+                            $fieldNamePlusDetails = $key . "_details";
+                            $relatedFieldName = $moduleFields[$key]['id_name'];
+                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                                [
+                                    'type' => new OpportunityType(),
+                                    'args' => argsHelper::entityArgsHelper('Opportunities', true),
+                                    'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
+                                        if (!empty($relatedFieldName)) {
+                                            $args['id'] = $value[$relatedFieldName];
+                                            return OpportunityType::resolve($value, $args, $info);
+                                        } else {
+                                            return null;
+                                        }
+                                    },
+                                ],
+                            ]);
                         }
-                    elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Contacts') {
-                        $fieldNamePlusDetails=$key."_details";
-                        $relatedFieldName=$moduleFields[$key]['id_name'];
-                        $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
-                        [
-                            'type' => new ContactType(),
-                            'args' => argsHelper::entityArgsHelper('Contacts', true),
-                            'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
-                                if (!empty($relatedFieldName)) {
-                                    $args['id']=$value[$relatedFieldName];
-                                    return ContactType::resolve($value, $args, $info);
-                                } else {
-                                    return null;
-                                }
-                            },
-                        ]
-                    ]);
-                }elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Accounts') {
-                    $fieldNamePlusDetails=$key."_details";
-                    $relatedFieldName=$moduleFields[$key]['id_name'];
-                    $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
-                    [
-                        'type' => new AccountType(),
-                        'args' => argsHelper::entityArgsHelper('Accounts', true),
-                        'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
-                            if (!empty($relatedFieldName)) {
-                                $args['id']=$value[$relatedFieldName];
-                                return AccountType::resolve($value, $args, $info);
-                            } else {
-                                return null;
-                            }
-                        },
-                        ]
-                        ]);
-                    }elseif ($fieldType=='relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module']=='Opportunities') {
-                        $fieldNamePlusDetails=$key."_details";
-                        $relatedFieldName=$moduleFields[$key]['id_name'];
-                        $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
-                        [
-                        'type' => new OpportunityType(),
-                        'args' => argsHelper::entityArgsHelper('Opportunities', true),
-                        'resolve' => function ($value, array $args, Youshido\GraphQL\Execution\ResolveInfo $info) use ($relatedFieldName) {
-                            if (!empty($relatedFieldName)) {
-                                $args['id']=$value[$relatedFieldName];
-                                return OpportunityType::resolve($value, $args, $info);
-                            } else {
-                                return null;
-                            }
-                        },
-                        ]
-                        ]);
-                    }
                     }
                 }
             }
         }
         $argsArray = array_merge($argsArray, [
             //TODO: This variables should only be exposed on QUERY or MUTATION not always.
-                'offset' => new StringType(TypeMap::TYPE_INT),
-                'limit' => new StringType(TypeMap::TYPE_INT),
-                'order' => new StringType(TypeMap::TYPE_STRING),
-                'distinct' => new StringType(TypeMap::TYPE_STRING),
-                'notifyonsave' => new StringType(TypeMap::TYPE_BOOLEAN),
-            ]);
-            //Some modules have more fields due to relations or special fields
+            'offset' => new StringType(TypeMap::TYPE_INT),
+            'limit' => new StringType(TypeMap::TYPE_INT),
+            'order' => new StringType(TypeMap::TYPE_STRING),
+            'distinct' => new StringType(TypeMap::TYPE_STRING),
+            'notifyonsave' => new StringType(TypeMap::TYPE_BOOLEAN),
+        ]);
+        //Some modules have more fields due to relations or special fields
         if ($entity == 'Contact' || $entity == 'Account' || $entity == 'Prospect' || $entity == 'Lead') {
             $argsArray = array_merge($argsArray, [
                 'email1' => new StringType(TypeMap::TYPE_STRING),

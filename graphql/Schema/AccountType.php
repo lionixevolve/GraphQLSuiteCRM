@@ -185,9 +185,12 @@ class AccountType extends AbstractObjectType// extending abstract Object type
         ]);
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customAccountType.php')) {
             require_once __DIR__ . '/../../../../../graphql/Schema/customAccountType.php';
-            $customFields = customAccountType::getFields();
-            foreach ($customFields as $field => $type) {
-                $config->addField($field, $type);
+            if (method_exists(customAccountType, getFields)) {
+                $customFields = customAccountType::getFields();
+                foreach ($customFields as $field => $type) {
+                    $config->addField($field, $type);
+                }
+
             }
         }
     }
