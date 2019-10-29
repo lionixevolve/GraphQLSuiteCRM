@@ -24,6 +24,18 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                     }
                  },
          ]);
+        $config->addField('meetings', [
+                'type' => new ListType(new MeetingType()),
+                'args' => argsHelper::entityArgsHelper('Meetings'),
+                'resolve' => function ($value, array $args, ResolveInfo $info) {
+                    if (!empty($value['meetings'])) {
+                        $args['id']=$value['meetings'];
+                        return MeetingsListType::resolve($value, $args, $info);
+                    } else {
+                        return null;
+                    }
+                 },
+         ]);
          $config->addField('created_user_details', [
                  'type' => new UserType(),
                  'resolve' => function ($value, array $args, ResolveInfo $info) {
@@ -187,6 +199,12 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
                 $module_arr['notes'] =  array();
                 foreach ($case->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
+                }
+            }
+            if(isset($queryFields) && array_key_exists('meetings',$queryFields)){
+                $module_arr['meetings'] =  array();
+                foreach ($case->get_linked_beans('meetings') as $meeting) {
+                    $module_arr['meetings'][] = $meeting->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('account_details',$queryFields)){
