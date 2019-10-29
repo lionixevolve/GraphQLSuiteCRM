@@ -129,6 +129,18 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
                      }
                  },
          ]);
+         $config->addField('cases',[
+            'type' => new CasesListType(),
+            'args' => argsHelper::entityArgsHelper('Cases'),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                 if (!empty($value['cases'])) {
+                     $args['ids']=$value['cases'];
+                     return CasesListType::resolve($value, $args, $info);
+                 } else {
+                     return null;
+                 }
+            },
+        ]);
     }
     private function retrieveNote($id, $info)
     {
@@ -217,6 +229,12 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
                     $module_arr['opportunities'] =  array();
                     foreach ($note->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                         $module_arr['opportunities'][] = $opportunity->id;
+                    }
+                }
+                if(isset($queryFields) && array_key_exists('cases',$queryFields)){
+                    $module_arr['cases'] =  array();
+                    foreach ($note->get_linked_beans('cases', 'aCase') as $case) {
+                        $module_arr['cases'][] = $case->id;
                     }
                 }
                 $module_arr['contact_details'] =  array();
