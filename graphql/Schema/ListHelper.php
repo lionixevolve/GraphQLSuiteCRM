@@ -47,7 +47,11 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
             $searchFields[$key] = array('query_type' => 'default', 'value' => $value, 'enable_range_search'=> true, 'is_date_field'=>true);
         }
     }
-
+     // Work around for email1 field, it cannot be used in the where clause as it an alias.
+    if (!empty($searchFields["email1"]) && isset($moduleBean->field_defs['email1'])) {
+        $searchFields["email_addresses.email_address"] = $searchFields["email1"];
+        unset($searchFields["email1"]);
+    }
     $where=searchHelper::generateSearchWhere($moduleBean, $searchFields);
     $offset=0;
     if (!empty($args['offset'])) {
