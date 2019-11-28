@@ -106,15 +106,6 @@ class ContactType extends AbstractObjectType // extending abstract Object type
                 }
             },
         ]);
-        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customContactType.php')) {
-            require_once __DIR__ . '/../../../../../graphql/Schema/customContactType.php';
-            if (method_exists(customContactType, getFields)) {
-                $customFields = customContactType::getFields();
-                foreach ($customFields as $field => $type) {
-                    $config->addField($field, $type);
-                }
-            }
-        }
     }
     private function retrieveContact($id, $info = null)
     {
@@ -182,7 +173,7 @@ class ContactType extends AbstractObjectType // extending abstract Object type
             }
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customContactType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customContactType.php';
-                if (method_exists(customContactType, processFields)) {
+                if (method_exists('customContactType', 'processFields')) {
                     $module_arr = customContactType::processFields($contact, $queryFields, $module_arr);
                 }
             }

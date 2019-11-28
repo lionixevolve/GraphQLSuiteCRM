@@ -241,6 +241,12 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
                 if(isset($queryFields) && array_key_exists('contact_details',$queryFields)){
                         $module_arr['contact_details'] = $note->contact_id;
                 }
+                if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customNoteType.php')) {
+                    require_once __DIR__ . '/../../../../../graphql/Schema/customNoteType.php';
+                    if (method_exists('customNoteType', 'processFields')) {
+                        $module_arr = customNoteType::processFields($contact, $queryFields, $module_arr);
+                    }
+                }
             return $module_arr;
         } else {
             return null;

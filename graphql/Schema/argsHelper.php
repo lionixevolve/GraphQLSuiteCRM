@@ -48,7 +48,7 @@ class argsHelper
         $customOverrideFile='custom' .$entity.'Type.php';
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile)) {
             require_once __DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile;
-            if (method_exists($customOverrideFile, getFields)) {
+            if (method_exists($customOverrideFile, 'getFields')) {
                 $customFields = $customOverrideFile::getFields();
                 foreach ($customFields as $field => $type) {
                     $argsArray = array_merge($argsArray, [

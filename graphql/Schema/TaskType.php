@@ -161,6 +161,12 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
                     $module_arr['related_opportunities'][] = $opportunity->id;
                 }
             }
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customTaskType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customTaskType.php';
+                if (method_exists('customTaskType', 'processFields')) {
+                    $module_arr = customTaskType::processFields($contact, $queryFields, $module_arr);
+                }
+            }
             return $module_arr;
         } else {
             return null;
@@ -171,8 +177,8 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
     {
         if (isset($args['id']) && is_array($args['id'])) {
             foreach ($args as $key => $taskId) {
-                if (isset($taskId) && is_array($noteId)) {
-                    foreach ($noteId as $key => $taskIdItem) {
+                if (isset($taskId) && is_array($taskId)) {
+                    foreach ($taskId as $key => $taskIdItem) {
                         $resultArray[] = self::retrieveTask($taskIdItem, $info );
                     }
                 } elseif (!empty($taskId)) {
@@ -182,7 +188,7 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
 
             return $resultArray;
         } elseif (!empty($args['id'])) {
-            return self::retrieveTask($args['id']);
+            return self::retrieveTask($args['id'],$info);
         }
     }
 

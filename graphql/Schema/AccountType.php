@@ -183,16 +183,6 @@ class AccountType extends AbstractObjectType// extending abstract Object type
                 }
             },
         ]);
-        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customAccountType.php')) {
-            require_once __DIR__ . '/../../../../../graphql/Schema/customAccountType.php';
-            if (method_exists(customAccountType, getFields)) {
-                $customFields = customAccountType::getFields();
-                foreach ($customFields as $field => $type) {
-                    $config->addField($field, $type);
-                }
-
-            }
-        }
     }
 
     public function resolve($value = null, $args = [], ResolveInfo $info = null)
@@ -310,7 +300,12 @@ class AccountType extends AbstractObjectType// extending abstract Object type
             if (isset($queryFields) && array_key_exists('created_user_details', $queryFields)) {
                 $module_arr['created_user_details'] = $module_arr['created_by'];
             }
-
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customAccountType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customAccountType.php';
+                if (method_exists('customAccountType', 'processFields')) {
+                    $module_arr = customAccountType::processFields($contact, $queryFields, $module_arr);
+                }
+            }
             return $module_arr;
         } else {
             return null;

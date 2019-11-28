@@ -180,6 +180,12 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
                     $module_arr['opportunities'][] = $account->id;
                 }
             }
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customMeetingType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customMeetingType.php';
+                if (method_exists('customMeetingType', 'processFields')) {
+                    $module_arr = customMeetingType::processFields($contact, $queryFields, $module_arr);
+                }
+            }
             return $module_arr;
         } else {
             return null;
