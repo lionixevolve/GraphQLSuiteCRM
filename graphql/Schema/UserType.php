@@ -14,7 +14,6 @@ class UserType extends AbstractObjectType   // extending abstract Object type
             $config->addField($field, $type);
         }
         $config->addField('session_id', new StringType());
-        $config->addField('email1', new StringType());
         $config->addField('roles', new StringType());
         $config->addField('related_roles', [
                     'type' => new ListType(new AclRoleType()),
