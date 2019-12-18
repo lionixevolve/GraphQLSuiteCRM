@@ -12,7 +12,6 @@ class ContactType extends AbstractObjectType // extending abstract Object type
         foreach (argsHelper::entityArgsHelper('Contacts') as $field => $type) {
             $config->addField($field, $type);
         }
-        $config->addField('email1', new StringType());
         $config->addField('calls', [
             'type' => new ListType(new CallType()),
             'args' => argsHelper::entityArgsHelper('Calls'),
