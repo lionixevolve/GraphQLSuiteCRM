@@ -48,9 +48,13 @@ public function saveBean($module_name, $class_name, $name_value_list){
 
     if ($seed->ACLAccess('Save')) {
         $seed->not_use_rel_in_req=true;
-        $seed->save($seed->notifyonsave);
+        
         if ($seed->deleted == 1) {
             $seed->mark_deleted($seed->id);
+        }
+        if(empty($seed->id)){
+            $seed->id = create_guid();
+            $seed->new_with_id = true;
         }
         if(isset($related_beans)){
             foreach ($related_beans as $key => $value) {
@@ -68,6 +72,7 @@ public function saveBean($module_name, $class_name, $name_value_list){
                 }
             }
         }
+        $seed->save($seed->notifyonsave);
         return array('id' => $seed->id);
 
     }else{
