@@ -92,13 +92,13 @@ class crmHelper
             if (isset($moduleBean->$field) && !is_object($moduleBean->$field)) {
                 if($moduleBean->field_name_map[$field]['type']=="datetime") {
                     $module_arr[$field] = $moduleBean->$field;
+                    date_default_timezone_set('UTC');
                     $dateField = new \DateTime($moduleBean->fetched_row[$field]);
-                    $tz = $current_user->getPreference('timezone', 'global');
-                    $dateField->setTimezone($tz);
                     $dateFieldName = $field . "_atom";
                     $module_arr[$dateFieldName]=$dateField->format(DATE_ATOM);
 
                 }else {
+                    //from_html is a SuiteCRM function
                     $moduleBean->$field = from_html($moduleBean->$field);
                     $moduleBean->$field = preg_replace("/\r\n/", '<BR>', $moduleBean->$field);
                     $moduleBean->$field = preg_replace("/\n/", '<BR>', $moduleBean->$field);
