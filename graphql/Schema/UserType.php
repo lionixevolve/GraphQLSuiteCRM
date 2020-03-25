@@ -30,27 +30,19 @@ class UserType extends AbstractObjectType   // extending abstract Object type
     private function retrieveUser($id, $info)
     {
         global $db, $sugar_config, $current_user;
-        $userBean = BeanFactory::getBean('Users');
-        $user = $userBean->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
+        $moduleBean = BeanFactory::getBean('Users');
+        $moduleBean = $moduleBean->retrieve($id);
+        
         $module_arr = array();
-        if ($user->id && $user->ACLAccess('view')) {
-            $all_fields = $user->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($user->$field) && !is_object($user->$field)) {
-                    $user->$field = from_html($user->$field);
-                    $user->$field = preg_replace("/\r\n/", '<BR>', $user->$field);
-                    $user->$field = preg_replace("/\n/", '<BR>', $user->$field);
-                    $module_arr[$field] = $user->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
-
             $roles = ACLRole::getUserRoleNames($id);
             if (!empty($roles)) {
                 //LX: TODO - create a RoleType to correctly return data
@@ -98,22 +90,22 @@ class UserType extends AbstractObjectType   // extending abstract Object type
         if(!empty($args['whoami'])){
             global $current_user;
             if($_SESSION['authenticated_user_id']){
-                $user=self::retrieveUser($_SESSION['authenticated_user_id'], $info);
-                $user['session_id']=session_id();
-                return $user;
+                $moduleBean=self::retrieveUser($_SESSION['authenticated_user_id'], $info);
+                $moduleBean['session_id']=session_id();
+                return $moduleBean;
 
             }else{
                 return null;
             }
         }
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $userId) {
-                if (isset($userId) && is_array($userId)) {
-                    foreach ($userId as $key => $userIdItem) {
-                        $resultArray[] = self::retrieveUser($userIdItem,$info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveUser($moduleBeanIdItem,$info);
                     }
-                } elseif (!empty($userId)) {
-                    $resultArray[] = self::retrieveUser($userId,$info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveUser($moduleBeanId,$info);
                 }
             }
             return $resultArray;

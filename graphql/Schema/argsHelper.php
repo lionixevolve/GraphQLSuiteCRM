@@ -73,8 +73,10 @@ class argsHelper
                             //If the field type is a date/datetime we add 2 more fields so we can search on that field using range
                             $fieldNameStartRange = "start_range_" . $key;
                             $fieldNameEndRange = "end_range_" . $key;
+                            $dateFieldAtomVersion =  $key . "_atom";
                             $argsArray = array_merge($argsArray, [$fieldNameStartRange => self::suitecrmToGraphqlTypeMapper($fieldType)]);
                             $argsArray = array_merge($argsArray, [$fieldNameEndRange => self::suitecrmToGraphqlTypeMapper($fieldType)]);
+                            $argsArray = array_merge($argsArray, [$dateFieldAtomVersion => self::suitecrmToGraphqlTypeMapper($fieldType)]);
                         } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Users') {
                             //Fields of type Related will be added a new _details FIELD to the graphql query
                             // Which will allow to reference the related Module allowing queries like
@@ -154,7 +156,7 @@ class argsHelper
             }
         }
         $argsArray = array_merge($argsArray, [
-            //TODO: This variables should only be exposed on QUERY or MUTATION not always.
+            //TODO: This variables should only be exposed on QUERY but not to MUTATION.
             'offset' => new StringType(TypeMap::TYPE_INT),
             'limit' => new StringType(TypeMap::TYPE_INT),
             'order' => new StringType(TypeMap::TYPE_STRING),

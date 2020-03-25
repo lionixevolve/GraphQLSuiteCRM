@@ -105,25 +105,18 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
     private function retrieveMeeting($id, $info)
     {
         global $sugar_config, $current_user;
-        $meetingBean = BeanFactory::getBean('Meetings');
-        $meeting = $meetingBean->retrieve($id);
-        if ($info != null) {
-            $getFieldASTList = $info->getFieldASTList();
-            $queryFields = [];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()] = "";
-            }
-        }
+        $moduleBean = \BeanFactory::getBean('Meetings');
+        $moduleBean = $moduleBean->retrieve($id);
+        
 
         $module_arr = array();
-        if ($meeting->id && $meeting->ACLAccess('view')) {
-            $all_fields = $meeting->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($meeting->$field) && !is_object($meeting->$field)) {
-                    $meeting->$field = from_html($meeting->$field);
-                    $meeting->$field = preg_replace("/\r\n/", '<BR>', $meeting->$field);
-                    $meeting->$field = preg_replace("/\n/", '<BR>', $meeting->$field);
-                    $module_arr[$field] = $meeting->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()] = "";
                 }
             }
             $module_arr['created_user_details'] = $module_arr['created_by'];
@@ -164,19 +157,19 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
                 $module_arr['contacts'] = array();
-                foreach ($meeting->get_linked_beans('contacts', 'Contact') as $contact) {
+                foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('accounts', $queryFields)) {
                 $module_arr['accounts'] = array();
-                foreach ($meeting->get_linked_beans('accounts', 'Account') as $account) {
+                foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('opportunities', $queryFields)) {
                 $module_arr['opportunities'] = array();
-                foreach ($meeting->get_linked_beans('opportunities', 'Opportunity') as $account) {
+                foreach ($moduleBean->get_linked_beans('opportunities', 'Opportunity') as $account) {
                     $module_arr['opportunities'][] = $account->id;
                 }
             }
@@ -196,13 +189,13 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
 
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $meetingId) {
-                if (isset($meetingId) && is_array($meetingId)) {
-                    foreach ($meetingId as $key => $meetingIdItem) {
-                        $resultArray[] = self::retrieveMeeting($meetingIdItem, $info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveMeeting($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($meetingId)) {
-                    $resultArray[] = self::retrieveMeeting($meetingId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveMeeting($moduleBeanId, $info);
                 }
             }
             return $resultArray;

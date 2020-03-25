@@ -74,25 +74,16 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
     private function retrieveCaseupdates($id, $info)
     {
         global $sugar_config, $current_user;
-        $caseBean = BeanFactory::getBean('AOP_Case_Updates');
-        $case = $caseBean->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
-
+        $moduleBean = \BeanFactory::getBean('AOP_Case_Updates');
+        $moduleBean = $moduleBean->retrieve($id);
         $module_arr = array();
-        if ($case->id && $case->ACLAccess('view')) {
-            $all_fields = $case->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($case->$field) && !is_object($case->$field)) {
-                    $case->$field = from_html($case->$field);
-                    $case->$field = preg_replace("/\r\n/", '<BR>', $case->$field);
-                    $case->$field = preg_replace("/\n/", '<BR>', $case->$field);
-                    $module_arr[$field] = $case->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
             if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
@@ -110,7 +101,7 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
 
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 $module_arr['contacts'] =  array();
-                foreach ($case->get_linked_beans('contacts', 'Contact') as $contact) {
+                foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
@@ -124,13 +115,13 @@ class CaseupdatesType extends AbstractObjectType   // extending abstract Object 
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $caseId) {
-                if (isset($caseId) && is_array($caseId)) {
-                    foreach ($caseId as $key => $caseIdItem) {
-                        $resultArray[] = self::retrieveCaseupdates($caseIdItem,$info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveCaseupdates($moduleBeanIdItem,$info);
                     }
-                } elseif (!empty($caseId)) {
-                    $resultArray[] = self::retrieveCaseupdates($caseId,$info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveCaseupdates($moduleBeanId,$info);
                 }
             }
 

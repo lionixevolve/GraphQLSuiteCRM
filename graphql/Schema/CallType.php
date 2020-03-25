@@ -155,25 +155,18 @@ class CallType extends AbstractObjectType// extending abstract Object type
     private function retrieveCall($id, $info)
     {
         global $sugar_config, $current_user;
-        $callBean = BeanFactory::getBean('Calls');
-        $call = $callBean->retrieve($id);
-        if ($info != null) {
-            $getFieldASTList = $info->getFieldASTList();
-            $queryFields = [];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()] = "";
-            }
-        }
+        $moduleBean = \BeanFactory::getBean('Calls');
+        $moduleBean = $moduleBean->retrieve($id);
+        
 
         $module_arr = array();
-        if ($call->id && $call->ACLAccess('view')) {
-            $all_fields = $call->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($call->$field) && !is_object($call->$field)) {
-                    $call->$field = from_html($call->$field);
-                    $call->$field = preg_replace("/\r\n/", '<BR>', $call->$field);
-                    $call->$field = preg_replace("/\n/", '<BR>', $call->$field);
-                    $module_arr[$field] = $call->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()] = "";
                 }
             }
             if (isset($queryFields) && array_key_exists('created_user_details', $queryFields)) {
@@ -223,25 +216,25 @@ class CallType extends AbstractObjectType// extending abstract Object type
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
                 $module_arr['contacts'] = array();
-                foreach ($call->get_linked_beans('contacts', 'Contact') as $contact) {
+                foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('accounts', $queryFields)) {
                 $module_arr['accounts'] = array();
-                foreach ($call->get_linked_beans('accounts', 'Account') as $account) {
+                foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('opportunities', $queryFields)) {
                 $module_arr['opportunities'] = array();
-                foreach ($call->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
+                foreach ($moduleBean->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                     $module_arr['opportunities'][] = $opportunity->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('notes', $queryFields)) {
                 $module_arr['notes'] = array();
-                foreach ($call->get_linked_beans('notes') as $note) {
+                foreach ($moduleBean->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
@@ -262,13 +255,13 @@ class CallType extends AbstractObjectType// extending abstract Object type
 
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $callId) {
-                if (isset($callId) && is_array($callId)) {
-                    foreach ($callId as $key => $callIdItem) {
-                        $resultArray[] = self::retrieveCall($callIdItem, $info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveCall($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($callId)) {
-                    $resultArray[] = self::retrieveCall($callId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveCall($moduleBeanId, $info);
                 }
             }
 

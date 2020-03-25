@@ -109,27 +109,19 @@ class ContactType extends AbstractObjectType // extending abstract Object type
     private function retrieveContact($id, $info = null)
     {
         global $sugar_config, $current_user;
-        $contactBean = BeanFactory::getBean('Contacts');
-        $contact = $contactBean->retrieve($id);
-        if ($info != null) {
-            $getFieldASTList = $info->getFieldASTList();
-            $queryFields = [];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()] = "";
-            }
-        }
+        $moduleBean = \BeanFactory::getBean('Contacts');
+        $moduleBean = $moduleBean->retrieve($id);
         $module_arr = array();
-        if ($contact->id && $contact->ACLAccess('view')) {
-            $all_fields = $contact->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($contact->$field) && !is_object($contact->$field)) {
-                    $contact->$field = from_html($contact->$field);
-                    $contact->$field = preg_replace("/\r\n/", '<BR>', $contact->$field);
-                    $contact->$field = preg_replace("/\n/", '<BR>', $contact->$field);
-                    $module_arr[$field] = $contact->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()] = "";
                 }
             }
-
             if (isset($queryFields) && array_key_exists('modified_user_details', $queryFields)) {
                 $module_arr['modified_user_details'] = $module_arr['modified_user_id'];
             }
@@ -141,39 +133,39 @@ class ContactType extends AbstractObjectType // extending abstract Object type
             }
             if (isset($queryFields) && array_key_exists('calls', $queryFields)) {
                 $module_arr['calls'] =  array();
-                foreach ($contact->get_linked_beans('calls') as $call) {
+                foreach ($moduleBean->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('cases', $queryFields)) {
                 $module_arr['cases'] =  array();
-                foreach ($contact->get_linked_beans('cases') as $case) {
+                foreach ($moduleBean->get_linked_beans('cases') as $case) {
                     $module_arr['cases'][] = $case->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('tasks', $queryFields)) {
                 $module_arr['tasks'] =  array();
-                foreach ($contact->get_linked_beans('tasks') as $task) {
+                foreach ($moduleBean->get_linked_beans('tasks') as $task) {
                     $module_arr['tasks'][] = $task->id;
                 }
             }
 
             if (isset($queryFields) && array_key_exists('accounts', $queryFields)) {
                 $module_arr['accounts'] =  array();
-                foreach ($contact->get_linked_beans('accounts') as $account) {
+                foreach ($moduleBean->get_linked_beans('accounts') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('campaigns', $queryFields)) {
                 $module_arr['campaigns'] =  array();
-                foreach ($contact->get_linked_beans('campaigns') as $campaign) {
+                foreach ($moduleBean->get_linked_beans('campaigns') as $campaign) {
                     $module_arr['campaigns'][] = $campaign->id;
                 }
             }
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customContactType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customContactType.php';
                 if (method_exists('customContactType', 'processFields')) {
-                    $module_arr = customContactType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customContactType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
             return $module_arr;
@@ -186,13 +178,13 @@ class ContactType extends AbstractObjectType // extending abstract Object type
     {
         if (isset($args['id']) && is_array($args['id'])) {
             // We received a list of contacts to return
-            foreach ($args as $key => $contactId) {
-                if (isset($contactId) && is_array($contactId)) {
-                    foreach ($contactId as $key => $contactIdItem) {
-                        $resultArray[] = self::retrieveContact($contactIdItem, $info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveContact($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($contactId)) {
-                    $resultArray[] = self::retrieveContact($contactId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveContact($moduleBeanId, $info);
                 }
             }
             return $resultArray;

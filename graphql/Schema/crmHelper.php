@@ -1,83 +1,114 @@
 <?php
-class crmHelper{
+class crmHelper
+{
     /* This saveBean is an adapted copy of the set_entry sugar rest/soap service
-*/
-public function saveBean($module_name, $class_name, $name_value_list){
-    session_start();
-    global  $beanList, $beanFiles, $current_user;
-    if(isset($_SESSION['user_id'])  && $_SESSION['user_id']!=$current_user->id){
-        $current_user=new User();
-        $current_user->retrieve($_SESSION['user_id']);
+    */
+    public function saveBean($module_name, $class_name, $name_value_list)
+    {
+        session_start();
+        global  $beanList, $beanFiles, $current_user;
+        if(isset($_SESSION['user_id'])  && $_SESSION['user_id']!=$current_user->id) {
+            $current_user=new User();
+            $current_user->retrieve($_SESSION['user_id']);
 
-    }
-    $seed = new $class_name();
-    // $name_value_list=$args;
-    foreach ($name_value_list as $name => $value) {
-        if (is_array($value) &&  $value['name'] == 'id') {
-            $seed->retrieve($value['value']);
-            break;
-        } elseif ($name === 'id') {
-            $seed->retrieve($value);
         }
-    }
-    $seed->notifyonsave=false;
-    foreach ($name_value_list as $name => $value) {
-        if ($module_name == 'Users' && !empty($seed->id) && ($seed->id != $current_user->id) && $name == 'user_hash') {
-            continue;
+        $seed = new $class_name();
+        // $name_value_list=$args;
+        foreach ($name_value_list as $name => $value) {
+            if (is_array($value) &&  $value['name'] == 'id') {
+                $seed->retrieve($value['value']);
+                break;
+            } elseif ($name === 'id') {
+                $seed->retrieve($value);
+            }
         }
-        if (!empty($seed->field_name_map[$name]['sensitive'])) {
-            continue;
-        }
-        if($name=="related_bean"){
-            $seed->new_rel_relname=$value;
-        }
-        if($name=="related_beans"){
-            $related_beans=$value;
-        }
-        if($name=="related_id"){
-            $seed->new_rel_id=$value;
-        }
-        if (!is_array($value)) {
-            $seed->$name = $value;
-        } elseif ($name!="related_beans") {
-            $seed->$value['name'] = $value['value'];
+        $seed->notifyonsave=false;
+        foreach ($name_value_list as $name => $value) {
+            if ($module_name == 'Users' && !empty($seed->id) && ($seed->id != $current_user->id) && $name == 'user_hash') {
+                continue;
+            }
+            if (!empty($seed->field_name_map[$name]['sensitive'])) {
+                continue;
+            }
+            if($name=="related_bean") {
+                $seed->new_rel_relname=$value;
+            }
+            if($name=="related_beans") {
+                $related_beans=$value;
+            }
+            if($name=="related_id") {
+                $seed->new_rel_id=$value;
+            }
+            if (!is_array($value)) {
+                $seed->$name = $value;
+            } elseif ($name!="related_beans") {
+                $seed->$value['name'] = $value['value'];
+            }
+
         }
 
-    }
 
-
-    if ($seed->ACLAccess('Save')) {
-        $seed->not_use_rel_in_req=true;
+        if ($seed->ACLAccess('Save')) {
+            $seed->not_use_rel_in_req=true;
         
-        if ($seed->deleted == 1) {
-            $seed->mark_deleted($seed->id);
-        }
-        if(empty($seed->id)){
-            $seed->id = create_guid();
-            $seed->new_with_id = true;
-        }
-        if(isset($related_beans)){
-            foreach ($related_beans as $key => $value) {
-                if($class_name=="Call" && isset($value['module']) && strtolower($value['module'])=="notes"){
-                    $note= new Note();
-                    $note->retrieve($value['id']);
-                    if(!empty($note->id)){
-                        $note->load_relationship('calls');
-                        $note->calls->add($seed->id);
+            if ($seed->deleted == 1) {
+                $seed->mark_deleted($seed->id);
+            }
+            if(empty($seed->id)) {
+                $seed->id = create_guid();
+                $seed->new_with_id = true;
+            }
+            if(isset($related_beans)) {
+                foreach ($related_beans as $key => $value) {
+                    if($class_name=="Call" && isset($value['module']) && strtolower($value['module'])=="notes") {
+                        $note= new Note();
+                        $note->retrieve($value['id']);
+                        if(!empty($note->id)) {
+                            $note->load_relationship('calls');
+                            $note->calls->add($seed->id);
+                        }
+                    }else{
+                        $relatedModule=strtolower($value['module']);
+                        $seed->load_relationship($relatedModule);
+                        $seed->$relatedModule->add($value['id']);
                     }
-                }else{
-                    $relatedModule=strtolower($value['module']);
-                    $seed->load_relationship($relatedModule);
-                    $seed->$relatedModule->add($value['id']);
+                }
+            }
+            $seed->save($seed->notifyonsave);
+            return array('id' => $seed->id);
+
+        }else{
+            error_log(__METHOD__." ERROR SAVING");
+            return "ERROR SAVING";
+        }
+    }
+
+    public function getDefaultFieldsValues($moduleBean)
+    {
+        global $current_user;
+        $all_fields = $moduleBean->column_fields;
+
+        foreach ($all_fields as $field) {
+            if (isset($moduleBean->$field) && !is_object($moduleBean->$field)) {
+                if($moduleBean->field_name_map[$field]['type']=="datetime") {
+                    $module_arr[$field] = $moduleBean->$field;
+                    $dateField = new \DateTime($moduleBean->fetched_row[$field]);
+                    $tz = $current_user->getPreference('timezone', 'global');
+                    $dateField->setTimezone($tz);
+                    $dateFieldName = $field . "_atom";
+                    $module_arr[$dateFieldName]=$dateField->format(DATE_ATOM);
+
+                }else {
+                    $moduleBean->$field = from_html($moduleBean->$field);
+                    $moduleBean->$field = preg_replace("/\r\n/", '<BR>', $moduleBean->$field);
+                    $moduleBean->$field = preg_replace("/\n/", '<BR>', $moduleBean->$field);
+                    $module_arr[$field] = $moduleBean->$field;
                 }
             }
         }
-        $seed->save($seed->notifyonsave);
-        return array('id' => $seed->id);
+        return $module_arr;
+    }
 
-    }else{
-        error_log(__METHOD__." ERROR SAVING");
-        return "ERROR SAVING";
-    }
-    }
+
 }
+

@@ -139,19 +139,11 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
     public function retrieve($id, $info=null)  // implementing resolve function
     {
         global $sugar_config, $current_user;
-        $quoteBean = BeanFactory::getBean('AOS_Quotes');
-        $quote = $quoteBean->retrieve($id);
+        $moduleBean = \BeanFactory::getBean('AOS_Quotes');
+        $moduleBean = $moduleBean->retrieve($id);
         $module_arr = array();
-        if ($quote->id && $quote->ACLAccess('view')) {
-            $all_fields = $quote->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($quote->$field) && !is_object($quote->$field)) {
-                    $quote->$field = from_html($quote->$field);
-                    $quote->$field = preg_replace("/\r\n/", '<BR>', $quote->$field);
-                    $quote->$field = preg_replace("/\n/", '<BR>', $quote->$field);
-                    $module_arr[$field] = $quote->$field;
-                }
-            }
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
             if($info!=null){
                 $getFieldASTList=$info->getFieldASTList();
                 $queryFields=[];

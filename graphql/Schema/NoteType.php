@@ -145,24 +145,17 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
     private function retrieveNote($id, $info)
     {
         global $sugar_config, $current_user;
-        $noteBean = BeanFactory::getBean('Notes');
-        $note = $noteBean->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
+        $moduleBean = \BeanFactory::getBean('Notes');
+        $moduleBean = $moduleBean->retrieve($id);
+        
         $module_arr = array();
-        if ($note->id && $note->ACLAccess('view')) {
-            $all_fields = $note->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($note->$field) && !is_object($note->$field)) {
-                    $note->$field = from_html($note->$field);
-                    $note->$field = preg_replace("/\r\n/", '<BR>', $note->$field);
-                    $note->$field = preg_replace("/\n/", '<BR>', $note->$field);
-                    $module_arr[$field] = $note->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
             $module_arr['created_user_details'] = $module_arr['created_by'];
@@ -215,31 +208,31 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
                 }
                 if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                     $module_arr['contacts'] =  array();
-                    foreach ($note->get_linked_beans('contacts', 'Contact') as $contact) {
+                    foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                         $module_arr['contacts'][] = $contact->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
                     $module_arr['accounts'] = array();
-                    foreach ($note->get_linked_beans('accounts', 'Account') as $account) {
+                    foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                         $module_arr['accounts'][] = $account->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
                     $module_arr['opportunities'] =  array();
-                    foreach ($note->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
+                    foreach ($moduleBean->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                         $module_arr['opportunities'][] = $opportunity->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('cases',$queryFields)){
                     $module_arr['cases'] =  array();
-                    foreach ($note->get_linked_beans('cases', 'aCase') as $case) {
+                    foreach ($moduleBean->get_linked_beans('cases', 'aCase') as $case) {
                         $module_arr['cases'][] = $case->id;
                     }
                 }
                 $module_arr['contact_details'] =  array();
                 if(isset($queryFields) && array_key_exists('contact_details',$queryFields)){
-                        $module_arr['contact_details'] = $note->contact_id;
+                        $module_arr['contact_details'] = $moduleBean->contact_id;
                 }
                 if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customNoteType.php')) {
                     require_once __DIR__ . '/../../../../../graphql/Schema/customNoteType.php';
@@ -256,14 +249,14 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $noteId) {
+            foreach ($args as $key => $moduleBeanId) {
                 // error_log(__LINE__.print_r($args,1));
-                if (isset($noteId) && is_array($noteId)) {
-                    foreach ($noteId as $key => $noteIdItem) {
-                        $resultArray[] = self::retrieveNote($noteIdItem, $info);
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveNote($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($noteId)) {
-                    $resultArray[] = self::retrieveNote($noteId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveNote($moduleBeanId, $info);
                 }
             }
 

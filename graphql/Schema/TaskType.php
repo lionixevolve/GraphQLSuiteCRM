@@ -96,25 +96,18 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
     private function retrieveTask($id, $info)
     {
         global $sugar_config, $current_user;
-        $taskBean = BeanFactory::getBean('Tasks');
-        $task = $taskBean->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
+        $moduleBean = BeanFactory::getBean('Tasks');
+        $moduleBean = $moduleBean->retrieve($id);
+        
 
         $module_arr = array();
-        if ($task->id && $task->ACLAccess('view')) {
-            $all_fields = $task->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($task->$field) && !is_object($task->$field)) {
-                    $task->$field = from_html($task->$field);
-                    $task->$field = preg_replace("/\r\n/", '<BR>', $task->$field);
-                    $task->$field = preg_replace("/\n/", '<BR>', $task->$field);
-                    $module_arr[$field] = $task->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
             $module_arr['created_user_details'] = $module_arr['created_by'];
@@ -145,19 +138,19 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
                 }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 $module_arr['related_contacts'] =  array();
-                foreach ($task->get_linked_beans('contacts', 'Contact') as $contact) {
+                foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['related_contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
                 $module_arr['related_accounts'] =  array();
-                foreach ($task->get_linked_beans('accounts', 'Account') as $account) {
+                foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['related_accounts'][] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
                 $module_arr['related_opportunities'] =  array();
-                foreach ($task->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
+                foreach ($moduleBean->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                     $module_arr['related_opportunities'][] = $opportunity->id;
                 }
             }
@@ -176,13 +169,13 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
     public function resolve($value = null, $args = [], $info = null )  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $taskId) {
-                if (isset($taskId) && is_array($taskId)) {
-                    foreach ($taskId as $key => $taskIdItem) {
-                        $resultArray[] = self::retrieveTask($taskIdItem, $info );
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveTask($moduleBeanIdItem, $info );
                     }
-                } elseif (!empty($taskId)) {
-                    $resultArray[] = self::retrieveTask($taskId, $info );
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveTask($moduleBeanId, $info );
                 }
             }
 

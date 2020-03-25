@@ -190,14 +190,14 @@ class AccountType extends AbstractObjectType// extending abstract Object type
         if (isset($args['id']) && is_array($args['id'])) {
 
             // We received a list of contacts to return
-            foreach ($args as $key => $accountId) {
-                if (isset($accountId) && is_array($accountId)) {
-                    foreach ($accountId as $key => $accountIdItem) {
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
 
-                        $resultArray[] = self::retrieve($accountIdItem, $info);
+                        $resultArray[] = self::retrieve($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($accountId)) {
-                    $resultArray[] = self::retrieve($accountId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieve($moduleBeanId, $info);
                 }
             }
 
@@ -213,20 +213,12 @@ class AccountType extends AbstractObjectType// extending abstract Object type
 
     {
         global $sugar_config, $current_user;
-        $accountBean = BeanFactory::getBean('Accounts');
-        $account = $accountBean->retrieve($id);
+        $moduleBean = \BeanFactory::getBean('Accounts');
+        $moduleBean = $moduleBean->retrieve($id);
         $module_arr = array();
 
-        if ($account->id && $account->ACLAccess('view')) {
-            $all_fields = $account->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($account->$field) && !is_object($account->$field)) {
-                    $account->$field = from_html($account->$field);
-                    $account->$field = preg_replace("/\r\n/", '<BR>', $account->$field);
-                    $account->$field = preg_replace("/\n/", '<BR>', $account->$field);
-                    $module_arr[$field] = $account->$field;
-                }
-            }
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
             if ($info != null) {
                 $getFieldASTList = $info->getFieldASTList();
                 $queryFields = [];
@@ -235,59 +227,59 @@ class AccountType extends AbstractObjectType// extending abstract Object type
                 }
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
-                $account->load_relationship('contacts');
+                $moduleBean->load_relationship('contacts');
                 $module_arr['contacts'] = array();
-                foreach ($account->contacts->getBeans() as $contact) {
+                foreach ($moduleBean->contacts->getBeans() as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('aos_quotes', $queryFields)) {
-                $account->load_relationship('aos_quotes');
+                $moduleBean->load_relationship('aos_quotes');
                 $module_arr['aos_quotes'] = array();
-                foreach ($account->aos_quotes->getBeans() as $aos_quote) {
+                foreach ($moduleBean->aos_quotes->getBeans() as $aos_quote) {
                     $module_arr['aos_quotes'][] = $aos_quote->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('opportunities', $queryFields)) {
-                $account->load_relationship('opportunities');
+                $moduleBean->load_relationship('opportunities');
                 $module_arr['opportunities'] = array();
-                foreach ($account->opportunities->getBeans() as $opportunity) {
+                foreach ($moduleBean->opportunities->getBeans() as $opportunity) {
                     $module_arr['opportunities'][] = $opportunity->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('calls', $queryFields)) {
                 $module_arr['calls'] = array();
-                foreach ($account->get_linked_beans('calls') as $call) {
+                foreach ($moduleBean->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('cases', $queryFields)) {
                 $module_arr['cases'] = array();
-                foreach ($account->get_linked_beans('cases') as $case) {
+                foreach ($moduleBean->get_linked_beans('cases') as $case) {
                     $module_arr['cases'][] = $case->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('notes', $queryFields)) {
                 $module_arr['notes'] = array();
-                foreach ($account->get_linked_beans('notes') as $note) {
+                foreach ($moduleBean->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('meetings', $queryFields)) {
                 $module_arr['meetings'] = array();
-                foreach ($account->get_linked_beans('meetings') as $meeting) {
+                foreach ($moduleBean->get_linked_beans('meetings') as $meeting) {
                     $module_arr['meetings'][] = $meeting->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('tasks', $queryFields)) {
                 $module_arr['tasks'] = array();
-                foreach ($account->get_linked_beans('tasks') as $task) {
+                foreach ($moduleBean->get_linked_beans('tasks') as $task) {
                     $module_arr['tasks'][] = $task->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('campaigns', $queryFields)) {
                 $module_arr['campaigns'] = array();
-                foreach ($account->get_linked_beans('campaigns') as $campaign) {
+                foreach ($moduleBean->get_linked_beans('campaigns') as $campaign) {
                     $module_arr['campaigns'][] = $campaign->id;
                 }
             }
@@ -303,7 +295,7 @@ class AccountType extends AbstractObjectType// extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customAccountType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customAccountType.php';
                 if (method_exists('customAccountType', 'processFields')) {
-                    $module_arr = customAccountType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = \customAccountType::processFields($contact, $queryFields, $module_arr);
                 }
             }
             return $module_arr;

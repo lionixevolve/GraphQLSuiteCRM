@@ -132,25 +132,17 @@ class CampaignType extends AbstractObjectType   // extending abstract Object typ
     private function retrieveCampaign($id, $info)
     {
         global $sugar_config, $current_user;
-        $campaignBean = BeanFactory::getBean('Campaigns');
-        $campaign = $campaignBean->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
-
+        $moduleBean = BeanFactory::getBean('Campaigns');
+        $moduleBean = $moduleBean->retrieve($id);
+        
         $module_arr = array();
-        if ($campaign->id && $campaign->ACLAccess('view')) {
-            $all_fields = $campaign->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($campaign->$field) && !is_object($campaign->$field)) {
-                    $campaign->$field = from_html($campaign->$field);
-                    $campaign->$field = preg_replace("/\r\n/", '<BR>', $campaign->$field);
-                    $campaign->$field = preg_replace("/\n/", '<BR>', $campaign->$field);
-                    $module_arr[$field] = $campaign->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
             if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
@@ -190,25 +182,25 @@ class CampaignType extends AbstractObjectType   // extending abstract Object typ
                 }
                 if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                     $module_arr['contacts'] =  array();
-                    foreach ($campaign->get_linked_beans('contacts', 'Contact') as $contact) {
+                    foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                         $module_arr['contacts'][] = $contact->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
                     $module_arr['accounts'] =  array();
-                        foreach ($campaign->get_linked_beans('accounts', 'Account') as $account) {
+                        foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                             $module_arr['accounts'][] = $account->id;
                         }
                 }
                 if(isset($queryFields) && array_key_exists('opportunities',$queryFields)){
                     $module_arr['opportunities'] =  array();
-                    foreach ($campaign->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
+                    foreach ($moduleBean->get_linked_beans('opportunities', 'Opportunity') as $opportunity) {
                         $module_arr['opportunities'][] = $opportunity->id;
                     }
                 }
                 if(isset($queryFields) && array_key_exists('notes',$queryFields)){
                     $module_arr['notes'] =  array();
-                    foreach ($campaign->get_linked_beans('notes') as $note) {
+                    foreach ($moduleBean->get_linked_beans('notes') as $note) {
                         $module_arr['notes'][] = $note->id;
                     }
                 }
@@ -223,13 +215,13 @@ class CampaignType extends AbstractObjectType   // extending abstract Object typ
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $campaignId) {
-                if (isset($campaignId) && is_array($campaignId)) {
-                    foreach ($campaignId as $key => $campaignIdItem) {
-                        $resultArray[] = self::retrieveCampaign($campaignIdItem,$info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveCampaign($moduleBeanIdItem,$info);
                     }
-                } elseif (!empty($campaignId)) {
-                    $resultArray[] = self::retrieveCampaign($campaignId,$info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveCampaign($moduleBeanId,$info);
                 }
             }
 

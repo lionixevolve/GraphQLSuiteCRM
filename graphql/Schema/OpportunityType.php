@@ -142,14 +142,14 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
     {
         if (isset($args['id']) && is_array($args['id'])) {
             // We received a list of contacts to return
-            foreach ($args as $key => $opportunityId) {
-                if (isset($opportunityId) && is_array($opportunityId)) {
-                    foreach ($opportunityId as $key => $opportunityIdItem) {
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
 
-                        $resultArray[] = self::retrieve($opportunityIdItem, $info);
+                        $resultArray[] = self::retrieve($moduleBeanIdItem, $info);
                     }
-                } elseif (!empty($opportunityId)) {
-                    $resultArray[] = self::retrieve($opportunityId, $info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieve($moduleBeanId, $info);
                 }
             }
             return $resultArray;
@@ -163,19 +163,11 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
     public function retrieve($id, $info = null)  // implementing resolve function
     {
         global $sugar_config, $current_user;
-        $opportunityBean = BeanFactory::getBean('Opportunities');
-        $opportunity = $opportunityBean->retrieve($id);
+        $moduleBean = \BeanFactory::getBean('Opportunities');
+        $moduleBean = $moduleBean->retrieve($id);
         $module_arr = array();
-        if ($opportunity->id && $opportunity->ACLAccess('view')) {
-            $all_fields = $opportunity->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($opportunity->$field) && !is_object($opportunity->$field)) {
-                    $opportunity->$field = from_html($opportunity->$field);
-                    $opportunity->$field = preg_replace("/\r\n/", '<BR>', $opportunity->$field);
-                    $opportunity->$field = preg_replace("/\n/", '<BR>', $opportunity->$field);
-                    $module_arr[$field] = $opportunity->$field;
-                }
-            }
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
             if ($info != null) {
                 $getFieldASTList = $info->getFieldASTList();
                 $queryFields = [];
@@ -184,34 +176,34 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
                 }
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
-                $opportunity->load_relationship('contacts');
+                $moduleBean->load_relationship('contacts');
                 $module_arr['contacts'] =  array();
-                foreach ($opportunity->contacts->getBeans() as $contact) {
+                foreach ($moduleBean->contacts->getBeans() as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('notes', $queryFields)) {
                 $module_arr['notes'] =  array();
-                foreach ($opportunity->get_linked_beans('notes') as $note) {
+                foreach ($moduleBean->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('account_id', $queryFields)) {
-                $opportunity->load_relationship('accounts');
-                foreach ($opportunity->accounts->getBeans() as $account) {
+                $moduleBean->load_relationship('accounts');
+                foreach ($moduleBean->accounts->getBeans() as $account) {
                     $module_arr['account_id'] = $account->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('aos_quotes', $queryFields)) {
-                $opportunity->load_relationship('aos_quotes');
+                $moduleBean->load_relationship('aos_quotes');
                 $module_arr['aos_quotes'] =  array();
-                foreach ($opportunity->aos_quotes->getBeans() as $aos_quote) {
+                foreach ($moduleBean->aos_quotes->getBeans() as $aos_quote) {
                     $module_arr['aos_quotes'][] = $aos_quote->id;
                 }
             }
             if (isset($queryFields) && array_key_exists('calls', $queryFields)) {
                 $module_arr['calls'] =  array();
-                foreach ($opportunity->get_linked_beans('calls') as $call) {
+                foreach ($moduleBean->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }

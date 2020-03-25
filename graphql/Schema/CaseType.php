@@ -130,25 +130,17 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
     private function retrieveCase($id, $info)
     {
         global $sugar_config, $current_user;
-        $caseBea = BeanFactory::getBean('Cases');
-        $case = $caseBea->retrieve($id);
-        if($info!=null){
-            $getFieldASTList=$info->getFieldASTList();
-            $queryFields=[];
-            foreach ($getFieldASTList as $key => $value) {
-                $queryFields[$value->getName()]="";
-            }
-        }
+        $moduleBean = BeanFactory::getBean('Cases');
+        $moduleBean = $moduleBean->retrieve($id);
 
         $module_arr = array();
-        if ($case->id && $case->ACLAccess('view')) {
-            $all_fields = $case->column_fields;
-            foreach ($all_fields as $field) {
-                if (isset($case->$field) && !is_object($case->$field)) {
-                    $case->$field = from_html($case->$field);
-                    $case->$field = preg_replace("/\r\n/", '<BR>', $case->$field);
-                    $case->$field = preg_replace("/\n/", '<BR>', $case->$field);
-                    $module_arr[$field] = $case->$field;
+        if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
+            $module_arr = crmHelper::getDefaultFieldsValues($moduleBean);
+            if($info!=null){
+                $getFieldASTList=$info->getFieldASTList();
+                $queryFields=[];
+                foreach ($getFieldASTList as $key => $value) {
+                    $queryFields[$value->getName()]="";
                 }
             }
             if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
@@ -164,43 +156,43 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
             }
             if(isset($queryFields) && array_key_exists('calls',$queryFields)){
                 $module_arr['calls'] =  array();
-                foreach ($case->get_linked_beans('calls') as $call) {
+                foreach ($moduleBean->get_linked_beans('calls') as $call) {
                     $module_arr['calls'][] = $call->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('contacts',$queryFields)){
                 $module_arr['contacts'] =  array();
-                foreach ($case->get_linked_beans('contacts', 'Contact') as $contact) {
+                foreach ($moduleBean->get_linked_beans('contacts', 'Contact') as $contact) {
                     $module_arr['contacts'][] = $contact->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('accounts',$queryFields)){
                 $module_arr['accounts'] =  array();
-                foreach ($case->get_linked_beans('accounts', 'Account') as $account) {
+                foreach ($moduleBean->get_linked_beans('accounts', 'Account') as $account) {
                     $module_arr['accounts'][] = $account->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('case_updates',$queryFields)){
                 $module_arr['case_updates'] =   array();
-                foreach ($case->get_linked_beans('aop_case_updates', 'AOP_Case_Updates') as $updates) {
+                foreach ($moduleBean->get_linked_beans('aop_case_updates', 'AOP_Case_Updates') as $updates) {
                     $module_arr['case_updates'][] = $updates->id;
                 }
             }
 
             if(isset($queryFields) && array_key_exists('notes',$queryFields)){
                 $module_arr['notes'] =  array();
-                foreach ($case->get_linked_beans('notes') as $note) {
+                foreach ($moduleBean->get_linked_beans('notes') as $note) {
                     $module_arr['notes'][] = $note->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('meetings',$queryFields)){
                 $module_arr['meetings'] =  array();
-                foreach ($case->get_linked_beans('meetings') as $meeting) {
+                foreach ($moduleBean->get_linked_beans('meetings') as $meeting) {
                     $module_arr['meetings'][] = $meeting->id;
                 }
             }
             if(isset($queryFields) && array_key_exists('account_details',$queryFields)){
-                    $module_arr['account_details'] = $case->account_id;
+                    $module_arr['account_details'] = $moduleBean->account_id;
             }
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customCaseType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customCaseType.php';
@@ -217,13 +209,13 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
         if (isset($args['id']) && is_array($args['id'])) {
-            foreach ($args as $key => $caseId) {
-                if (isset($caseId) && is_array($caseId)) {
-                    foreach ($caseId as $key => $caseIdItem) {
-                        $resultArray[] = self::retrieveCase($caseIdItem,$info);
+            foreach ($args as $key => $moduleBeanId) {
+                if (isset($moduleBeanId) && is_array($moduleBeanId)) {
+                    foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
+                        $resultArray[] = self::retrieveCase($moduleBeanIdItem,$info);
                     }
-                } elseif (!empty($caseId)) {
-                    $resultArray[] = self::retrieveCase($caseId,$info);
+                } elseif (!empty($moduleBeanId)) {
+                    $resultArray[] = self::retrieveCase($moduleBeanId,$info);
                 }
             }
 
