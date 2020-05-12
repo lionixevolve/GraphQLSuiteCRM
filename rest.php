@@ -97,7 +97,7 @@ $app->post('/graphql', function (Request $request, Response $response) {
     $schema = new SuiteCRMSchema();
     $processor = new Processor($schema);
     $parsedBody = $request->getParsedBody();
-    $parsedVariables = $parsedBody['variables'];
+    $parsedVariables = isset($parsedBody['variables']) ? $parsedBody['variables'] : "";
     $parsedBody = $parsedBody['query'];
     $processor->processPayload($parsedBody,$parsedVariables);
     return $response->withJson($processor->getResponseData());

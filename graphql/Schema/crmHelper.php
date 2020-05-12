@@ -2,27 +2,27 @@
 class crmHelper
 {
     /* This saveBean is an adapted copy of the set_entry sugar rest/soap service
-    */
+     */
     public function saveBean($module_name, $class_name, $name_value_list)
     {
         session_start();
-        global  $beanList, $beanFiles, $current_user;
-        if(isset($_SESSION['user_id'])  && $_SESSION['user_id']!=$current_user->id) {
-            $current_user=new User();
+        global $beanList, $beanFiles, $current_user;
+        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $current_user->id) {
+            $current_user = new User();
             $current_user->retrieve($_SESSION['user_id']);
 
         }
         $seed = new $class_name();
         // $name_value_list=$args;
         foreach ($name_value_list as $name => $value) {
-            if (is_array($value) &&  $value['name'] == 'id') {
+            if (is_array($value) && $value['name'] == 'id') {
                 $seed->retrieve($value['value']);
                 break;
             } elseif ($name === 'id') {
                 $seed->retrieve($value);
             }
         }
-        $seed->notifyonsave=false;
+        $seed->notifyonsave = false;
         foreach ($name_value_list as $name => $value) {
             if ($module_name == 'Users' && !empty($seed->id) && ($seed->id != $current_user->id) && $name == 'user_hash') {
                 continue;
@@ -30,45 +30,44 @@ class crmHelper
             if (!empty($seed->field_name_map[$name]['sensitive'])) {
                 continue;
             }
-            if($name=="related_bean") {
-                $seed->new_rel_relname=$value;
+            if ($name == "related_bean") {
+                $seed->new_rel_relname = $value;
             }
-            if($name=="related_beans") {
-                $related_beans=$value;
+            if ($name == "related_beans") {
+                $related_beans = $value;
             }
-            if($name=="related_id") {
-                $seed->new_rel_id=$value;
+            if ($name == "related_id") {
+                $seed->new_rel_id = $value;
             }
             if (!is_array($value)) {
                 $seed->$name = $value;
-            } elseif ($name!="related_beans") {
+            } elseif ($name != "related_beans") {
                 $seed->$value['name'] = $value['value'];
             }
 
         }
 
-
         if ($seed->ACLAccess('Save')) {
-            $seed->not_use_rel_in_req=true;
-        
+            $seed->not_use_rel_in_req = true;
+
             if ($seed->deleted == 1) {
                 $seed->mark_deleted($seed->id);
             }
-            if(empty($seed->id)) {
+            if (empty($seed->id)) {
                 $seed->id = create_guid();
                 $seed->new_with_id = true;
             }
-            if(isset($related_beans)) {
+            if (isset($related_beans)) {
                 foreach ($related_beans as $key => $value) {
-                    if($class_name=="Call" && isset($value['module']) && strtolower($value['module'])=="notes") {
-                        $note= new Note();
+                    if ($class_name == "Call" && isset($value['module']) && strtolower($value['module']) == "notes") {
+                        $note = new Note();
                         $note->retrieve($value['id']);
-                        if(!empty($note->id)) {
+                        if (!empty($note->id)) {
                             $note->load_relationship('calls');
                             $note->calls->add($seed->id);
                         }
-                    }else{
-                        $relatedModule=strtolower($value['module']);
+                    } else {
+                        $relatedModule = strtolower($value['module']);
                         $seed->load_relationship($relatedModule);
                         $seed->$relatedModule->add($value['id']);
                     }
@@ -77,8 +76,8 @@ class crmHelper
             $seed->save($seed->notifyonsave);
             return array('id' => $seed->id);
 
-        }else{
-            error_log(__METHOD__." ERROR SAVING");
+        } else {
+            error_log(__METHOD__ . " ERROR SAVING");
             return "ERROR SAVING";
         }
     }
@@ -90,14 +89,14 @@ class crmHelper
 
         foreach ($all_fields as $field) {
             if (isset($moduleBean->$field) && !is_object($moduleBean->$field)) {
-                if($moduleBean->field_name_map[$field]['type']=="datetime") {
+                if (($moduleBean->field_name_map[$field]['type'] == "datetime") || $moduleBean->field_name_map[$field]['type'] == "datetimecombo") {
                     $module_arr[$field] = $moduleBean->$field;
                     date_default_timezone_set('UTC');
                     $dateField = new \DateTime($moduleBean->fetched_row[$field]);
                     $dateFieldName = $field . "_atom";
-                    $module_arr[$dateFieldName]=$dateField->format(DATE_ATOM);
+                    $module_arr[$dateFieldName] = $dateField->format(DATE_ATOM);
 
-                }else {
+                } else {
                     //from_html is a SuiteCRM function
                     $moduleBean->$field = from_html($moduleBean->$field);
                     $moduleBean->$field = preg_replace("/\r\n/", '<BR>', $moduleBean->$field);
@@ -109,6 +108,4 @@ class crmHelper
         return $module_arr;
     }
 
-
 }
-
