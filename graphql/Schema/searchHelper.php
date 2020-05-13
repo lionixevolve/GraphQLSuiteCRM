@@ -2,17 +2,38 @@
 
 class searchHelper
 {
+    public function getDayStartEndGMT($date)
+    {
+        global $timedate;
+        $tz = new DateTimeZone('UTC');
+        $min = new DateTime($date, $tz);
+        $max = new DateTime($date, $tz);
+        $min->setTime(0, 0);
+        $max->setTime(23, 59, 59);
+
+        $min->setTimezone($tz);
+        $max->setTimezone($tz);
+
+        $result['start'] = $timedate->asDb($min);
+        $result['startdate'] = $timedate->asDbDate($min);
+        $result['starttime'] = $timedate->asDbTime($min);
+        $result['end'] = $timedate->asDb($max);
+        $result['enddate'] = $timedate->asDbDate($max);
+        $result['endtime'] = $timedate->asDbtime($max);
+
+        return $result;
+    }
     public function generateSearchWhere($bean, $searchFields, $add_custom_fields = false, $module = '')
     {
         global $timedate;
         $searchColumns = array();
-        $values              = $searchFields;
-        $where_clauses       = array();
-        $like_char           = '%';
-        $db                  = $bean->db;
-        $table_name          = $bean->object_name;
+        $values = $searchFields;
+        $where_clauses = array();
+        $like_char = '%';
+        $db = $bean->db;
+        $table_name = $bean->object_name;
         // $bean->fill_in_additional_detail_fields();
-        foreach ((array)$searchFields as $field => $parms) {
+        foreach ((array) $searchFields as $field => $parms) {
             $customField = false;
             // Jenny - Bug 7462: We need a type check here to avoid database errors
             // when searching for numeric fields. This is a temporary fix until we have
@@ -81,14 +102,13 @@ class searchHelper
             }
 
             if ($type == 'int' && isset($parms['value']) && !empty($parms['value'])) {
-                require_once('include/SugarFields/SugarFieldHandler.php');
+                require_once 'include/SugarFields/SugarFieldHandler.php';
                 $intField = SugarFieldHandler::getSugarField('int');
                 $newVal = $intField->getSearchWhereValue($parms['value']);
                 $parms['value'] = $newVal;
             } elseif ($type == 'html' && $customField) {
                 continue;
             }
-
 
             if (isset($parms['value']) && $parms['value'] != "") {
                 $operator = $db->isNumericType($type) ? '=' : 'like';
@@ -190,7 +210,7 @@ class searchHelper
                 $itr = 0;
 
                 if ($field_value != '' || $operator == 'isnull') {
-                    $searchColumns [strtoupper($field)] = $field;
+                    $searchColumns[strtoupper($field)] = $field;
 
                     foreach ($parms['db_field'] as $db_field) {
                         if (strstr($db_field, '.') === false) {
@@ -212,7 +232,7 @@ class searchHelper
                                     $rel_module = $parentType['value'];
                                     global $beanFiles, $beanList;
                                     if (!empty($beanFiles[$beanList[$rel_module]])) {
-                                        require_once($beanFiles[$beanList[$rel_module]]);
+                                        require_once $beanFiles[$beanList[$rel_module]];
                                         $rel_seed = new $beanList[$rel_module]();
                                         $db_field = 'parent_' . $rel_module . '_' . $rel_seed->table_name . '.name';
                                     }
@@ -255,33 +275,34 @@ class searchHelper
                                     $placeholderPos = strpos($field_value, "<>");
                                     if ($placeholderPos !== false && $placeholderPos > 0) {
                                         $datesLimit = explode("<>", $field_value);
-                                        $dateStart = $timedate->getDayStartEndGMT($datesLimit[0]);
-                                        $dateEnd = $timedate->getDayStartEndGMT($datesLimit[1]);
+                                        $dateStart = searchHelper::getDayStartEndGMT($datesLimit[0]);
+                                        $dateEnd = searchHelper::getDayStartEndGMT($datesLimit[1]);
                                         $dates = $dateStart;
                                         $dates['end'] = $dateEnd['end'];
                                         $dates['enddate'] = $dateEnd['enddate'];
                                         $dates['endtime'] = $dateEnd['endtime'];
                                     } else {
-                                        $dates = $timedate->getDayStartEndGMT($field_value);
+                                        $dates = searchHelper::getDayStartEndGMT($field_value);
                                     }
+                                    file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lx.log', PHP_EOL . date_format(date_create(), 'Y-m-d H:i:s ') . __FILE__ . ' : ' . __LINE__ . " -- " . print_r($dates, 1) . PHP_EOL, FILE_APPEND);
                                     // FG - bug45287 - Note "start" and "end" are the correct interval at GMT timezone
                                     $field_value = array($dates["start"], $dates["end"]);
                                     $operator = 'between';
                                 } elseif ($operator == 'not_equal') {
-                                    $dates = $timedate->getDayStartEndGMT($field_value);
+                                    $dates = searchHelper::getDayStartEndGMT($field_value);
                                     $field_value = array($dates["start"], $dates["end"]);
                                     $operator = 'date_not_equal';
                                 } elseif ($operator == 'greater_than') {
-                                    $dates = $timedate->getDayStartEndGMT($field_value);
+                                    $dates = searchHelper::getDayStartEndGMT($field_value);
                                     $field_value = $dates["end"];
                                 } elseif ($operator == 'less_than') {
-                                    $dates = $timedate->getDayStartEndGMT($field_value);
+                                    $dates = searchHelper::getDayStartEndGMT($field_value);
                                     $field_value = $dates["start"];
                                 } elseif ($operator == 'greater_than_equals') {
-                                    $dates = $timedate->getDayStartEndGMT($field_value);
+                                    $dates = searchHelper::getDayStartEndGMT($field_value);
                                     $field_value = $dates["start"];
                                 } elseif ($operator == 'less_than_equals') {
-                                    $dates = $timedate->getDayStartEndGMT($field_value);
+                                    $dates = searchHelper::getDayStartEndGMT($field_value);
                                     $field_value = $dates["end"];
                                 }
                             } catch (Exception $timeException) {
@@ -294,7 +315,7 @@ class searchHelper
                         }
 
                         if ($type == 'decimal' || $type == 'float' || $type == 'currency' || (!empty($parms['enable_range_search']) && empty($parms['is_date_field']))) {
-                            require_once('modules/Currencies/Currency.php');
+                            require_once 'modules/Currencies/Currency.php';
 
                             //we need to handle formatting either a single value or 2 values in case the 'between' search option is set
                             //start by splitting the string if the between operator exists
@@ -329,7 +350,6 @@ class searchHelper
                                 $operator = 'between';
                             }
                         }
-
 
                         if ($db->supports("case_sensitive") && isset($parms['query_type']) && $parms['query_type'] == 'case_insensitive') {
                             $db_field = 'upper(' . $db_field . ")";
