@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/v/stable)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm)  [![Total Downloads](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/downloads)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm) [![Latest Unstable Version](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/v/unstable)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm) [![License](https://poser.pugx.org/lionixevolve/graphqlsuitecrm/license)](https://packagist.org/packages/lionixevolve/graphqlsuitecrm)
 
 
-# UPCOMING NEW VERSION
+# ~~UPCOMING NEW VERSION~~ SuiteCRM 8 will have GraphQL natively so stopping development!
 Current code works well with SuiteCRM rest API. .
 
 But I am already developing next version based on a much stronger PHP-GraphQL library webonyx/graphql.
