@@ -7,6 +7,7 @@ use Youshido\GraphQL\Type\Scalar\DateTimeType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Config\Object\ObjectTypeConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
+
 if (!defined('sugarEntry')) {
     define('sugarEntry', true);
 }
@@ -38,79 +39,89 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach ( argsHelper::entityArgsHelper('AOS_Quotes') as $field => $type){
+        foreach (argsHelper::entityArgsHelper('AOS_Quotes') as $field => $type) {
             $config->addField($field, $type);
         }
 
         $config->addField('billing_account_details', [
-                'type'=> new AccountType(),
-                'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     if (!empty($value['billing_account_details'])) {
-                         $args['id']=$value['billing_account_details'];
-                         return AccountType::resolve($value, $args,$info);
-                     } else {
-                         return null;
-                     }
-                 },
-         ]);
+            'type' => new AccountType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['billing_account_details'])) {
+                    $args['id'] = $value['billing_account_details'];
+                    return AccountType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
         $config->addField('billing_contact_details', [
-                'type'=> new ContactType(),
-                'resolve' => function ($value, array $args, ResolveInfo $info) {
-                     if (!empty($value['billing_contact_details'])) {
-                         $args['id']=$value['billing_contact_details'];
-                         return ContactType::resolve($value, $args,$info);
-                     } else {
-                         return null;
-                     }
-                 },
-         ]);
-         $config->addField('opportunity_details', [
-                 'type'=> new OpportunityType(),
-                 'resolve' => function ($value, array $args, ResolveInfo $info) {
-                      if (!empty($value['created_user_details'])) {
-                          $args['id']=$value['opportunity_details'];
-                          return OpportunityType::resolve($value, $args,$info);
-                      } else {
-                          return null;
-                      }
-                  },
-          ]);
-          $config->addField('created_user_details', [
-                  'type' => new UserType(),
-                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                      if (!empty($value['created_user_details'])) {
-                          $args['id']=$value['created_user_details'];
-                          return UserType::resolve($value, $args, $info);
-                      } else {
-                          return null;
-                      }
-                   },
-           ]);
-          $config->addField('assigned_user_details',[
-                  'type' => new UserType(),
-                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                      if (!empty($value['assigned_user_details'])) {
-                          $args['id']=$value['assigned_user_details'];
-                          return UserType::resolve($value, $args, $info);
-                      } else {
-                          return null;
-                      }
-                   },
-           ]);
-          $config->addField('modified_user_details', [
-                  'type' => new UserType(),
-                  'resolve' => function ($value, array $args, ResolveInfo $info) {
-                      if (!empty($value['modified_user_details'])) {
-                          $args['id']=$value['modified_user_details'];
-                          return UserType::resolve($value, $args, $info);
-                      } else {
-                          return null;
-                      }
-                   },
-           ]);
+            'type' => new ContactType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['billing_contact_details'])) {
+                    $args['id'] = $value['billing_contact_details'];
+                    return ContactType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('opportunity_details', [
+            'type' => new OpportunityType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['created_user_details'])) {
+                    $args['id'] = $value['opportunity_details'];
+                    return OpportunityType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('created_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['created_user_details'])) {
+                    $args['id'] = $value['created_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('assigned_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['assigned_user_details'])) {
+                    $args['id'] = $value['assigned_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        $config->addField('modified_user_details', [
+            'type' => new UserType(),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['modified_user_details'])) {
+                    $args['id'] = $value['modified_user_details'];
+                    return UserType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php';
+            if (method_exists(customOpportunityType, getFields)) {
+                $customFields = customOpportunityType::getFields();
+                foreach ($customFields as $field => $type) {
+                    $config->addField($field, $type);
+                }
+            }
+        }
     }
 
-    public function resolve($value = null, $args = [], $info = null){
+    public function resolve($value = null, $args = [], $info = null)
+    {
         if (isset($args['id']) && is_array($args['id'])) {
 
             // We received a list of contacts to return
@@ -136,7 +147,7 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
         }
     }
 
-    public function retrieve($id, $info=null)  // implementing resolve function
+    public function retrieve($id, $info = null)  // implementing resolve function
     {
         global $sugar_config, $current_user;
         $moduleBean = \BeanFactory::getBean('AOS_Quotes');
@@ -144,30 +155,30 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
         $module_arr = array();
         if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
             $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
-            if($info!=null){
-                $getFieldASTList=$info->getFieldASTList();
-                $queryFields=[];
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
                 foreach ($getFieldASTList as $key => $value) {
-                    $queryFields[$value->getName()]="";
+                    $queryFields[$value->getName()] = "";
                 }
             }
-            if(isset($queryFields) && array_key_exists('modified_user_details',$queryFields)){
-                $module_arr['modified_user_details']=$module_arr['modified_user_id'];
+            if (isset($queryFields) && array_key_exists('modified_user_details', $queryFields)) {
+                $module_arr['modified_user_details'] = $module_arr['modified_user_id'];
             }
-            if(isset($queryFields) && array_key_exists('assigned_user_details',$queryFields)){
-                $module_arr['assigned_user_details']=$module_arr['assigned_user_id'];
+            if (isset($queryFields) && array_key_exists('assigned_user_details', $queryFields)) {
+                $module_arr['assigned_user_details'] = $module_arr['assigned_user_id'];
             }
-            if(isset($queryFields) && array_key_exists('created_user_details',$queryFields)){
-                $module_arr['created_user_details']=$module_arr['created_by'];
+            if (isset($queryFields) && array_key_exists('created_user_details', $queryFields)) {
+                $module_arr['created_user_details'] = $module_arr['created_by'];
             }
-            if(isset($queryFields) && array_key_exists('billing_account_details',$queryFields)){
-                $module_arr['billing_account_details']=$module_arr['billing_account_id'];
+            if (isset($queryFields) && array_key_exists('billing_account_details', $queryFields)) {
+                $module_arr['billing_account_details'] = $module_arr['billing_account_id'];
             }
-            if(isset($queryFields) && array_key_exists('billing_contact_details',$queryFields)){
-                $module_arr['billing_contact_details']=$module_arr['billing_contact_id'];
+            if (isset($queryFields) && array_key_exists('billing_contact_details', $queryFields)) {
+                $module_arr['billing_contact_details'] = $module_arr['billing_contact_id'];
             }
-            if(isset($queryFields) && array_key_exists('opportunity_details',$queryFields)){
-                $module_arr['opportunity_details']=$module_arr['opportunity_id'];
+            if (isset($queryFields) && array_key_exists('opportunity_details', $queryFields)) {
+                $module_arr['opportunity_details'] = $module_arr['opportunity_id'];
             }
 
             return $module_arr;

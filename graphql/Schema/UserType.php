@@ -4,43 +4,53 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Execution\ResolveInfo;
+
 require_once 'argsHelper.php';
 
 class UserType extends AbstractObjectType   // extending abstract Object type
 {
     public function build($config)  // implementing an abstract function where you build your type
     {
-        foreach (argsHelper::entityArgsHelper('Users',true) as $field => $type) {
+        foreach (argsHelper::entityArgsHelper('Users', true) as $field => $type) {
             $config->addField($field, $type);
         }
         $config->addField('session_id', new StringType());
         $config->addField('roles', new StringType());
         $config->addField('related_roles', [
-                    'type' => new ListType(new AclRoleType()),
-                    'resolve' => function ($value, array $args, ResolveInfo $info) {
-                         if (!empty($value['related_roles'])) {
-                             $args['id']=$value['related_roles'];
-                             return AclRoleType::resolve($value, $args, $info);
-                         } else {
-                             return null;
-                         }
-                    },
-                ]);
+            'type' => new ListType(new AclRoleType()),
+            'resolve' => function ($value, array $args, ResolveInfo $info) {
+                if (!empty($value['related_roles'])) {
+                    $args['id'] = $value['related_roles'];
+                    return AclRoleType::resolve($value, $args, $info);
+                } else {
+                    return null;
+                }
+            },
+        ]);
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customUserType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customUserType.php';
+            if (method_exists(customUserType, getFields)) {
+                $customFields = customUserType::getFields();
+                foreach ($customFields as $field => $type) {
+                    $config->addField($field, $type);
+                }
+            }
+        }
     }
     private function retrieveUser($id, $info)
     {
         global $db, $sugar_config, $current_user;
         $moduleBean = BeanFactory::getBean('Users');
         $moduleBean = $moduleBean->retrieve($id);
-        
+
         $module_arr = array();
         if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
             $module_arr = \crmHelper::getDefaultFieldsValues($moduleBean);
-            if($info!=null){
-                $getFieldASTList=$info->getFieldASTList();
-                $queryFields=[];
+            if ($info != null) {
+                $getFieldASTList = $info->getFieldASTList();
+                $queryFields = [];
                 foreach ($getFieldASTList as $key => $value) {
-                    $queryFields[$value->getName()]="";
+                    $queryFields[$value->getName()] = "";
                 }
             }
             $roles = ACLRole::getUserRoleNames($id);
@@ -61,8 +71,8 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                 AND r.deleted = 0
                 AND u.id = '{$id}';
             ";
-            $result=$db->query($sql);
-            if(isset($queryFields) && array_key_exists('related_roles',$queryFields)){
+            $result = $db->query($sql);
+            if (isset($queryFields) && array_key_exists('related_roles', $queryFields)) {
                 $module_arr['related_roles'] =  array();
                 while (($row = $db->fetchByAssoc($result)) != null) {
                     $module_arr['related_roles'][] = $row['id'];
@@ -74,7 +84,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
                     $module_arr = customUserType::processFields($contact, $queryFields, $module_arr);
                 }
             }
-            
+
 
             // $m1 = 'Users';
             // $m2 = 'ACLRoles';
@@ -87,14 +97,13 @@ class UserType extends AbstractObjectType   // extending abstract Object type
 
     public function resolve($value = null, $args = [], $info = null)  // implementing resolve function
     {
-        if(!empty($args['whoami'])){
+        if (!empty($args['whoami'])) {
             global $current_user;
-            if($_SESSION['authenticated_user_id']){
-                $moduleBean=self::retrieveUser($_SESSION['authenticated_user_id'], $info);
-                $moduleBean['session_id']=session_id();
+            if ($_SESSION['authenticated_user_id']) {
+                $moduleBean = self::retrieveUser($_SESSION['authenticated_user_id'], $info);
+                $moduleBean['session_id'] = session_id();
                 return $moduleBean;
-
-            }else{
+            } else {
                 return null;
             }
         }
@@ -102,17 +111,16 @@ class UserType extends AbstractObjectType   // extending abstract Object type
             foreach ($args as $key => $moduleBeanId) {
                 if (isset($moduleBeanId) && is_array($moduleBeanId)) {
                     foreach ($moduleBeanId as $key => $moduleBeanIdItem) {
-                        $resultArray[] = self::retrieveUser($moduleBeanIdItem,$info);
+                        $resultArray[] = self::retrieveUser($moduleBeanIdItem, $info);
                     }
                 } elseif (!empty($moduleBeanId)) {
-                    $resultArray[] = self::retrieveUser($moduleBeanId,$info);
+                    $resultArray[] = self::retrieveUser($moduleBeanId, $info);
                 }
             }
             return $resultArray;
         } elseif (!empty($args['id'])) {
-            return self::retrieveUser($args['id'],$info);
+            return self::retrieveUser($args['id'], $info);
         }
-
     }
 
     public function getName()

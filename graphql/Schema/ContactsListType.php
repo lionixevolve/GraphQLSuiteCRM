@@ -3,7 +3,7 @@
 
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\ListType\AbstractListType;
-use Youshido\GraphQL\Type\TypeMap ;
+use Youshido\GraphQL\Type\TypeMap;
 use Youshido\GraphQL\Execution\ResolveInfo;
 
 require_once 'ContactType.php';
@@ -29,7 +29,7 @@ class ContactsListType extends AbstractListType
     public function resolve($value = null, $args = [], $info = null)
     {
         require_once 'ListHelper.php';
-        $list=ListHelper('Contacts', $value, $args, $info);
+        $list = ListHelper('Contacts', $value, $args, $info);
         $resultArray = [];
 
         if (is_array($list['list']) && !empty($list['list'])) {
@@ -41,7 +41,7 @@ class ContactsListType extends AbstractListType
                 //no access
                 error_log('no access');
             }
-            return empty($resultArray)? null :$resultArray;
+            return empty($resultArray) ? null : $resultArray;
         } else {
             return null;
         }

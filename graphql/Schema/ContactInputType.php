@@ -13,27 +13,27 @@ class ContactInputType extends AbstractObjectType   // extending abstract Object
             $config->addField($field, $type);
         }
         $config->addField('created_user_details', new UserType(), [
-                 'resolve' => function ($contact) {
-                     return UserType::resolve(null, ['id' => $contact['created_user_details']], null);
-                 },
-         ]);
+            'resolve' => function ($contact) {
+                return UserType::resolve(null, ['id' => $contact['created_user_details']], null);
+            },
+        ]);
         $config->addField('assigned_user_details', new UserType(), [
-                  'resolve' => function ($contact) {
-                      return UserType::resolve(null, ['id' => $contact['assigned_user_details']], null);
-                  },
-          ]);
+            'resolve' => function ($contact) {
+                return UserType::resolve(null, ['id' => $contact['assigned_user_details']], null);
+            },
+        ]);
         $config->addField('modified_user_details', new UserType(), [
-                  'resolve' => function ($contact) {
-                      return UserType::resolve(null, ['id' => $contact['modified_user_details']], null);
-                  },
-          ]);
+            'resolve' => function ($contact) {
+                return UserType::resolve(null, ['id' => $contact['modified_user_details']], null);
+            },
+        ]);
         $config->addField('related_beans', new ListType(new RelatedBeanInputType()));
     }
 
     public function resolve($value = null, $args = [], $type = null)  // implementing resolve function
     {
         //We use the crm Helper to create/save the Bean
-        return crmHelper::saveBean("Contacts","Contact",$args);
+        return crmHelper::saveBean("Contacts", "Contact", $args);
     }
     public function getName()
     {

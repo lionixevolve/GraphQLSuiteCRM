@@ -10,7 +10,6 @@ class crmHelper
         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $current_user->id) {
             $current_user = new User();
             $current_user->retrieve($_SESSION['user_id']);
-
         }
         $seed = new $class_name();
         // $name_value_list=$args;
@@ -44,7 +43,6 @@ class crmHelper
             } elseif ($name != "related_beans") {
                 $seed->$value['name'] = $value['value'];
             }
-
         }
 
         if ($seed->ACLAccess('Save')) {
@@ -75,7 +73,6 @@ class crmHelper
             }
             $seed->save($seed->notifyonsave);
             return array('id' => $seed->id);
-
         } else {
             error_log(__METHOD__ . " ERROR SAVING");
             return "ERROR SAVING";
@@ -95,7 +92,6 @@ class crmHelper
                     $dateField = new \DateTime($moduleBean->fetched_row[$field]);
                     $dateFieldName = $field . "_atom";
                     $module_arr[$dateFieldName] = $dateField->format(DATE_ATOM);
-
                 } else {
                     //from_html is a SuiteCRM function
                     $moduleBean->$field = from_html($moduleBean->$field);
@@ -107,5 +103,4 @@ class crmHelper
         }
         return $module_arr;
     }
-
 }

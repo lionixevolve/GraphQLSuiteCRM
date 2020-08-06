@@ -100,7 +100,15 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
                 }
             },
         ]);
-
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customMeetingType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customMeetingType.php';
+            if (method_exists(customMeetingType, getFields)) {
+                $customFields = customMeetingType::getFields();
+                foreach ($customFields as $field => $type) {
+                    $config->addField($field, $type);
+                }
+            }
+        }
     }
     private function retrieveMeeting($id, $info)
     {
