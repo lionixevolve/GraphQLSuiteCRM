@@ -86,7 +86,7 @@ class crmHelper
 
         foreach ($all_fields as $field) {
             if (isset($moduleBean->$field) && !is_object($moduleBean->$field)) {
-                if (($moduleBean->field_name_map[$field]['type'] == "datetime") || $moduleBean->field_name_map[$field]['type'] == "datetimecombo") {
+                if (($moduleBean->field_name_map[$field]['type'] == "datetime") || $moduleBean->field_name_map[$field]['type'] == "datetimecombo" || $moduleBean->field_name_map[$field]['type'] == "date") {
                     $module_arr[$field] = $moduleBean->$field;
                     date_default_timezone_set('UTC');
                     $dateField = new \DateTime($moduleBean->fetched_row[$field]);
