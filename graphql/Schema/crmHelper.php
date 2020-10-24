@@ -43,6 +43,7 @@ class crmHelper
             } elseif ($name != "related_beans") {
                 $seed->$value['name'] = $value['value'];
             }
+
         }
 
         if ($seed->ACLAccess('Save')) {
@@ -86,12 +87,17 @@ class crmHelper
 
         foreach ($all_fields as $field) {
             if (isset($moduleBean->$field) && !is_object($moduleBean->$field)) {
-                if (($moduleBean->field_name_map[$field]['type'] == "datetime") || $moduleBean->field_name_map[$field]['type'] == "datetimecombo" || $moduleBean->field_name_map[$field]['type'] == "date") {
+                if (($moduleBean->field_name_map[$field]['type'] == "datetime") || $moduleBean->field_name_map[$field]['type'] == "datetimecombo") {
                     $module_arr[$field] = $moduleBean->$field;
                     date_default_timezone_set('UTC');
                     $dateField = new \DateTime($moduleBean->fetched_row[$field]);
                     $dateFieldName = $field . "_atom";
+                    if($moduleBean->fetched_row[$field]==""){
+                        $module_arr[$dateFieldName] = "";
+                    }else{
                     $module_arr[$dateFieldName] = $dateField->format(DATE_ATOM);
+                    }
+
                 } else {
                     //from_html is a SuiteCRM function
                     $moduleBean->$field = from_html($moduleBean->$field);
@@ -103,4 +109,5 @@ class crmHelper
         }
         return $module_arr;
     }
+
 }
