@@ -86,7 +86,7 @@ class AclRoleType extends AbstractObjectType   // extending abstract Object type
                         $resultArray[] = self::retrieveAclRole($roleIdItem,$info);
                     }
                 } elseif (!empty($roleId)) {
-                    $resultArray[] = self::retrieveAclRole($callId,$info);
+                    $resultArray[] = self::retrieveAclRole($roleId,$info);
                 }
             }
             return $resultArray;
