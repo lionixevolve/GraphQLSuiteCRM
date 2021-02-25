@@ -38,6 +38,12 @@ class crmHelper
             if ($name == "related_id") {
                 $seed->new_rel_id = $value;
             }
+            if ($name == "relate_id") {
+                $_REQUEST['relate_id'] = $value;
+            }
+            if ($name == "relate_to") {
+                $_REQUEST['relate_to'] = $value;
+            }
             if (!is_array($value)) {
                 $seed->$name = $value;
             } elseif ($name != "related_beans") {
