@@ -1,4 +1,5 @@
 <?php
+
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\TypeMap;
@@ -45,9 +46,9 @@ class argsHelper
             //Case is a special scenario, Cases is the entity, but aCase is the class and Case seems to be in the dictionary
             $entity = "Case";
         }
-        $customOverrideFile='custom' .$entity.'Type.php';
-        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile)) {
-            require_once __DIR__ . '/../../../../../graphql/Schema/'.$customOverrideFile;
+        $customOverrideFile = 'custom' . $entity . 'Type.php';
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/' . $customOverrideFile)) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/' . $customOverrideFile;
             if (method_exists($customOverrideFile, 'getFields')) {
                 $customFields = $customOverrideFile::getFields();
                 foreach ($customFields as $field => $type) {
@@ -85,7 +86,8 @@ class argsHelper
                             // So it will be possible to query related_user_field_c_details{ user_name}
                             $fieldNamePlusDetails = $key . "_details";
                             $relatedFieldName = $moduleFields[$key]['id_name'];
-                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                            $argsArray = array_merge($argsArray, [
+                                $fieldNamePlusDetails =>
                                 [
                                     'type' => new UserType(),
                                     'args' => argsHelper::entityArgsHelper('Users', true),
@@ -102,7 +104,8 @@ class argsHelper
                         } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Contacts') {
                             $fieldNamePlusDetails = $key . "_details";
                             $relatedFieldName = $moduleFields[$key]['id_name'];
-                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                            $argsArray = array_merge($argsArray, [
+                                $fieldNamePlusDetails =>
                                 [
                                     'type' => new ContactType(),
                                     'args' => argsHelper::entityArgsHelper('Contacts', true),
@@ -119,7 +122,8 @@ class argsHelper
                         } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Accounts') {
                             $fieldNamePlusDetails = $key . "_details";
                             $relatedFieldName = $moduleFields[$key]['id_name'];
-                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                            $argsArray = array_merge($argsArray, [
+                                $fieldNamePlusDetails =>
                                 [
                                     'type' => new AccountType(),
                                     'args' => argsHelper::entityArgsHelper('Accounts', true),
@@ -136,7 +140,8 @@ class argsHelper
                         } elseif ($fieldType == 'relate' && isset($moduleFields[$key]['module']) && $moduleFields[$key]['module'] == 'Opportunities') {
                             $fieldNamePlusDetails = $key . "_details";
                             $relatedFieldName = $moduleFields[$key]['id_name'];
-                            $argsArray = array_merge($argsArray, [$fieldNamePlusDetails =>
+                            $argsArray = array_merge($argsArray, [
+                                $fieldNamePlusDetails =>
                                 [
                                     'type' => new OpportunityType(),
                                     'args' => argsHelper::entityArgsHelper('Opportunities', true),
@@ -161,6 +166,8 @@ class argsHelper
             'limit' => new StringType(TypeMap::TYPE_INT),
             'order' => new StringType(TypeMap::TYPE_STRING),
             'distinct' => new StringType(TypeMap::TYPE_STRING),
+            'relate_to' => new StringType(TypeMap::TYPE_STRING),
+            'relate_id' => new StringType(TypeMap::TYPE_STRING),
             'notifyonsave' => new StringType(TypeMap::TYPE_BOOLEAN),
         ]);
         //Some modules have more fields due to relations or special fields
