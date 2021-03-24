@@ -277,6 +277,6 @@ class NoteType extends AbstractObjectType   // extending abstract Object type
 
     public function getName()
     {
-        return 'Note';  // important to use the real name here, it will be used later in the Schema
+        return 'note';  // important to use the real name here, it will be used later in the Schema
     }
 }

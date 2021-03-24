@@ -125,10 +125,10 @@ class UserType extends AbstractObjectType   // extending abstract Object type
 
     public function getName()
     {
-        return 'User';  // important to use the real name here, it will be used later in the Schema
+        return 'user';  // important to use the real name here, it will be used later in the Schema
     }
     public function getOutputType()
     {
-        return 'User';  // important to use the real name here, it will be used later in the Schema
+        return 'user';  // important to use the real name here, it will be used later in the Schema
     }
 }

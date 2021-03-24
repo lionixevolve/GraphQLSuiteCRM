@@ -192,6 +192,6 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
 
     public function getName()
     {
-        return 'Quote';  // important to use the real name here, it will be used later in the Schema
+        return 'quote';  // important to use the real name here, it will be used later in the Schema
     }
 }

@@ -236,6 +236,6 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
 
     public function getName()
     {
-        return 'Case';  // important to use the real name here, it will be used later in the Schema
+        return 'case';  // important to use the real name here, it will be used later in the Schema
     }
 }

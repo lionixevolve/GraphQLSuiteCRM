@@ -5,7 +5,7 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
 require_once 'argsHelper.php';
 
-class MeetingType extends AbstractObjectType// extending abstract Object type
+class MeetingType extends AbstractObjectType // extending abstract Object type
 
 {
     public function build($config) // implementing an abstract function where you build your type
@@ -115,7 +115,7 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
         global $sugar_config, $current_user;
         $moduleBean = \BeanFactory::getBean('Meetings');
         $moduleBean = $moduleBean->retrieve($id);
-        
+
 
         $module_arr = array();
         if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
@@ -161,7 +161,6 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
                     $module_arr['parent_account'] = '';
                     $module_arr['parent_case'] = '';
                     break;
-
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
                 $module_arr['contacts'] = array();
@@ -214,6 +213,6 @@ class MeetingType extends AbstractObjectType// extending abstract Object type
 
     public function getName()
     {
-        return 'Meeting'; // important to use the real name here, it will be used later in the Schema
+        return 'meeting'; // important to use the real name here, it will be used later in the Schema
     }
 }

@@ -33,7 +33,7 @@ require_once 'modules/Documents/Document.php';
 require_once 'include/utils.php';
 require_once 'include/formbase.php';
 
-class AccountType extends AbstractObjectType// extending abstract Object type
+class AccountType extends AbstractObjectType // extending abstract Object type
 
 {
     public function build($config) // implementing an abstract function where you build your type
@@ -190,7 +190,6 @@ class AccountType extends AbstractObjectType// extending abstract Object type
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
                 }
-
             }
         }
     }
@@ -316,6 +315,6 @@ class AccountType extends AbstractObjectType// extending abstract Object type
 
     public function getName()
     {
-        return 'Account'; // important to use the real name here, it will be used later in the Schema
+        return 'account'; // important to use the real name here, it will be used later in the Schema
     }
 }

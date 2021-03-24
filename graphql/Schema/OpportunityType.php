@@ -242,6 +242,6 @@ class OpportunityType extends AbstractObjectType   // extending abstract Object 
 
     public function getName()
     {
-        return "Opportunity";  // important to use the real name here, it will be used later in the Schema
+        return "opportunity";  // important to use the real name here, it will be used later in the Schema
     }
 }

@@ -241,6 +241,6 @@ class CampaignType extends AbstractObjectType   // extending abstract Object typ
 
     public function getName()
     {
-        return 'Campaign';  // important to use the real name here, it will be used later in the Schema
+        return 'campaign';  // important to use the real name here, it will be used later in the Schema
     }
 }

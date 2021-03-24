@@ -6,7 +6,7 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
 require_once 'argsHelper.php';
 
-class CallType extends AbstractObjectType// extending abstract Object type
+class CallType extends AbstractObjectType // extending abstract Object type
 
 {
     public function build($config) // implementing an abstract function where you build your type
@@ -153,14 +153,13 @@ class CallType extends AbstractObjectType// extending abstract Object type
                 }
             }
         }
-        
     }
     private function retrieveCall($id, $info)
     {
         global $sugar_config, $current_user;
         $moduleBean = \BeanFactory::getBean('Calls');
         $moduleBean = $moduleBean->retrieve($id);
-        
+
 
         $module_arr = array();
         if ($moduleBean->id && $moduleBean->ACLAccess('view')) {
@@ -215,7 +214,6 @@ class CallType extends AbstractObjectType// extending abstract Object type
                     $module_arr['parent_account'] = '';
                     $module_arr['parent_case'] = '';
                     break;
-
             }
             if (isset($queryFields) && array_key_exists('contacts', $queryFields)) {
                 $module_arr['contacts'] = array();
@@ -276,6 +274,6 @@ class CallType extends AbstractObjectType// extending abstract Object type
 
     public function getName()
     {
-        return 'Call'; // important to use the real name here, it will be used later in the Schema
+        return 'call'; // important to use the real name here, it will be used later in the Schema
     }
 }
