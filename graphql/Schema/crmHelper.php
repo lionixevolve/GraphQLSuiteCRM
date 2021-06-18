@@ -68,14 +68,21 @@ class crmHelper
                         $note->retrieve($value['id']);
                         if (!empty($note->id)) {
                             $note->load_relationship('calls');
-                            $note->calls->add($seed->id);
+                            if (isset($value['deleted'])) {
+                                $note->calls->delete($seed->id);
+                            } else {
+                                $note->calls->add($seed->id);
+                            }
                         }
                     } else {
                         $relatedModule = strtolower($value['module']);
                         $seed->load_relationship($relatedModule);
-                        $seed->$relatedModule->add($value['id']);
+                        if (isset($value['deleted'])) {
+                            $seed->$relatedModule->delete($value['id']);
+                        } else {
+                            $seed->$relatedModule->add($value['id']);
+                        }
                     }
-                }
             }
             $seed->save($seed->notifyonsave);
             return array('id' => $seed->id);
