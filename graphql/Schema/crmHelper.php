@@ -83,12 +83,13 @@ class crmHelper
                             $seed->$relatedModule->add($value['id']);
                         }
                     }
+                }
+                $seed->save($seed->notifyonsave);
+                return array('id' => $seed->id);
+            } else {
+                error_log(__METHOD__ . " ERROR SAVING");
+                return "ERROR SAVING";
             }
-            $seed->save($seed->notifyonsave);
-            return array('id' => $seed->id);
-        } else {
-            error_log(__METHOD__ . " ERROR SAVING");
-            return "ERROR SAVING";
         }
     }
 
