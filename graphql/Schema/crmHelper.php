@@ -5,6 +5,7 @@ class crmHelper
      */
     public function saveBean($module_name, $class_name, $name_value_list)
     {
+
         session_start();
         global $beanList, $beanFiles, $current_user;
         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $current_user->id) {
@@ -12,6 +13,7 @@ class crmHelper
             $current_user->retrieve($_SESSION['user_id']);
         }
         $seed = new $class_name();
+
         // $name_value_list=$args;
         foreach ($name_value_list as $name => $value) {
             if (is_array($value) && $value['name'] == 'id') {
@@ -50,7 +52,6 @@ class crmHelper
                 $seed->$value['name'] = $value['value'];
             }
         }
-
         if ($seed->ACLAccess('Save')) {
             $seed->not_use_rel_in_req = true;
 
@@ -84,12 +85,12 @@ class crmHelper
                         }
                     }
                 }
-                $seed->save($seed->notifyonsave);
-                return array('id' => $seed->id);
-            } else {
-                error_log(__METHOD__ . " ERROR SAVING");
-                return "ERROR SAVING";
             }
+            $seed->save($seed->notifyonsave);
+            return array('id' => $seed->id);
+        } else {
+            error_log(__METHOD__ . " ERROR SAVING - NO ACCESS");
+            return "ERROR SAVING";
         }
     }
 
