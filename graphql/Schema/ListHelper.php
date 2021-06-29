@@ -109,5 +109,9 @@ function ListHelper($module, $value = null, $args = [],  Youshido\GraphQL\Execut
         $args['limit'] = "";
         $max = -1;
     }
+    if ($module == "ACLRoles") {
+        //Otherwise fails when using a custom field in roles
+        $GLOBALS['dictionary']['ACLRole']['custom_fields'] = false;
+    }
     return $moduleBean->process_list_query($query, $offset, $args['limit'], $max, $where);
 }
