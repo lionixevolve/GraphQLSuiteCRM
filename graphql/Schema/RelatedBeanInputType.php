@@ -11,6 +11,7 @@ class RelatedBeanInputType extends AbstractInputObjectType   // extending abstra
     {
         $config->addField('module', new StringType());
         $config->addField('id', new StringType());
+        $config->addField('deleted', new StringType());
     }
     public function resolve($value = null, $args = [], $type = null)  // implementing resolve function
     {
