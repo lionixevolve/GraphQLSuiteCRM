@@ -206,7 +206,7 @@ class CaseType extends AbstractObjectType   // extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customCaseType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customCaseType.php';
                 if (method_exists('customCaseType', 'processFields')) {
-                    $module_arr = customCaseType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customCaseType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
             return $module_arr;
