@@ -102,7 +102,7 @@ class MeetingType extends AbstractObjectType // extending abstract Object type
         ]);
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customMeetingType.php')) {
             require_once __DIR__ . '/../../../../../graphql/Schema/customMeetingType.php';
-            if (method_exists(customMeetingType, getFields)) {
+            if (method_exists('customMeetingType', 'getFields')) {
                 $customFields = customMeetingType::getFields();
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
@@ -183,7 +183,7 @@ class MeetingType extends AbstractObjectType // extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customMeetingType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customMeetingType.php';
                 if (method_exists('customMeetingType', 'processFields')) {
-                    $module_arr = customMeetingType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customMeetingType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
             return $module_arr;

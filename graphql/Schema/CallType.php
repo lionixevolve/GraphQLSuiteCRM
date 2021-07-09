@@ -146,7 +146,7 @@ class CallType extends AbstractObjectType // extending abstract Object type
         ]);
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customCallType.php')) {
             require_once __DIR__ . '/../../../../../graphql/Schema/customCallType.php';
-            if (method_exists(customCallType, getFields)) {
+            if (method_exists('customCallType', 'getFields')) {
                 $customFields = customCallType::getFields();
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
@@ -242,7 +242,7 @@ class CallType extends AbstractObjectType // extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customCallType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customCallType.php';
                 if (method_exists('customCallType', 'processFields')) {
-                    $module_arr = customCallType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customCallType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
 

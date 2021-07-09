@@ -109,10 +109,10 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
                 }
             },
         ]);
-        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php')) {
-            require_once __DIR__ . '/../../../../../graphql/Schema/customOpportunityType.php';
-            if (method_exists(customOpportunityType, getFields)) {
-                $customFields = customOpportunityType::getFields();
+        if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customQuoteType.php')) {
+            require_once __DIR__ . '/../../../../../graphql/Schema/customQuoteType.php';
+            if (method_exists('customQuoteType', 'getFields')) {
+                $customFields = customQuoteType::getFields();
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
                 }
@@ -180,7 +180,12 @@ class QuoteType extends AbstractObjectType   // extending abstract Object type
             if (isset($queryFields) && array_key_exists('opportunity_details', $queryFields)) {
                 $module_arr['opportunity_details'] = $module_arr['opportunity_id'];
             }
-
+            if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customQuoteType.php')) {
+                require_once __DIR__ . '/../../../../../graphql/Schema/customQuoteType.php';
+                if (method_exists('customQuoteType', 'processFields')) {
+                    $module_arr = customQuoteType::processFields($moduleBean, $queryFields, $module_arr);
+                }
+            }
             return $module_arr;
         } else {
             // Error

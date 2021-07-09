@@ -95,7 +95,7 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
         ]);
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customTaskType.php')) {
             require_once __DIR__ . '/../../../../../graphql/Schema/customTaskType.php';
-            if (method_exists(customTaskType, getFields)) {
+            if (method_exists('customTaskType', 'getFields')) {
                 $customFields = customTaskType::getFields();
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
@@ -166,7 +166,7 @@ class TaskType extends AbstractObjectType   // extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customTaskType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customTaskType.php';
                 if (method_exists('customTaskType', 'processFields')) {
-                    $module_arr = customTaskType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customTaskType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
             return $module_arr;

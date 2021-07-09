@@ -29,7 +29,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
         ]);
         if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customUserType.php')) {
             require_once __DIR__ . '/../../../../../graphql/Schema/customUserType.php';
-            if (method_exists(customUserType, getFields)) {
+            if (method_exists('customUserType', 'getFields')) {
                 $customFields = customUserType::getFields();
                 foreach ($customFields as $field => $type) {
                     $config->addField($field, $type);
@@ -81,7 +81,7 @@ class UserType extends AbstractObjectType   // extending abstract Object type
             if (file_exists(__DIR__ . '/../../../../../graphql/Schema/customUserType.php')) {
                 require_once __DIR__ . '/../../../../../graphql/Schema/customUserType.php';
                 if (method_exists('customUserType', 'processFields')) {
-                    $module_arr = customUserType::processFields($contact, $queryFields, $module_arr);
+                    $module_arr = customUserType::processFields($moduleBean, $queryFields, $module_arr);
                 }
             }
 
